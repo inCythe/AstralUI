@@ -1,11 +1,3 @@
---[[ 
-    ASTRAL V3 UI LIBRARY - Fixed & Formatted Edition
-    - Consistent colors throughout
-    - Improved readability and spacing
-    - Smart notification queue
-    - Fixed Slider drag logic
-]]
-
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
