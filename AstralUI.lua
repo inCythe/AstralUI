@@ -327,53 +327,6 @@ function Astral:Window(Options)
     SidebarStroke.Transparency = 0.5
     SidebarStroke.Parent = SidebarFrame
 
-    local SidebarSearchFrame = Instance.new("Frame")
-    SidebarSearchFrame.Name = "SidebarSearch"
-    SidebarSearchFrame.Parent = Sidebar
-    SidebarSearchFrame.BackgroundColor3 = Astral.Theme.Secondary
-    SidebarSearchFrame.Size = UDim2.new(1, -20, 0, 28)
-    SidebarSearchFrame.Position = UDim2.new(0, 10, 0, 10)
-    Instance.new("UICorner", SidebarSearchFrame).CornerRadius = UDim.new(0, 6)
-
-    local SidebarSearchIcon = Instance.new("ImageLabel")
-    SidebarSearchIcon.Parent = SidebarSearchFrame
-    SidebarSearchIcon.BackgroundTransparency = 1
-    SidebarSearchIcon.Position = UDim2.new(0, 8, 0.5, -7)
-    SidebarSearchIcon.Size = UDim2.new(0, 14, 0, 14)
-    SidebarSearchIcon.Image = "rbxassetid://6031154871"
-    SidebarSearchIcon.ImageColor3 = Astral.Theme.TextDark
-
-    local SidebarSearchBox = Instance.new("TextBox")
-    SidebarSearchBox.Parent = SidebarSearchFrame
-    SidebarSearchBox.BackgroundTransparency = 1
-    SidebarSearchBox.Position = UDim2.new(0, 30, 0, 0)
-    SidebarSearchBox.Size = UDim2.new(1, -35, 1, 0)
-    SidebarSearchBox.Font = Enum.Font.Gotham
-    SidebarSearchBox.PlaceholderText = "Search Tabs..."
-    SidebarSearchBox.Text = ""
-    SidebarSearchBox.TextColor3 = Astral.Theme.Text
-    SidebarSearchBox.TextSize = 12
-    SidebarSearchBox.TextXAlignment = Enum.TextXAlignment.Left
-
-    -- Move TabHolder down to accommodate search
-    TabHolder.Position = UDim2.new(0, 0, 0, 50)
-    TabHolder.Size = UDim2.new(1, 0, 1, -50)
-
-    -- Global Tab Search Logic
-    SidebarSearchBox:GetPropertyChangedSignal("Text"):Connect(function()
-        local Query = string.lower(SidebarSearchBox.Text)
-        for _, TabBtn in pairs(TabHolder:GetChildren()) do
-            if TabBtn:IsA("TextButton") then
-                local TabName = string.lower(TabBtn:FindFirstChild("TabText").Text)
-                if string.find(TabName, Query) then
-                    TabBtn.Visible = true
-                else
-                    TabBtn.Visible = false
-                end
-            end
-        end
-    end)
-
     -- Search Box
     local SearchFrame = Instance.new("Frame")
     SearchFrame.Parent = SidebarFrame
