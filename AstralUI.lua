@@ -1059,6 +1059,12 @@ function Astral:Window(Options)
             DropdownList.Size = UDim2.new(1, -12, 0, 100)
             DropdownList.ScrollBarThickness = 2
             DropdownList.BorderSizePixel = 0
+            -- Only scroll if list is longer than 100px
+            DropdownList.ScrollingEnabled = false
+
+            local DropdownLayout = Instance.new("UIListLayout")
+            DropdownLayout.Parent = DropdownList
+            DropdownLayout.Padding = UDim.new(0, 3)
 
             local function Refresh(filter)
                 for _, Child in pairs(DropdownList:GetChildren()) do
@@ -1085,6 +1091,10 @@ function Astral:Window(Options)
                         Refresh(SearchBox.Text)
                     end)
                 end
+                
+                local ContentHeight = DropdownLayout.AbsoluteContentSize.Y
+                DropdownList.CanvasSize = UDim2.new(0, 0, 0, ContentHeight)
+                DropdownList.ScrollingEnabled = ContentHeight > 100
             end
 
             SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
@@ -1142,14 +1152,22 @@ function Astral:Window(Options)
 
             local DropdownLabel = Instance.new("TextLabel")
             DropdownLabel.Parent = DropdownButton
-            DropdownLabel.BackgroundTransparency = 1
             DropdownLabel.Position = UDim2.new(0, 12, 0, 0)
             DropdownLabel.Size = UDim2.new(1, -40, 1, 0)
             DropdownLabel.Font = Enum.Font.GothamMedium
-            DropdownLabel.Text = DropdownName
             DropdownLabel.TextColor3 = Astral.Theme.Text
             DropdownLabel.TextSize = 12
             DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
+            DropdownLabel.BackgroundTransparency = 1
+
+            local function UpdateLabel()
+                if #SelectionOrder == 0 then
+                    DropdownLabel.Text = DropdownName
+                else
+                    DropdownLabel.Text = DropdownName .. ": " .. table.concat(SelectionOrder, ", ")
+                end
+            end
+            UpdateLabel()
 
             local ArrowImage = Instance.new("ImageLabel")
             ArrowImage.Parent = DropdownButton
@@ -1181,7 +1199,7 @@ function Astral:Window(Options)
             SelectAllBtn.Position = UDim2.new(0, 0, 0, 30)
             SelectAllBtn.Size = UDim2.new(0.5, -3, 0, 25)
             SelectAllBtn.BackgroundColor3 = Astral.Theme.Success
-            SelectAllBtn.BackgroundTransparency = 0.5
+            SelectAllBtn.BackgroundTransparency = 0.4
             SelectAllBtn.Text = "SELECT ALL"
             SelectAllBtn.Font = Enum.Font.GothamBold
             SelectAllBtn.TextColor3 = Astral.Theme.Text
@@ -1193,7 +1211,7 @@ function Astral:Window(Options)
             ClearAllBtn.Position = UDim2.new(0.5, 3, 0, 30)
             ClearAllBtn.Size = UDim2.new(0.5, -3, 0, 25)
             ClearAllBtn.BackgroundColor3 = Astral.Theme.Error
-            ClearAllBtn.BackgroundTransparency = 0.5
+            ClearAllBtn.BackgroundTransparency = 0.4
             ClearAllBtn.Text = "CLEAR ALL"
             ClearAllBtn.Font = Enum.Font.GothamBold
             ClearAllBtn.TextColor3 = Astral.Theme.Text
@@ -1208,6 +1226,7 @@ function Astral:Window(Options)
             DropdownList.ScrollBarThickness = 2
             DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
             DropdownList.BorderSizePixel = 0
+            DropdownList.ScrollingEnabled = true
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
@@ -1241,6 +1260,7 @@ function Astral:Window(Options)
                             Selected[Option] = true
                             table.insert(SelectionOrder, Option)
                         end
+                        UpdateLabel()
                         Refresh(SearchBox.Text)
                         Callback(SelectionOrder)
                     end)
@@ -1258,6 +1278,7 @@ function Astral:Window(Options)
                         table.insert(SelectionOrder, Option)
                     end
                 end
+                UpdateLabel()
                 Refresh(SearchBox.Text)
                 Callback(SelectionOrder)
             end)
@@ -1267,6 +1288,7 @@ function Astral:Window(Options)
                     local removed = table.remove(SelectionOrder, 1)
                     Selected[removed] = false
                 end
+                UpdateLabel()
                 Refresh(SearchBox.Text)
                 Callback(SelectionOrder)
             end)
