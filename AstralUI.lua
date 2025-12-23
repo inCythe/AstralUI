@@ -985,8 +985,8 @@ function Astral:Window(Options)
         function TabFunctions:Dropdown(Options, Parent)
             Parent = Parent or PageFrame
             local DropdownName = Options.Name or "Dropdown"
-            local DropdownOptions = Options.Options or {"Option 1", "Option 2"}
-            local Default = Options.Default or DropdownOptions[1]
+            local DropdownOptions = Options.Options or {}
+            local Default = Options.Default
             local Callback = Options.Callback or function() end
             local Dropped = false
 
@@ -996,10 +996,7 @@ function Astral:Window(Options)
             DropdownFrame.BackgroundTransparency = 0.3
             DropdownFrame.Size = UDim2.new(1, 0, 0, 34)
             DropdownFrame.ClipsDescendants = true
-            
-            local DropdownCorner = Instance.new("UICorner")
-            DropdownCorner.CornerRadius = UDim.new(0, 6)
-            DropdownCorner.Parent = DropdownFrame
+            Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 6)
 
             local DropdownButton = Instance.new("TextButton")
             DropdownButton.Parent = DropdownFrame
@@ -1013,7 +1010,7 @@ function Astral:Window(Options)
             DropdownLabel.Position = UDim2.new(0, 12, 0, 0)
             DropdownLabel.Size = UDim2.new(1, -40, 1, 0)
             DropdownLabel.Font = Enum.Font.GothamMedium
-            DropdownLabel.Text = DropdownName .. ": " .. Default
+            DropdownLabel.Text = DropdownName .. (Default and (": " .. tostring(Default)) or "")
             DropdownLabel.TextColor3 = Astral.Theme.Text
             DropdownLabel.TextSize = 12
             DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -1026,79 +1023,111 @@ function Astral:Window(Options)
             ArrowImage.Image = "rbxassetid://6031091004"
             ArrowImage.ImageColor3 = Astral.Theme.Accent
 
+            -- Search and Clear Header
+            local Header = Instance.new("Frame")
+            Header.Parent = DropdownFrame
+            Header.Position = UDim2.new(0, 6, 0, 38)
+            Header.Size = UDim2.new(1, -12, 0, 28)
+            Header.BackgroundTransparency = 1
+
+            local SearchBox = Instance.new("TextBox")
+            SearchBox.Parent = Header
+            SearchBox.Size = UDim2.new(1, -50, 1, 0)
+            SearchBox.BackgroundColor3 = Astral.Theme.Tertiary
+            SearchBox.PlaceholderText = "Search..."
+            SearchBox.Text = ""
+            SearchBox.TextColor3 = Astral.Theme.Text
+            SearchBox.Font = Enum.Font.Gotham
+            SearchBox.TextSize = 11
+            Instance.new("UICorner", SearchBox).CornerRadius = UDim.new(0, 4)
+
+            local ClearBtn = Instance.new("TextButton")
+            ClearBtn.Parent = Header
+            ClearBtn.Position = UDim2.new(1, -45, 0, 0)
+            ClearBtn.Size = UDim2.new(0, 45, 1, 0)
+            ClearBtn.BackgroundColor3 = Astral.Theme.Error
+            ClearBtn.BackgroundTransparency = 0.5
+            ClearBtn.Text = "CLEAR"
+            ClearBtn.Font = Enum.Font.GothamBold
+            ClearBtn.TextColor3 = Astral.Theme.Text
+            ClearBtn.TextSize = 9
+            Instance.new("UICorner", ClearBtn).CornerRadius = UDim.new(0, 4)
+
             local DropdownList = Instance.new("ScrollingFrame")
             DropdownList.Parent = DropdownFrame
             DropdownList.BackgroundTransparency = 1
-            DropdownList.Position = UDim2.new(0, 6, 0, 38)
+            DropdownList.Position = UDim2.new(0, 6, 0, 72)
             DropdownList.Size = UDim2.new(1, -12, 0, 100)
             DropdownList.ScrollBarThickness = 2
-            DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
             DropdownList.BorderSizePixel = 0
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
             DropdownLayout.Padding = UDim.new(0, 3)
 
-            local function Refresh()
+            local function Refresh(filter)
                 for _, Child in pairs(DropdownList:GetChildren()) do
-                    if Child:IsA("TextButton") then 
-                        Child:Destroy() 
-                    end
+                    if Child:IsA("TextButton") then Child:Destroy() end
                 end
                 for _, Option in pairs(DropdownOptions) do
+                    if filter and filter ~= "" and not string.find(string.lower(Option), string.lower(filter)) then continue end
+                    
                     local OptionButton = Instance.new("TextButton")
                     OptionButton.Parent = DropdownList
                     OptionButton.BackgroundColor3 = Astral.Theme.Tertiary
-                    OptionButton.BackgroundTransparency = 0.3
                     OptionButton.Size = UDim2.new(1, 0, 0, 26)
-                    OptionButton.Font = Enum.Font.Gotham
                     OptionButton.Text = Option
                     OptionButton.TextColor3 = Astral.Theme.Text
+                    OptionButton.Font = Enum.Font.Gotham
                     OptionButton.TextSize = 11
-                    
-                    local OptionCorner = Instance.new("UICorner")
-                    OptionCorner.CornerRadius = UDim.new(0, 4)
-                    OptionCorner.Parent = OptionButton
-                    
-                    AddHoverEffect(OptionButton, Astral.Theme.HoverBright, Astral.Theme.Tertiary, 0.1, 0.3)
-                    AddClickEffect(OptionButton)
+                    Instance.new("UICorner", OptionButton).CornerRadius = UDim.new(0, 4)
                     
                     OptionButton.MouseButton1Click:Connect(function()
-                        Dropped = false
                         DropdownLabel.Text = DropdownName .. ": " .. Option
                         Callback(Option)
+                        Dropped = false
                         TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 34)}):Play()
-                        TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = 0}):Play()
                     end)
                 end
-                DropdownList.CanvasSize = UDim2.new(0, 0, 0, DropdownLayout.AbsoluteContentSize.Y + 6)
+                DropdownList.CanvasSize = UDim2.new(0, 0, 0, DropdownLayout.AbsoluteContentSize.Y)
             end
-            Refresh()
+
+            SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
+            
+            ClearBtn.MouseButton1Click:Connect(function()
+                DropdownLabel.Text = DropdownName
+                Callback(nil)
+                Dropped = false
+                TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 34)}):Play()
+            end)
 
             DropdownButton.MouseButton1Click:Connect(function()
                 Dropped = not Dropped
-                local TargetSize = Dropped and UDim2.new(1, 0, 0, 142) or UDim2.new(1, 0, 0, 34)
-                
-                if Dropped then
-                    CenterElement(PageFrame, DropdownFrame)
-                end
-                
-                TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = TargetSize}):Play()
-                TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = Dropped and 180 or 0}):Play()
+                TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = Dropped and UDim2.new(1, 0, 0, 180) or UDim2.new(1, 0, 0, 34)}):Play()
+                if Dropped then Refresh() end
             end)
+            Refresh()
         end
 
         function TabFunctions:MultiDropdown(Options, Parent)
             Parent = Parent or PageFrame
             local DropdownName = Options.Name or "Multi-Dropdown"
-            local DropdownOptions = Options.Options or {"Option 1", "Option 2"}
+            local DropdownOptions = Options.Options or {}
             local Default = Options.Default or {}
             local Callback = Options.Callback or function() end
+            local Max = Options.Max or #DropdownOptions
+            local Min = Options.Min or 0
+            
             local Selected = {}
+            local SelectionOrder = {}
             local Dropped = false
 
-            -- Set defaults
-            for _, v in pairs(Default) do Selected[v] = true end
+            for _, v in pairs(Default) do 
+                if #SelectionOrder < Max then
+                    Selected[v] = true 
+                    table.insert(SelectionOrder, v)
+                end
+            end
 
             local DropdownFrame = Instance.new("Frame")
             DropdownFrame.Parent = Parent
@@ -1106,10 +1135,7 @@ function Astral:Window(Options)
             DropdownFrame.BackgroundTransparency = 0.3
             DropdownFrame.Size = UDim2.new(1, 0, 0, 34)
             DropdownFrame.ClipsDescendants = true
-            
-            local DropdownCorner = Instance.new("UICorner")
-            DropdownCorner.CornerRadius = UDim.new(0, 6)
-            DropdownCorner.Parent = DropdownFrame
+            Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 6)
 
             local DropdownButton = Instance.new("TextButton")
             DropdownButton.Parent = DropdownFrame
@@ -1119,7 +1145,6 @@ function Astral:Window(Options)
 
             local DropdownLabel = Instance.new("TextLabel")
             DropdownLabel.Parent = DropdownButton
-            DropdownLabel.BackgroundTransparency = 1
             DropdownLabel.Position = UDim2.new(0, 12, 0, 0)
             DropdownLabel.Size = UDim2.new(1, -40, 1, 0)
             DropdownLabel.Font = Enum.Font.GothamMedium
@@ -1127,73 +1152,119 @@ function Astral:Window(Options)
             DropdownLabel.TextColor3 = Astral.Theme.Text
             DropdownLabel.TextSize = 12
             DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
+            DropdownLabel.BackgroundTransparency = 1
 
-            local ArrowImage = Instance.new("ImageLabel")
-            ArrowImage.Parent = DropdownButton
-            ArrowImage.BackgroundTransparency = 1
-            ArrowImage.Position = UDim2.new(1, -26, 0.5, -6)
-            ArrowImage.Size = UDim2.new(0, 12, 0, 12)
-            ArrowImage.Image = "rbxassetid://6031091004"
-            ArrowImage.ImageColor3 = Astral.Theme.Accent
+            -- Controls Header
+            local Header = Instance.new("Frame")
+            Header.Parent = DropdownFrame
+            Header.Position = UDim2.new(0, 6, 0, 38)
+            Header.Size = UDim2.new(1, -12, 0, 58)
+            Header.BackgroundTransparency = 1
+
+            local SearchBox = Instance.new("TextBox")
+            SearchBox.Parent = Header
+            SearchBox.Size = UDim2.new(1, 0, 0, 25)
+            SearchBox.BackgroundColor3 = Astral.Theme.Tertiary
+            SearchBox.PlaceholderText = "Search options..."
+            SearchBox.Text = ""
+            SearchBox.TextColor3 = Astral.Theme.Text
+            SearchBox.Font = Enum.Font.Gotham
+            SearchBox.TextSize = 11
+            Instance.new("UICorner", SearchBox).CornerRadius = UDim.new(0, 4)
+
+            local SelectAllBtn = Instance.new("TextButton")
+            SelectAllBtn.Parent = Header
+            SelectAllBtn.Position = UDim2.new(0, 0, 0, 30)
+            SelectAllBtn.Size = UDim2.new(0.5, -3, 0, 25)
+            SelectAllBtn.BackgroundColor3 = Astral.Theme.Secondary
+            SelectAllBtn.Text = "SELECT ALL"
+            SelectAllBtn.Font = Enum.Font.GothamBold
+            SelectAllBtn.TextColor3 = Astral.Theme.TextDark
+            SelectAllBtn.TextSize = 9
+            Instance.new("UICorner", SelectAllBtn).CornerRadius = UDim.new(0, 4)
+
+            local ClearAllBtn = Instance.new("TextButton")
+            ClearAllBtn.Parent = Header
+            ClearAllBtn.Position = UDim2.new(0.5, 3, 0, 30)
+            ClearAllBtn.Size = UDim2.new(0.5, -3, 0, 25)
+            ClearAllBtn.BackgroundColor3 = Astral.Theme.Secondary
+            ClearAllBtn.Text = "CLEAR ALL"
+            ClearAllBtn.Font = Enum.Font.GothamBold
+            ClearAllBtn.TextColor3 = Astral.Theme.TextDark
+            ClearAllBtn.TextSize = 9
+            Instance.new("UICorner", ClearAllBtn).CornerRadius = UDim.new(0, 4)
 
             local DropdownList = Instance.new("ScrollingFrame")
             DropdownList.Parent = DropdownFrame
             DropdownList.BackgroundTransparency = 1
-            DropdownList.Position = UDim2.new(0, 6, 0, 38)
+            DropdownList.Position = UDim2.new(0, 6, 0, 100)
             DropdownList.Size = UDim2.new(1, -12, 0, 100)
             DropdownList.ScrollBarThickness = 2
-            DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
             DropdownList.BorderSizePixel = 0
 
-            local DropdownLayout = Instance.new("UIListLayout")
-            DropdownLayout.Parent = DropdownList
-            DropdownLayout.Padding = UDim.new(0, 3)
-
-            local function Refresh()
+            local function Refresh(filter)
                 for _, Child in pairs(DropdownList:GetChildren()) do
                     if Child:IsA("TextButton") then Child:Destroy() end
                 end
                 for _, Option in pairs(DropdownOptions) do
+                    if filter and filter ~= "" and not string.find(string.lower(Option), string.lower(filter)) then continue end
+                    
                     local IsSelected = Selected[Option]
                     local OptionButton = Instance.new("TextButton")
                     OptionButton.Parent = DropdownList
                     OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
-                    OptionButton.BackgroundTransparency = 0.3
                     OptionButton.Size = UDim2.new(1, 0, 0, 26)
-                    OptionButton.Font = Enum.Font.Gotham
                     OptionButton.Text = Option
                     OptionButton.TextColor3 = IsSelected and Astral.Theme.Main or Astral.Theme.Text
+                    OptionButton.Font = Enum.Font.Gotham
                     OptionButton.TextSize = 11
-                    
-                    local OptionCorner = Instance.new("UICorner")
-                    OptionCorner.CornerRadius = UDim.new(0, 4)
-                    OptionCorner.Parent = OptionButton
+                    Instance.new("UICorner", OptionButton).CornerRadius = UDim.new(0, 4)
                     
                     OptionButton.MouseButton1Click:Connect(function()
-                        Selected[Option] = not Selected[Option]
-                        
-                        local TableToSend = {}
-                        for key, val in pairs(Selected) do if val then table.insert(TableToSend, key) end end
-                        Callback(TableToSend)
-                        Refresh()
+                        if Selected[Option] then
+                            if #SelectionOrder > Min then
+                                Selected[Option] = false
+                                for i, v in ipairs(SelectionOrder) do if v == Option then table.remove(SelectionOrder, i) break end end
+                            end
+                        elseif #SelectionOrder < Max then
+                            Selected[Option] = true
+                            table.insert(SelectionOrder, Option)
+                        end
+                        Refresh(SearchBox.Text)
+                        Callback(SelectionOrder)
                     end)
                 end
-                DropdownList.CanvasSize = UDim2.new(0, 0, 0, DropdownLayout.AbsoluteContentSize.Y + 6)
             end
-            Refresh()
+
+            SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
+
+            SelectAllBtn.MouseButton1Click:Connect(function()
+                for _, Option in ipairs(DropdownOptions) do
+                    if #SelectionOrder >= Max then break end
+                    if not Selected[Option] then
+                        Selected[Option] = true
+                        table.insert(SelectionOrder, Option)
+                    end
+                end
+                Refresh(SearchBox.Text)
+                Callback(SelectionOrder)
+            end)
+
+            ClearAllBtn.MouseButton1Click:Connect(function()
+                while #SelectionOrder > Min do
+                    local removed = table.remove(SelectionOrder, 1)
+                    Selected[removed] = false
+                end
+                Refresh(SearchBox.Text)
+                Callback(SelectionOrder)
+            end)
 
             DropdownButton.MouseButton1Click:Connect(function()
                 Dropped = not Dropped
-                local TargetSize = Dropped and UDim2.new(1, 0, 0, 142) or UDim2.new(1, 0, 0, 34)
-                
-                -- Center when opened
-                if Dropped then
-                    CenterElement(PageFrame, DropdownFrame)
-                end
-                
-                TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = TargetSize}):Play()
-                TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = Dropped and 180 or 0}):Play()
+                TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = Dropped and UDim2.new(1, 0, 0, 210) or UDim2.new(1, 0, 0, 34)}):Play()
+                if Dropped then Refresh() end
             end)
+            Refresh()
         end
 
         function TabFunctions:Keybind(Options, Parent)
