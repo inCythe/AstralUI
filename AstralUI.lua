@@ -1059,7 +1059,6 @@ function Astral:Window(Options)
             DropdownList.Size = UDim2.new(1, -12, 0, 100)
             DropdownList.ScrollBarThickness = 2
             DropdownList.BorderSizePixel = 0
-            -- Only scroll if list is longer than 100px
             DropdownList.ScrollingEnabled = false
 
             local DropdownLayout = Instance.new("UIListLayout")
@@ -1153,18 +1152,20 @@ function Astral:Window(Options)
             local DropdownLabel = Instance.new("TextLabel")
             DropdownLabel.Parent = DropdownButton
             DropdownLabel.Position = UDim2.new(0, 12, 0, 0)
-            DropdownLabel.Size = UDim2.new(1, -40, 1, 0)
+            DropdownLabel.Size = UDim2.new(1, -45, 1, 0)
             DropdownLabel.Font = Enum.Font.GothamMedium
             DropdownLabel.TextColor3 = Astral.Theme.Text
             DropdownLabel.TextSize = 12
             DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
             DropdownLabel.BackgroundTransparency = 1
+            DropdownLabel.TextTruncate = Enum.TextTruncate.AtEnd
 
             local function UpdateLabel()
                 if #SelectionOrder == 0 then
                     DropdownLabel.Text = DropdownName
                 else
-                    DropdownLabel.Text = DropdownName .. ": " .. table.concat(SelectionOrder, ", ")
+                    local combinedText = DropdownName .. ": " .. table.concat(SelectionOrder, ", ")
+                    DropdownLabel.Text = combinedText
                 end
             end
             UpdateLabel()
@@ -1226,7 +1227,6 @@ function Astral:Window(Options)
             DropdownList.ScrollBarThickness = 2
             DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
             DropdownList.BorderSizePixel = 0
-            DropdownList.ScrollingEnabled = true
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
