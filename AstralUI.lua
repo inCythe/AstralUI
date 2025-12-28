@@ -22,8 +22,8 @@ Astral.Theme = {
 }
 
 -- Prevent duplicate GUIs
-if CoreGui:FindFirstChild("AstralLib") then 
-    CoreGui.AstralLib:Destroy() 
+if CoreGui:FindFirstChild("AstralUI") then 
+    CoreGui.AstralUI:Destroy() 
 end
 
 --// UTILITY FUNCTIONS
@@ -121,12 +121,14 @@ end
 
 --// MAIN WINDOW
 function Astral:Window(Options)
-    local Name = Options.Name or "Astral V3"
+    local Name = Options.Name or "Astral"
     
     local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "AstralLib"
+    ScreenGui.Name = "AstralUI"
     ScreenGui.Parent = CoreGui
+    ScreenGui.DisplayOrder = 999
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    ScreenGui.ResetOnSpawn = false
 
     -- Notification system internals
     local NotificationQueue = {}
