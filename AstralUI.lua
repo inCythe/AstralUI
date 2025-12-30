@@ -375,6 +375,8 @@ function Astral:Window(Options)
     TabContainer.ScrollBarThickness = 3
     TabContainer.ScrollBarImageColor3 = Astral.Theme.Accent
     TabContainer.BorderSizePixel = 0
+    TabContainer.ScrollingDirection = Enum.ScrollingDirection.Y
+    TabContainer.ScrollingEnabled = true
 
     local TabLayout = Instance.new("UIListLayout")
     TabLayout.Parent = TabContainer
@@ -390,6 +392,8 @@ function Astral:Window(Options)
     PagesFrame.BackgroundTransparency = 0.2
     PagesFrame.Position = UDim2.new(0, 146, 0, 0)
     PagesFrame.Size = UDim2.new(1, -154, 1, -8)
+    PageFrame.ScrollingDirection = Enum.ScrollingDirection.Y
+    PageFrame.ScrollingEnabled = true
 
     local PagesCorner = Instance.new("UICorner")
     PagesCorner.CornerRadius = UDim.new(0, 8)
@@ -1074,6 +1078,7 @@ function Astral:Window(Options)
             DropdownList.ScrollBarThickness = 2
             DropdownList.BorderSizePixel = 0
             DropdownList.ScrollingEnabled = false
+            DropdownList.ScrollingDirection = Enum.ScrollingDirection.Y
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
@@ -1241,6 +1246,7 @@ function Astral:Window(Options)
             DropdownList.ScrollBarThickness = 2
             DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
             DropdownList.BorderSizePixel = 0
+            DropdownList.ScrollingDirection = Enum.ScrollingDirection.Y
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
