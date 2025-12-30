@@ -1,5 +1,8 @@
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
 
 local Astral = {}
@@ -134,7 +137,7 @@ function Astral:Window(Options)
     
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "AstralUI"
-    ScreenGui.Parent = CoreGui
+    ScreenGui.Parent = RunService:IsStudio() and Player.PlayerGui or CoreGui
     ScreenGui.DisplayOrder = 999
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     ScreenGui.ResetOnSpawn = false
