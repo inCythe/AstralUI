@@ -1103,7 +1103,7 @@ function Astral:Window(Options)
                     local IsSelected = (CurrentSelected == Option)
                     local OptionButton = Instance.new("TextButton")
                     OptionButton.Parent = DropdownList
-                    OptionButton.BackgroundColor3 = IsSelected and Color3.fromRGB(108, 159, 255) or Astral.Theme.Tertiary
+                    OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
                     OptionButton.Size = UDim2.new(1, 0, 0, 26)
                     OptionButton.Text = Option
                     OptionButton.TextColor3 = IsSelected and Astral.Theme.Main or Astral.Theme.Text
@@ -1273,7 +1273,7 @@ function Astral:Window(Options)
                     local IsSelected = Selected[Option]
                     local OptionButton = Instance.new("TextButton")
                     OptionButton.Parent = DropdownList
-                    OptionButton.BackgroundColor3 = IsSelected and Color3.fromRGB(108, 159, 255) or Astral.Theme.Tertiary
+                    OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
                     OptionButton.Size = UDim2.new(1, 0, 0, 26)
                     OptionButton.Text = Option
                     OptionButton.TextColor3 = IsSelected and Astral.Theme.Main or Astral.Theme.Text
