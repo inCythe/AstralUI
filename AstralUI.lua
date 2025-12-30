@@ -1083,11 +1083,11 @@ function Astral:Window(Options)
             DropdownList.Size = UDim2.new(1, -12, 0, 100)
             DropdownList.ScrollBarThickness = 2
             DropdownList.BorderSizePixel = 0
-            DropdownList.ScrollingEnabled = false
-            -- Fix for horizontal scrolling
+            DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
             DropdownList.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
             DropdownList.HorizontalScrollBarInset = Enum.ScrollBarInset.None
             DropdownList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
+            DropdownList.ScrollingEnabled = false
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
