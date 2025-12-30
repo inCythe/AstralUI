@@ -1,47 +1,7 @@
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-
---// PROTECTION
-local function GetSafeGui()
-    -- Try multiple methods to safely get a GUI container
-    local success, result = pcall(function()
-        if gethui then
-            return gethui()
-        elseif game:GetService("CoreGui") then
-            return game:GetService("CoreGui")
-        elseif game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui") then
-            return game:GetService("Players").LocalPlayer.PlayerGui
-        end
-    end)
-    return success and result or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-end
-
-local SafeGui = GetSafeGui()
-
---// INPUT BLOCKING
-local InputBlocked = false
-local function BlockInput()
-    InputBlocked = true
-end
-
-local function UnblockInput()
-    InputBlocked = false
-end
-
--- Connect input blocking to UserInputService
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if InputBlocked then
-        gameProcessed = true
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(input, gameProcessed)
-    if InputBlocked and (input.UserInputType == Enum.UserInputType.MouseMovement or 
-                         input.UserInputType == Enum.UserInputType.Touch) then
-        gameProcessed = true
-    end
-end)
+local CoreGui = game:GetService("CoreGui")
+local ContextActionService = game:GetService("ContextActionService")
 
 local Astral = {}
 
@@ -62,21 +22,16 @@ Astral.Theme = {
     Error = Color3.fromRGB(255, 100, 100),
 }
 
--- Prevent duplicate GUIs with more robust checking
-pcall(function()
-    for _, child in pairs(SafeGui:GetChildren()) do
-        if child.Name == "AstralLib" then
-            child:Destroy()
-        end
-    end
-end)
+-- Prevent duplicate GUIs
+if CoreGui:FindFirstChild("AstralLib") then 
+    CoreGui.AstralLib:Destroy() 
+end
 
 --// UTILITY FUNCTIONS
 local function MakeDraggable(DragBar, WindowObject)
     local Dragging, DragInput, DragStart, StartPosition
 
     local function Update(input)
-        BlockInput()  -- Block input while dragging
         local Delta = input.Position - DragStart
         WindowObject.Position = UDim2.new(
             StartPosition.X.Scale, 
@@ -88,7 +43,6 @@ local function MakeDraggable(DragBar, WindowObject)
 
     DragBar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            BlockInput()  -- Block input on click start
             Dragging = true
             DragStart = input.Position
             StartPosition = WindowObject.Position
@@ -96,8 +50,6 @@ local function MakeDraggable(DragBar, WindowObject)
             input.Changed:Connect(function()
                 if input.UserInputState == Enum.UserInputState.End then
                     Dragging = false
-                    task.wait(0.1)  -- Small delay before unblocking
-                    UnblockInput()
                 end
             end)
         end
@@ -118,7 +70,6 @@ end
 
 local function AddHoverEffect(Object, HoverColor, NormalColor, HoverTransparency, NormalTransparency)
     Object.MouseEnter:Connect(function()
-        BlockInput()  -- Block input on hover start
         local Properties = {BackgroundColor3 = HoverColor}
         if HoverTransparency then 
             Properties.BackgroundTransparency = HoverTransparency 
@@ -127,7 +78,6 @@ local function AddHoverEffect(Object, HoverColor, NormalColor, HoverTransparency
     end)
 
     Object.MouseLeave:Connect(function()
-        UnblockInput()  -- Unblock input on hover end
         local Properties = {BackgroundColor3 = NormalColor}
         if NormalTransparency then 
             Properties.BackgroundTransparency = NormalTransparency 
@@ -139,32 +89,22 @@ end
 local function AddClickEffect(Object)
     local OriginalSize = Object.Size
     
-    Object.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            BlockInput()  -- Block input on click
-            TweenService:Create(Object, TweenInfo.new(0.08), {
-                Size = UDim2.new(
-                    OriginalSize.X.Scale * 0.98, 
-                    OriginalSize.X.Offset, 
-                    OriginalSize.Y.Scale * 0.98, 
-                    OriginalSize.Y.Offset
-                )
-            }):Play()
-        end
+    Object.MouseButton1Down:Connect(function()
+        TweenService:Create(Object, TweenInfo.new(0.08), {
+            Size = UDim2.new(
+                OriginalSize.X.Scale * 0.98, 
+                OriginalSize.X.Offset, 
+                OriginalSize.Y.Scale * 0.98, 
+                OriginalSize.Y.Offset
+            )
+        }):Play()
     end)
 
     local function Restore()
         TweenService:Create(Object, TweenInfo.new(0.15), {Size = OriginalSize}):Play()
-        task.wait(0.1)  -- Small delay before unblocking
-        UnblockInput()
     end
 
-    Object.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            Restore()
-        end
-    end)
-    
+    Object.MouseButton1Up:Connect(Restore)
     Object.MouseLeave:Connect(Restore)
 end
 
@@ -180,19 +120,35 @@ local function CenterElement(ScrollingFrame, Element)
     }):Play()
 end
 
+--// INPUT BLOCKING SYSTEM
+local function CreateInputBlocker(Parent)
+    local Blocker = Instance.new("Frame")
+    Blocker.Name = "InputBlocker"
+    Blocker.BackgroundTransparency = 1
+    Blocker.Size = UDim2.new(1, 0, 1, 0)
+    Blocker.ZIndex = 9998
+    Blocker.Active = true
+    Blocker.Selectable = true
+    Blocker.Parent = Parent
+    return Blocker
+end
+
 --// MAIN WINDOW
 function Astral:Window(Options)
     local Name = Options.Name or "Astral V3"
     
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "AstralLib"
-    ScreenGui.Parent = SafeGui
+    ScreenGui.Parent = CoreGui
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    ScreenGui.ResetOnSpawn = false
-    ScreenGui.IgnoreGuiInset = true
-    
-    -- Set high display order to be on top
+    ScreenGui.Active = true
+    ScreenGui.Selectable = true
     ScreenGui.DisplayOrder = 999
+    ScreenGui.IgnoreGuiInset = true
+
+    -- Create main input blocker
+    local MainInputBlocker = CreateInputBlocker(ScreenGui)
+    MainInputBlocker.Visible = false
 
     -- Notification system internals
     local NotificationQueue = {}
@@ -206,8 +162,9 @@ function Astral:Window(Options)
     MainFrame.Position = UDim2.new(0.5, -290, 0.5, -210)
     MainFrame.Size = UDim2.new(0, 580, 0, 420)
     MainFrame.ClipsDescendants = true
-    MainFrame.Active = true  -- Make frame interactive
+    MainFrame.Active = true
     MainFrame.Selectable = true
+    MainFrame.ZIndex = 10
 
     local MainCorner = Instance.new("UICorner")
     MainCorner.CornerRadius = UDim.new(0, 12)
@@ -226,6 +183,7 @@ function Astral:Window(Options)
     TitleFrame.Size = UDim2.new(1, 0, 0, 38)
     TitleFrame.Active = true
     TitleFrame.Selectable = true
+    TitleFrame.ZIndex = 11
 
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Parent = TitleFrame
@@ -246,6 +204,9 @@ function Astral:Window(Options)
     ControlsFrame.BackgroundTransparency = 1
     ControlsFrame.Position = UDim2.new(1, -90, 0, 0)
     ControlsFrame.Size = UDim2.new(0, 90, 1, 0)
+    ControlsFrame.Active = true
+    ControlsFrame.Selectable = true
+    ControlsFrame.ZIndex = 12
 
     local function MakeButton(Text, Position, Color)
         local Button = Instance.new("TextButton")
@@ -261,6 +222,7 @@ function Astral:Window(Options)
         Button.TextSize = 14
         Button.Active = true
         Button.Selectable = true
+        Button.ZIndex = 13
         
         local ButtonCorner = Instance.new("UICorner")
         ButtonCorner.CornerRadius = UDim.new(0, 6)
@@ -274,25 +236,22 @@ function Astral:Window(Options)
     local CloseButton = MakeButton("×", UDim2.new(1, -32, 0.5, -14), Astral.Theme.Error)
     CloseButton.TextSize = 18
     CloseButton.MouseButton1Click:Connect(function()
-        BlockInput()  -- Block input during close animation
         local Tween = TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
             Size = UDim2.new(0, 0, 0, 0), 
             Position = UDim2.new(0.5, 0, 0.5, 0)
         })
         Tween:Play()
-        Tween.Completed:Wait()
+        task.wait(0.25)
         ScreenGui:Destroy()
-        UnblockInput()
+        ContextActionService:UnbindAction("AstralBlockInput")
     end)
 
     -- Minimize button
     local MinimizeButton = MakeButton("−", UDim2.new(1, -64, 0.5, -14), Astral.Theme.TextDark)
     MinimizeButton.TextSize = 16
     MinimizeButton.MouseButton1Click:Connect(function()
-        BlockInput()
         MainFrame.Visible = not MainFrame.Visible
-        task.wait(0.1)
-        UnblockInput()
+        MainInputBlocker.Visible = MainFrame.Visible
     end)
 
     -- Floating bubble
@@ -303,7 +262,7 @@ function Astral:Window(Options)
     -- Spawn in the middle of the right side
     Bubble.Position = UDim2.new(1, -60, 0.5, -25)
     Bubble.Size = UDim2.new(0, 50, 0, 50)
-    Bubble.ZIndex = 500
+    Bubble.ZIndex = 1000
     Bubble.Text = ""
     Bubble.AutoButtonColor = false
     Bubble.Active = true
@@ -348,7 +307,6 @@ function Astral:Window(Options)
 
     Bubble.InputBegan:Connect(function(input)
         if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
-            BlockInput()  -- Block input on bubble interaction
             BubbleDragging = true
             DragStart = input.Position
             StartPos = Bubble.Position
@@ -357,8 +315,6 @@ function Astral:Window(Options)
                 if input.UserInputState == Enum.UserInputState.End then
                     BubbleDragging = false
                     SnapToSide()
-                    task.wait(0.1)
-                    UnblockInput()
                 end
             end)
         end
@@ -378,12 +334,10 @@ function Astral:Window(Options)
     end)
 
     Bubble.MouseButton1Click:Connect(function()
-        BlockInput()
         if (StartPos.X.Offset - Bubble.Position.X.Offset) < 5 then
             MainFrame.Visible = not MainFrame.Visible
+            MainInputBlocker.Visible = MainFrame.Visible
         end
-        task.wait(0.1)
-        UnblockInput()
     end)
 
     -- Content Area
@@ -403,6 +357,8 @@ function Astral:Window(Options)
     SidebarFrame.BackgroundTransparency = 0.2
     SidebarFrame.Position = UDim2.new(0, 8, 0, 0)
     SidebarFrame.Size = UDim2.new(0, 130, 1, -8)
+    SidebarFrame.Active = true
+    SidebarFrame.Selectable = true
 
     local SidebarCorner = Instance.new("UICorner")
     SidebarCorner.CornerRadius = UDim.new(0, 8)
@@ -421,6 +377,8 @@ function Astral:Window(Options)
     SearchFrame.BackgroundTransparency = 0.3
     SearchFrame.Position = UDim2.new(0, 6, 0, 6)
     SearchFrame.Size = UDim2.new(1, -12, 0, 30)
+    SearchFrame.Active = true
+    SearchFrame.Selectable = true
 
     local SearchCorner = Instance.new("UICorner")
     SearchCorner.CornerRadius = UDim.new(0, 6)
@@ -438,7 +396,8 @@ function Astral:Window(Options)
     SearchBox.TextColor3 = Astral.Theme.TextDark
     SearchBox.TextSize = 11
     SearchBox.TextXAlignment = Enum.TextXAlignment.Left
-    SearchBox.ClearTextOnFocus = false
+    SearchBox.Active = true
+    SearchBox.Selectable = true
 
     -- Tab Container
     local TabContainer = Instance.new("ScrollingFrame")
@@ -541,12 +500,11 @@ function Astral:Window(Options)
         NotificationFrame.BackgroundColor3 = Astral.Theme.Main
         NotificationFrame.BackgroundTransparency = 0.1
         NotificationFrame.Size = UDim2.new(0, 300, 0, 70)
-        NotificationFrame.Active = true
-        NotificationFrame.Selectable = true
-
         NotificationFrame.AnchorPoint = Vector2.new(1, 1)
         NotificationFrame.Position = UDim2.new(1.5, 0, 1, -20)
-        NotificationFrame.ZIndex = 100
+        NotificationFrame.ZIndex = 1100
+        NotificationFrame.Active = true
+        NotificationFrame.Selectable = true
 
         local NotificationCorner = Instance.new("UICorner")
         NotificationCorner.CornerRadius = UDim.new(0, 8)
@@ -689,7 +647,6 @@ function Astral:Window(Options)
         end)
 
         local function Activate()
-            BlockInput()
             for _, Page in pairs(PagesFrame:GetChildren()) do
                 if Page:IsA("ScrollingFrame") then 
                     Page.Visible = false 
@@ -706,8 +663,6 @@ function Astral:Window(Options)
             TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundTransparency = 0.1}):Play()
             TweenService:Create(LabelText, TweenInfo.new(0.2), {TextColor3 = Astral.Theme.Text}):Play()
             TweenService:Create(IconImage, TweenInfo.new(0.2), {ImageColor3 = Astral.Theme.Accent}):Play()
-            task.wait(0.1)
-            UnblockInput()
         end
 
         TabButton.MouseButton1Click:Connect(Activate)
@@ -742,6 +697,8 @@ function Astral:Window(Options)
             HeaderFrame.BackgroundColor3 = Astral.Theme.Main
             HeaderFrame.BackgroundTransparency = 0.3
             HeaderFrame.Size = UDim2.new(1, 0, 0, 32)
+            HeaderFrame.Active = true
+            HeaderFrame.Selectable = true
 
             local HeaderCorner = Instance.new("UICorner")
             HeaderCorner.CornerRadius = UDim.new(0, 8)
@@ -764,6 +721,8 @@ function Astral:Window(Options)
             SectionContent.Position = UDim2.new(0, 0, 0, 32)
             SectionContent.Size = UDim2.new(1, 0, 0, 0)
             SectionContent.AutomaticSize = Enum.AutomaticSize.Y
+            SectionContent.Active = true
+            SectionContent.Selectable = true
 
             local SectionPadding = Instance.new("UIPadding")
             SectionPadding.Parent = SectionContent
@@ -822,12 +781,7 @@ function Astral:Window(Options)
 
             AddHoverEffect(ButtonFrame, Astral.Theme.HoverBright, Astral.Theme.Main, 0.1, 0.3)
             AddClickEffect(ButtonFrame)
-            ButtonFrame.MouseButton1Click:Connect(function()
-                BlockInput()
-                Callback()
-                task.wait(0.1)
-                UnblockInput()
-            end)
+            ButtonFrame.MouseButton1Click:Connect(Callback)
         end
 
         function TabFunctions:Toggle(Options, Parent)
@@ -885,14 +839,11 @@ function Astral:Window(Options)
             CircleCorner.Parent = CircleFrame
 
             local function Update()
-                BlockInput()
                 local Position = State and UDim2.new(1, -16, 0.5, -7) or UDim2.new(0, 2, 0.5, -7)
                 local Color = State and Astral.Theme.Accent or Astral.Theme.Tertiary
                 TweenService:Create(CircleFrame, TweenInfo.new(0.2), {Position = Position}):Play()
                 TweenService:Create(CheckButton, TweenInfo.new(0.2), {BackgroundColor3 = Color}):Play()
                 Callback(State)
-                task.wait(0.1)
-                UnblockInput()
             end
             
             CheckButton.MouseButton1Click:Connect(function() 
@@ -954,6 +905,8 @@ function Astral:Window(Options)
             BackgroundFrame.BackgroundColor3 = Astral.Theme.Tertiary
             BackgroundFrame.Position = UDim2.new(0, 12, 1, -18)
             BackgroundFrame.Size = UDim2.new(1, -24, 0, 6)
+            BackgroundFrame.Active = true
+            BackgroundFrame.Selectable = true
             
             local BackgroundCorner = Instance.new("UICorner")
             BackgroundCorner.CornerRadius = UDim.new(1, 0)
@@ -984,7 +937,6 @@ function Astral:Window(Options)
             local Dragging = false
 
             local function Update(input)
-                BlockInput()
                 local SizeX = BackgroundFrame.AbsoluteSize.X
                 local OffsetX = math.clamp(input.Position.X - BackgroundFrame.AbsolutePosition.X, 0, SizeX)
                 local Percentage = OffsetX / SizeX
@@ -1025,14 +977,11 @@ function Astral:Window(Options)
             UserInputService.InputEnded:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     Dragging = false
-                    task.wait(0.1)
-                    UnblockInput()
                 end
             end)
 
             ValueInput.Focused:Connect(function()
                 CenterElement(PageFrame, SliderFrame)
-                BlockInput()
             end)
 
             ValueInput.FocusLost:Connect(function()
@@ -1047,8 +996,6 @@ function Astral:Window(Options)
                 else
                     ValueInput.Text = tostring(Value)
                 end
-                task.wait(0.1)
-                UnblockInput()
             end)
         end
 
@@ -1105,15 +1052,17 @@ function Astral:Window(Options)
 
             InputBox.Focused:Connect(function()
                 CenterElement(PageFrame, TextBoxFrame)
-                BlockInput()
+                -- Block game input when typing
+                ContextActionService:BindAction("AstralBlockInput", function() return Enum.ContextActionResult.Sink end, false, 
+                    Enum.KeyCode.LeftShift, Enum.KeyCode.RightShift, Enum.KeyCode.Tab)
             end)
 
             InputBox.FocusLost:Connect(function(EnterPressed) 
                 if EnterPressed then 
                     Callback(InputBox.Text) 
-                end 
-                task.wait(0.1)
-                UnblockInput()
+                end
+                -- Unblock game input
+                ContextActionService:UnbindAction("AstralBlockInput")
             end)
         end
 
@@ -1167,6 +1116,8 @@ function Astral:Window(Options)
             Header.Position = UDim2.new(0, 6, 0, 38)
             Header.Size = UDim2.new(1, -12, 0, 28)
             Header.BackgroundTransparency = 1
+            Header.Active = true
+            Header.Selectable = true
 
             local SearchBox = Instance.new("TextBox")
             SearchBox.Parent = Header
@@ -1231,13 +1182,10 @@ function Astral:Window(Options)
                     Instance.new("UICorner", OptionButton).CornerRadius = UDim.new(0, 4)
                     
                     OptionButton.MouseButton1Click:Connect(function()
-                        BlockInput()
                         CurrentSelected = Option
                         DropdownLabel.Text = DropdownName .. ": " .. Option
                         Callback(Option)
                         Refresh(SearchBox.Text)
-                        task.wait(0.1)
-                        UnblockInput()
                     end)
                 end
                 
@@ -1249,24 +1197,25 @@ function Astral:Window(Options)
             SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
             
             ClearBtn.MouseButton1Click:Connect(function()
-                BlockInput()
                 CurrentSelected = nil
                 DropdownLabel.Text = DropdownName
                 Callback(nil)
                 Refresh(SearchBox.Text)
-                task.wait(0.1)
-                UnblockInput()
             end)
 
             DropdownButton.MouseButton1Click:Connect(function()
-                BlockInput()
                 Dropped = not Dropped
-                if Dropped then CenterElement(PageFrame, DropdownFrame) end
+                if Dropped then 
+                    CenterElement(PageFrame, DropdownFrame) 
+                    -- Block game input when dropdown is open
+                    ContextActionService:BindAction("AstralBlockInput", function() return Enum.ContextActionResult.Sink end, false, 
+                        Enum.KeyCode.Escape, Enum.KeyCode.Tab)
+                else
+                    ContextActionService:UnbindAction("AstralBlockInput")
+                end
                 TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = Dropped and UDim2.new(1, 0, 0, 180) or UDim2.new(1, 0, 0, 34)}):Play()
                 TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = Dropped and 180 or 0}):Play()
                 if Dropped then Refresh() end
-                task.wait(0.1)
-                UnblockInput()
             end)
             Refresh()
         end
@@ -1343,6 +1292,8 @@ function Astral:Window(Options)
             Header.Position = UDim2.new(0, 6, 0, 38)
             Header.Size = UDim2.new(1, -12, 0, 58)
             Header.BackgroundTransparency = 1
+            Header.Active = true
+            Header.Selectable = true
 
             local SearchBox = Instance.new("TextBox")
             SearchBox.Parent = Header
@@ -1421,7 +1372,6 @@ function Astral:Window(Options)
                     Instance.new("UICorner", OptionButton).CornerRadius = UDim.new(0, 4)
                     
                     OptionButton.MouseButton1Click:Connect(function()
-                        BlockInput()
                         if Selected[Option] then
                             if #SelectionOrder > Min then
                                 Selected[Option] = false
@@ -1434,8 +1384,6 @@ function Astral:Window(Options)
                         UpdateLabel()
                         Refresh(SearchBox.Text)
                         Callback(SelectionOrder)
-                        task.wait(0.1)
-                        UnblockInput()
                     end)
                 end
                 DropdownList.CanvasSize = UDim2.new(0, 0, 0, DropdownLayout.AbsoluteContentSize.Y + 5)
@@ -1444,7 +1392,6 @@ function Astral:Window(Options)
             SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
 
             SelectAllBtn.MouseButton1Click:Connect(function()
-                BlockInput()
                 for _, Option in ipairs(DropdownOptions) do
                     if #SelectionOrder >= Max then break end
                     if not Selected[Option] then
@@ -1455,12 +1402,9 @@ function Astral:Window(Options)
                 UpdateLabel()
                 Refresh(SearchBox.Text)
                 Callback(SelectionOrder)
-                task.wait(0.1)
-                UnblockInput()
             end)
 
             ClearAllBtn.MouseButton1Click:Connect(function()
-                BlockInput()
                 while #SelectionOrder > Min do
                     local removed = table.remove(SelectionOrder, 1)
                     Selected[removed] = false
@@ -1468,20 +1412,22 @@ function Astral:Window(Options)
                 UpdateLabel()
                 Refresh(SearchBox.Text)
                 Callback(SelectionOrder)
-                task.wait(0.1)
-                UnblockInput()
             end)
 
             DropdownButton.MouseButton1Click:Connect(function()
-                BlockInput()
                 Dropped = not Dropped
                 local TargetSize = Dropped and UDim2.new(1, 0, 0, 230) or UDim2.new(1, 0, 0, 34)
-                if Dropped then CenterElement(PageFrame, DropdownFrame) end
+                if Dropped then 
+                    CenterElement(PageFrame, DropdownFrame) 
+                    -- Block game input when dropdown is open
+                    ContextActionService:BindAction("AstralBlockInput", function() return Enum.ContextActionResult.Sink end, false, 
+                        Enum.KeyCode.Escape, Enum.KeyCode.Tab)
+                else
+                    ContextActionService:UnbindAction("AstralBlockInput")
+                end
                 TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = TargetSize}):Play()
                 TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = Dropped and 180 or 0}):Play()
                 if Dropped then Refresh() end
-                task.wait(0.1)
-                UnblockInput()
             end)
             Refresh()
         end
@@ -1540,10 +1486,12 @@ function Astral:Window(Options)
 
             local Binding = false
             KeybindButton.MouseButton1Click:Connect(function()
-                BlockInput()
                 Binding = true
                 KeybindButton.Text = "..."
                 KeybindButton.TextColor3 = Astral.Theme.Warning
+                -- Block all keyboard input while binding
+                ContextActionService:BindAction("AstralBlockInput", function() return Enum.ContextActionResult.Sink end, false, 
+                    unpack(Enum.KeyCode:GetEnumItems()))
             end)
 
             UserInputService.InputBegan:Connect(function(input, GameProcessed)
@@ -1553,8 +1501,8 @@ function Astral:Window(Options)
                     KeybindButton.TextColor3 = Astral.Theme.Accent
                     Binding = false
                     Callback(Current)
-                    task.wait(0.1)
-                    UnblockInput()
+                    -- Unblock keyboard input after binding
+                    ContextActionService:UnbindAction("AstralBlockInput")
                 elseif not GameProcessed and input.KeyCode == Current then
                     Callback(Current)
                 end
@@ -1570,6 +1518,8 @@ function Astral:Window(Options)
             LabelFrame.BackgroundColor3 = Astral.Theme.Main
             LabelFrame.BackgroundTransparency = 0.3
             LabelFrame.Size = UDim2.new(1, 0, 0, 30)
+            LabelFrame.Active = true
+            LabelFrame.Selectable = true
             
             local LabelCorner = Instance.new("UICorner")
             LabelCorner.CornerRadius = UDim.new(0, 6)
