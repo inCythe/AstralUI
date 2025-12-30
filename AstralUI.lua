@@ -141,8 +141,6 @@ function Astral:Window(Options)
     ScreenGui.Name = "AstralLib"
     ScreenGui.Parent = CoreGui
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    ScreenGui.Active = true
-    ScreenGui.Selectable = true
     ScreenGui.DisplayOrder = 999
     ScreenGui.IgnoreGuiInset = true
 
