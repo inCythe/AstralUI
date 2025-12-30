@@ -22,18 +22,8 @@ Astral.Theme = {
 }
 
 -- Prevent duplicate GUIs
-if gethui then
-	for _, Interface in ipairs(gethui():GetChildren()) do
-		if Interface.Name == "AstralUI" then
-			Interface.Enabled = false
-			Interface.Name = "AstralUI-Old"
-		end
-	end
-else
-	if CoreGui:FindFirstChild("AstralUI") then 
-		CoreGui.AstralUI:Enabled = false
-		CoreGui.AstralUI.Name = "AstralUI-Old"
-	end
+if CoreGui:FindFirstChild("AstralUI") then 
+    CoreGui.AstralUI:Destroy() 
 end
 
 --// UTILITY FUNCTIONS
