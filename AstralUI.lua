@@ -139,7 +139,7 @@ function Astral:Window(Options)
     
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "AstralUI"
-    ScreenGui.Parent = (IsStudio and Players.LocalPlayer.PlayerGui) or game.CoreGui
+    ScreenGui.Parent = (IsStudio and LocalPlayer.PlayerGui) or game.CoreGui
     ScreenGui.DisplayOrder = 999
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     ScreenGui.ResetOnSpawn = false
