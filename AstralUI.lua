@@ -1,7 +1,6 @@
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
-local ContextActionService = game:GetService("ContextActionService")
 
 local Astral = {}
 
@@ -21,6 +20,11 @@ Astral.Theme = {
     Warning = Color3.fromRGB(255, 180, 80),
     Error = Color3.fromRGB(255, 100, 100),
 }
+
+-- Prevent duplicate GUIs
+if CoreGui:FindFirstChild("AstralUI") then 
+    CoreGui.AstralUI:Destroy() 
+end
 
 --// UTILITY FUNCTIONS
 local function MakeDraggable(DragBar, WindowObject)
@@ -115,56 +119,16 @@ local function CenterElement(ScrollingFrame, Element)
     }):Play()
 end
 
---// INPUT BLOCKING SYSTEM
-local function CreateInputBlocker(Parent)
-    local Blocker = Instance.new("Frame")
-    Blocker.Name = "InputBlocker"
-    Blocker.BackgroundTransparency = 1
-    Blocker.Size = UDim2.new(1, 0, 1, 0)
-    Blocker.ZIndex = 9998
-    Blocker.Active = true
-    Blocker.Selectable = true
-    Blocker.Parent = Parent
-    return Blocker
-end
-
---// CLEANUP FUNCTION
-local function CleanupExistingUI()
-    -- Clean up any existing Astral UI elements
-    for _, child in pairs(CoreGui:GetChildren()) do
-        if child.Name == "AstralLib" or child.Name == "AstralBubble" then
-            child:Destroy()
-        end
-    end
-    
-    -- Also check for any notifications or other UI elements
-    for _, child in pairs(CoreGui:GetChildren()) do
-        if child:IsA("ScreenGui") and (child.Name:find("Astral") or child.Name:find("Notification")) then
-            child:Destroy()
-        end
-    end
-    
-    -- Unbind any context actions
-    ContextActionService:UnbindAction("AstralBlockInput")
-end
-
 --// MAIN WINDOW
 function Astral:Window(Options)
-    -- Clean up any existing UI first
-    CleanupExistingUI()
-    
-    local Name = Options.Name or "Astral V3"
+    local Name = Options.Name or "Astral"
     
     local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "AstralLib"
+    ScreenGui.Name = "AstralUI"
     ScreenGui.Parent = CoreGui
-    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     ScreenGui.DisplayOrder = 999
-    ScreenGui.IgnoreGuiInset = true
-
-    -- Create main input blocker
-    local MainInputBlocker = CreateInputBlocker(ScreenGui)
-    MainInputBlocker.Visible = false
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    ScreenGui.ResetOnSpawn = false
 
     -- Notification system internals
     local NotificationQueue = {}
@@ -178,9 +142,6 @@ function Astral:Window(Options)
     MainFrame.Position = UDim2.new(0.5, -290, 0.5, -210)
     MainFrame.Size = UDim2.new(0, 580, 0, 420)
     MainFrame.ClipsDescendants = true
-    MainFrame.Active = true
-    MainFrame.Selectable = true
-    MainFrame.ZIndex = 10
 
     local MainCorner = Instance.new("UICorner")
     MainCorner.CornerRadius = UDim.new(0, 12)
@@ -197,9 +158,6 @@ function Astral:Window(Options)
     TitleFrame.Parent = MainFrame
     TitleFrame.BackgroundTransparency = 1
     TitleFrame.Size = UDim2.new(1, 0, 0, 38)
-    TitleFrame.Active = true
-    TitleFrame.Selectable = true
-    TitleFrame.ZIndex = 11
 
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Parent = TitleFrame
@@ -220,9 +178,6 @@ function Astral:Window(Options)
     ControlsFrame.BackgroundTransparency = 1
     ControlsFrame.Position = UDim2.new(1, -90, 0, 0)
     ControlsFrame.Size = UDim2.new(0, 90, 1, 0)
-    ControlsFrame.Active = true
-    ControlsFrame.Selectable = true
-    ControlsFrame.ZIndex = 12
 
     local function MakeButton(Text, Position, Color)
         local Button = Instance.new("TextButton")
@@ -236,9 +191,6 @@ function Astral:Window(Options)
         Button.Text = Text
         Button.TextColor3 = Color
         Button.TextSize = 14
-        Button.Active = true
-        Button.Selectable = true
-        Button.ZIndex = 13
         
         local ButtonCorner = Instance.new("UICorner")
         ButtonCorner.CornerRadius = UDim.new(0, 6)
@@ -258,7 +210,7 @@ function Astral:Window(Options)
         })
         Tween:Play()
         task.wait(0.25)
-        CleanupExistingUI()
+        ScreenGui:Destroy()
     end)
 
     -- Minimize button
@@ -266,7 +218,6 @@ function Astral:Window(Options)
     MinimizeButton.TextSize = 16
     MinimizeButton.MouseButton1Click:Connect(function()
         MainFrame.Visible = not MainFrame.Visible
-        MainInputBlocker.Visible = MainFrame.Visible
     end)
 
     -- Floating bubble
@@ -277,11 +228,9 @@ function Astral:Window(Options)
     -- Spawn in the middle of the right side
     Bubble.Position = UDim2.new(1, -60, 0.5, -25)
     Bubble.Size = UDim2.new(0, 50, 0, 50)
-    Bubble.ZIndex = 1000
+    Bubble.ZIndex = 500
     Bubble.Text = ""
     Bubble.AutoButtonColor = false
-    Bubble.Active = true
-    Bubble.Selectable = true
     
     local BubbleCorner = Instance.new("UICorner")
     BubbleCorner.CornerRadius = UDim.new(1, 0)
@@ -351,7 +300,6 @@ function Astral:Window(Options)
     Bubble.MouseButton1Click:Connect(function()
         if (StartPos.X.Offset - Bubble.Position.X.Offset) < 5 then
             MainFrame.Visible = not MainFrame.Visible
-            MainInputBlocker.Visible = MainFrame.Visible
         end
     end)
 
@@ -362,8 +310,6 @@ function Astral:Window(Options)
     ContentFrame.Position = UDim2.new(0, 0, 0, 42)
     ContentFrame.Size = UDim2.new(1, 0, 1, -42)
     ContentFrame.ClipsDescendants = true
-    ContentFrame.Active = true
-    ContentFrame.Selectable = true
 
     -- Sidebar
     local SidebarFrame = Instance.new("Frame")
@@ -372,8 +318,6 @@ function Astral:Window(Options)
     SidebarFrame.BackgroundTransparency = 0.2
     SidebarFrame.Position = UDim2.new(0, 8, 0, 0)
     SidebarFrame.Size = UDim2.new(0, 130, 1, -8)
-    SidebarFrame.Active = true
-    SidebarFrame.Selectable = true
 
     local SidebarCorner = Instance.new("UICorner")
     SidebarCorner.CornerRadius = UDim.new(0, 8)
@@ -392,8 +336,6 @@ function Astral:Window(Options)
     SearchFrame.BackgroundTransparency = 0.3
     SearchFrame.Position = UDim2.new(0, 6, 0, 6)
     SearchFrame.Size = UDim2.new(1, -12, 0, 30)
-    SearchFrame.Active = true
-    SearchFrame.Selectable = true
 
     local SearchCorner = Instance.new("UICorner")
     SearchCorner.CornerRadius = UDim.new(0, 6)
@@ -411,8 +353,6 @@ function Astral:Window(Options)
     SearchBox.TextColor3 = Astral.Theme.TextDark
     SearchBox.TextSize = 11
     SearchBox.TextXAlignment = Enum.TextXAlignment.Left
-    SearchBox.Active = true
-    SearchBox.Selectable = true
 
     -- Tab Container
     local TabContainer = Instance.new("ScrollingFrame")
@@ -423,8 +363,6 @@ function Astral:Window(Options)
     TabContainer.ScrollBarThickness = 3
     TabContainer.ScrollBarImageColor3 = Astral.Theme.Accent
     TabContainer.BorderSizePixel = 0
-    TabContainer.Active = true
-    TabContainer.Selectable = true
 
     local TabLayout = Instance.new("UIListLayout")
     TabLayout.Parent = TabContainer
@@ -440,8 +378,6 @@ function Astral:Window(Options)
     PagesFrame.BackgroundTransparency = 0.2
     PagesFrame.Position = UDim2.new(0, 146, 0, 0)
     PagesFrame.Size = UDim2.new(1, -154, 1, -8)
-    PagesFrame.Active = true
-    PagesFrame.Selectable = true
 
     local PagesCorner = Instance.new("UICorner")
     PagesCorner.CornerRadius = UDim.new(0, 8)
@@ -515,11 +451,11 @@ function Astral:Window(Options)
         NotificationFrame.BackgroundColor3 = Astral.Theme.Main
         NotificationFrame.BackgroundTransparency = 0.1
         NotificationFrame.Size = UDim2.new(0, 300, 0, 70)
+        
+
         NotificationFrame.AnchorPoint = Vector2.new(1, 1)
         NotificationFrame.Position = UDim2.new(1.5, 0, 1, -20)
-        NotificationFrame.ZIndex = 1100
-        NotificationFrame.Active = true
-        NotificationFrame.Selectable = true
+        NotificationFrame.ZIndex = 100
 
         local NotificationCorner = Instance.new("UICorner")
         NotificationCorner.CornerRadius = UDim.new(0, 8)
@@ -598,8 +534,6 @@ function Astral:Window(Options)
         TabButton.Size = UDim2.new(1, 0, 0, 28)
         TabButton.AutoButtonColor = false
         TabButton.Text = ""
-        TabButton.Active = true
-        TabButton.Selectable = true
         
         local TabButtonCorner = Instance.new("UICorner")
         TabButtonCorner.CornerRadius = UDim.new(0, 8)
@@ -644,8 +578,6 @@ function Astral:Window(Options)
         PageFrame.ScrollBarThickness = 4
         PageFrame.ScrollBarImageColor3 = Astral.Theme.Accent
         PageFrame.Visible = false
-        PageFrame.Active = true
-        PageFrame.Selectable = true
 
         local PagePadding = Instance.new("UIPadding")
         PagePadding.Parent = PageFrame
@@ -700,8 +632,6 @@ function Astral:Window(Options)
             SectionFrame.BackgroundTransparency = 0.3
             SectionFrame.Size = UDim2.new(1, 0, 0, 0)
             SectionFrame.AutomaticSize = Enum.AutomaticSize.Y
-            SectionFrame.Active = true
-            SectionFrame.Selectable = true
 
             local SectionCorner = Instance.new("UICorner")
             SectionCorner.CornerRadius = UDim.new(0, 8)
@@ -712,8 +642,6 @@ function Astral:Window(Options)
             HeaderFrame.BackgroundColor3 = Astral.Theme.Main
             HeaderFrame.BackgroundTransparency = 0.3
             HeaderFrame.Size = UDim2.new(1, 0, 0, 32)
-            HeaderFrame.Active = true
-            HeaderFrame.Selectable = true
 
             local HeaderCorner = Instance.new("UICorner")
             HeaderCorner.CornerRadius = UDim.new(0, 8)
@@ -736,8 +664,6 @@ function Astral:Window(Options)
             SectionContent.Position = UDim2.new(0, 0, 0, 32)
             SectionContent.Size = UDim2.new(1, 0, 0, 0)
             SectionContent.AutomaticSize = Enum.AutomaticSize.Y
-            SectionContent.Active = true
-            SectionContent.Selectable = true
 
             local SectionPadding = Instance.new("UIPadding")
             SectionPadding.Parent = SectionContent
@@ -776,8 +702,6 @@ function Astral:Window(Options)
             ButtonFrame.Size = UDim2.new(1, 0, 0, 34)
             ButtonFrame.AutoButtonColor = false
             ButtonFrame.Text = ""
-            ButtonFrame.Active = true
-            ButtonFrame.Selectable = true
             
             local ButtonCorner = Instance.new("UICorner")
             ButtonCorner.CornerRadius = UDim.new(0, 6)
@@ -811,8 +735,6 @@ function Astral:Window(Options)
             ToggleFrame.BackgroundColor3 = Astral.Theme.Main
             ToggleFrame.BackgroundTransparency = 0.3
             ToggleFrame.Size = UDim2.new(1, 0, 0, 34)
-            ToggleFrame.Active = true
-            ToggleFrame.Selectable = true
             
             local ToggleCorner = Instance.new("UICorner")
             ToggleCorner.CornerRadius = UDim.new(0, 6)
@@ -836,8 +758,6 @@ function Astral:Window(Options)
             CheckButton.Size = UDim2.new(0, 38, 0, 18)
             CheckButton.AutoButtonColor = false
             CheckButton.Text = ""
-            CheckButton.Active = true
-            CheckButton.Selectable = true
             
             local CheckCorner = Instance.new("UICorner")
             CheckCorner.CornerRadius = UDim.new(1, 0)
@@ -883,8 +803,6 @@ function Astral:Window(Options)
             SliderFrame.BackgroundColor3 = Astral.Theme.Main
             SliderFrame.BackgroundTransparency = 0.3
             SliderFrame.Size = UDim2.new(1, 0, 0, 50)
-            SliderFrame.Active = true
-            SliderFrame.Selectable = true
             
             local SliderCorner = Instance.new("UICorner")
             SliderCorner.CornerRadius = UDim.new(0, 6)
@@ -912,16 +830,12 @@ function Astral:Window(Options)
             ValueInput.TextColor3 = Astral.Theme.Accent
             ValueInput.TextSize = 11
             ValueInput.ClearTextOnFocus = false
-            ValueInput.Active = true
-            ValueInput.Selectable = true
 
             local BackgroundFrame = Instance.new("Frame")
             BackgroundFrame.Parent = SliderFrame
             BackgroundFrame.BackgroundColor3 = Astral.Theme.Tertiary
             BackgroundFrame.Position = UDim2.new(0, 12, 1, -18)
             BackgroundFrame.Size = UDim2.new(1, -24, 0, 6)
-            BackgroundFrame.Active = true
-            BackgroundFrame.Selectable = true
             
             local BackgroundCorner = Instance.new("UICorner")
             BackgroundCorner.CornerRadius = UDim.new(1, 0)
@@ -942,8 +856,6 @@ function Astral:Window(Options)
             BallFrame.Size = UDim2.new(0, 14, 0, 14)
             BallFrame.Position = UDim2.new((Value - Min) / (Max - Min), -7, 0.5, -7)
             BallFrame.ZIndex = 2
-            BallFrame.Active = true
-            BallFrame.Selectable = true
             
             local BallCorner = Instance.new("UICorner")
             BallCorner.CornerRadius = UDim.new(1, 0)
@@ -1026,8 +938,6 @@ function Astral:Window(Options)
             TextBoxFrame.BackgroundColor3 = Astral.Theme.Main
             TextBoxFrame.BackgroundTransparency = 0.3
             TextBoxFrame.Size = UDim2.new(1, 0, 0, 44)
-            TextBoxFrame.Active = true
-            TextBoxFrame.Selectable = true
             
             local TextBoxCorner = Instance.new("UICorner")
             TextBoxCorner.CornerRadius = UDim.new(0, 6)
@@ -1058,8 +968,6 @@ function Astral:Window(Options)
             InputBox.TextSize = 11
             InputBox.TextXAlignment = Enum.TextXAlignment.Left
             InputBox.ClearTextOnFocus = false
-            InputBox.Active = true
-            InputBox.Selectable = true
             
             local InputCorner = Instance.new("UICorner")
             InputCorner.CornerRadius = UDim.new(0, 4)
@@ -1067,17 +975,12 @@ function Astral:Window(Options)
 
             InputBox.Focused:Connect(function()
                 CenterElement(PageFrame, TextBoxFrame)
-                -- Block game input when typing
-                ContextActionService:BindAction("AstralBlockInput", function() return Enum.ContextActionResult.Sink end, false, 
-                    Enum.KeyCode.LeftShift, Enum.KeyCode.RightShift, Enum.KeyCode.Tab)
             end)
 
             InputBox.FocusLost:Connect(function(EnterPressed) 
                 if EnterPressed then 
                     Callback(InputBox.Text) 
-                end
-                -- Unblock game input
-                ContextActionService:UnbindAction("AstralBlockInput")
+                end 
             end)
         end
 
@@ -1095,8 +998,6 @@ function Astral:Window(Options)
             DropdownFrame.BackgroundTransparency = 0.3
             DropdownFrame.Size = UDim2.new(1, 0, 0, 34)
             DropdownFrame.ClipsDescendants = true
-            DropdownFrame.Active = true
-            DropdownFrame.Selectable = true
             Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 6)
 
             local DropdownButton = Instance.new("TextButton")
@@ -1104,8 +1005,6 @@ function Astral:Window(Options)
             DropdownButton.BackgroundTransparency = 1
             DropdownButton.Size = UDim2.new(1, 0, 0, 34)
             DropdownButton.Text = ""
-            DropdownButton.Active = true
-            DropdownButton.Selectable = true
 
             local DropdownLabel = Instance.new("TextLabel")
             DropdownLabel.Parent = DropdownButton
@@ -1131,8 +1030,6 @@ function Astral:Window(Options)
             Header.Position = UDim2.new(0, 6, 0, 38)
             Header.Size = UDim2.new(1, -12, 0, 28)
             Header.BackgroundTransparency = 1
-            Header.Active = true
-            Header.Selectable = true
 
             local SearchBox = Instance.new("TextBox")
             SearchBox.Parent = Header
@@ -1143,8 +1040,6 @@ function Astral:Window(Options)
             SearchBox.TextColor3 = Astral.Theme.Text
             SearchBox.Font = Enum.Font.Gotham
             SearchBox.TextSize = 11
-            SearchBox.Active = true
-            SearchBox.Selectable = true
             Instance.new("UICorner", SearchBox).CornerRadius = UDim.new(0, 4)
 
             local ClearBtn = Instance.new("TextButton")
@@ -1157,8 +1052,6 @@ function Astral:Window(Options)
             ClearBtn.Font = Enum.Font.GothamBold
             ClearBtn.TextColor3 = Astral.Theme.Text
             ClearBtn.TextSize = 9
-            ClearBtn.Active = true
-            ClearBtn.Selectable = true
             Instance.new("UICorner", ClearBtn).CornerRadius = UDim.new(0, 4)
 
             local DropdownList = Instance.new("ScrollingFrame")
@@ -1169,8 +1062,6 @@ function Astral:Window(Options)
             DropdownList.ScrollBarThickness = 2
             DropdownList.BorderSizePixel = 0
             DropdownList.ScrollingEnabled = false
-            DropdownList.Active = true
-            DropdownList.Selectable = true
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
@@ -1192,8 +1083,6 @@ function Astral:Window(Options)
                     OptionButton.TextColor3 = IsSelected and Astral.Theme.Main or Astral.Theme.Text
                     OptionButton.Font = Enum.Font.Gotham
                     OptionButton.TextSize = 11
-                    OptionButton.Active = true
-                    OptionButton.Selectable = true
                     Instance.new("UICorner", OptionButton).CornerRadius = UDim.new(0, 4)
                     
                     OptionButton.MouseButton1Click:Connect(function()
@@ -1220,14 +1109,7 @@ function Astral:Window(Options)
 
             DropdownButton.MouseButton1Click:Connect(function()
                 Dropped = not Dropped
-                if Dropped then 
-                    CenterElement(PageFrame, DropdownFrame) 
-                    -- Block game input when dropdown is open
-                    ContextActionService:BindAction("AstralBlockInput", function() return Enum.ContextActionResult.Sink end, false, 
-                        Enum.KeyCode.Escape, Enum.KeyCode.Tab)
-                else
-                    ContextActionService:UnbindAction("AstralBlockInput")
-                end
+                if Dropped then CenterElement(PageFrame, DropdownFrame) end
                 TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = Dropped and UDim2.new(1, 0, 0, 180) or UDim2.new(1, 0, 0, 34)}):Play()
                 TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = Dropped and 180 or 0}):Play()
                 if Dropped then Refresh() end
@@ -1261,8 +1143,6 @@ function Astral:Window(Options)
             DropdownFrame.BackgroundTransparency = 0.3
             DropdownFrame.Size = UDim2.new(1, 0, 0, 34)
             DropdownFrame.ClipsDescendants = true
-            DropdownFrame.Active = true
-            DropdownFrame.Selectable = true
             Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 6)
 
             local DropdownButton = Instance.new("TextButton")
@@ -1270,8 +1150,6 @@ function Astral:Window(Options)
             DropdownButton.BackgroundTransparency = 1
             DropdownButton.Size = UDim2.new(1, 0, 0, 34)
             DropdownButton.Text = ""
-            DropdownButton.Active = true
-            DropdownButton.Selectable = true
 
             local DropdownLabel = Instance.new("TextLabel")
             DropdownLabel.Parent = DropdownButton
@@ -1307,8 +1185,6 @@ function Astral:Window(Options)
             Header.Position = UDim2.new(0, 6, 0, 38)
             Header.Size = UDim2.new(1, -12, 0, 58)
             Header.BackgroundTransparency = 1
-            Header.Active = true
-            Header.Selectable = true
 
             local SearchBox = Instance.new("TextBox")
             SearchBox.Parent = Header
@@ -1319,8 +1195,6 @@ function Astral:Window(Options)
             SearchBox.TextColor3 = Astral.Theme.Text
             SearchBox.Font = Enum.Font.Gotham
             SearchBox.TextSize = 11
-            SearchBox.Active = true
-            SearchBox.Selectable = true
             Instance.new("UICorner", SearchBox).CornerRadius = UDim.new(0, 4)
 
             local SelectAllBtn = Instance.new("TextButton")
@@ -1333,8 +1207,6 @@ function Astral:Window(Options)
             SelectAllBtn.Font = Enum.Font.GothamBold
             SelectAllBtn.TextColor3 = Astral.Theme.Text
             SelectAllBtn.TextSize = 9
-            SelectAllBtn.Active = true
-            SelectAllBtn.Selectable = true
             Instance.new("UICorner", SelectAllBtn).CornerRadius = UDim.new(0, 4)
 
             local ClearAllBtn = Instance.new("TextButton")
@@ -1347,8 +1219,6 @@ function Astral:Window(Options)
             ClearAllBtn.Font = Enum.Font.GothamBold
             ClearAllBtn.TextColor3 = Astral.Theme.Text
             ClearAllBtn.TextSize = 9
-            ClearAllBtn.Active = true
-            ClearAllBtn.Selectable = true
             Instance.new("UICorner", ClearAllBtn).CornerRadius = UDim.new(0, 4)
 
             local DropdownList = Instance.new("ScrollingFrame")
@@ -1359,8 +1229,6 @@ function Astral:Window(Options)
             DropdownList.ScrollBarThickness = 2
             DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
             DropdownList.BorderSizePixel = 0
-            DropdownList.Active = true
-            DropdownList.Selectable = true
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
@@ -1382,8 +1250,6 @@ function Astral:Window(Options)
                     OptionButton.TextColor3 = IsSelected and Astral.Theme.Main or Astral.Theme.Text
                     OptionButton.Font = Enum.Font.Gotham
                     OptionButton.TextSize = 11
-                    OptionButton.Active = true
-                    OptionButton.Selectable = true
                     Instance.new("UICorner", OptionButton).CornerRadius = UDim.new(0, 4)
                     
                     OptionButton.MouseButton1Click:Connect(function()
@@ -1432,14 +1298,7 @@ function Astral:Window(Options)
             DropdownButton.MouseButton1Click:Connect(function()
                 Dropped = not Dropped
                 local TargetSize = Dropped and UDim2.new(1, 0, 0, 230) or UDim2.new(1, 0, 0, 34)
-                if Dropped then 
-                    CenterElement(PageFrame, DropdownFrame) 
-                    -- Block game input when dropdown is open
-                    ContextActionService:BindAction("AstralBlockInput", function() return Enum.ContextActionResult.Sink end, false, 
-                        Enum.KeyCode.Escape, Enum.KeyCode.Tab)
-                else
-                    ContextActionService:UnbindAction("AstralBlockInput")
-                end
+                if Dropped then CenterElement(PageFrame, DropdownFrame) end
                 TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = TargetSize}):Play()
                 TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = Dropped and 180 or 0}):Play()
                 if Dropped then Refresh() end
@@ -1459,8 +1318,6 @@ function Astral:Window(Options)
             KeybindFrame.BackgroundColor3 = Astral.Theme.Main
             KeybindFrame.BackgroundTransparency = 0.3
             KeybindFrame.Size = UDim2.new(1, 0, 0, 34)
-            KeybindFrame.Active = true
-            KeybindFrame.Selectable = true
             
             local KeybindCorner = Instance.new("UICorner")
             KeybindCorner.CornerRadius = UDim.new(0, 6)
@@ -1490,8 +1347,6 @@ function Astral:Window(Options)
             KeybindButton.TextColor3 = Astral.Theme.Accent
             KeybindButton.TextSize = 10
             KeybindButton.AutoButtonColor = false
-            KeybindButton.Active = true
-            KeybindButton.Selectable = true
             
             local KeybindButtonCorner = Instance.new("UICorner")
             KeybindButtonCorner.CornerRadius = UDim.new(0, 4)
@@ -1504,9 +1359,6 @@ function Astral:Window(Options)
                 Binding = true
                 KeybindButton.Text = "..."
                 KeybindButton.TextColor3 = Astral.Theme.Warning
-                -- Block all keyboard input while binding
-                ContextActionService:BindAction("AstralBlockInput", function() return Enum.ContextActionResult.Sink end, false, 
-                    unpack(Enum.KeyCode:GetEnumItems()))
             end)
 
             UserInputService.InputBegan:Connect(function(input, GameProcessed)
@@ -1516,8 +1368,6 @@ function Astral:Window(Options)
                     KeybindButton.TextColor3 = Astral.Theme.Accent
                     Binding = false
                     Callback(Current)
-                    -- Unblock keyboard input after binding
-                    ContextActionService:UnbindAction("AstralBlockInput")
                 elseif not GameProcessed and input.KeyCode == Current then
                     Callback(Current)
                 end
@@ -1533,8 +1383,6 @@ function Astral:Window(Options)
             LabelFrame.BackgroundColor3 = Astral.Theme.Main
             LabelFrame.BackgroundTransparency = 0.3
             LabelFrame.Size = UDim2.new(1, 0, 0, 30)
-            LabelFrame.Active = true
-            LabelFrame.Selectable = true
             
             local LabelCorner = Instance.new("UICorner")
             LabelCorner.CornerRadius = UDim.new(0, 6)
