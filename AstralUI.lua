@@ -375,7 +375,10 @@ function Astral:Window(Options)
     TabContainer.ScrollBarThickness = 3
     TabContainer.ScrollBarImageColor3 = Astral.Theme.Accent
     TabContainer.BorderSizePixel = 0
-    TabContainer.ScrollingDirection = Enum.ScrollingDirection.Y
+    -- Fix for horizontal scrolling
+    TabContainer.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
+    TabContainer.HorizontalScrollBarInset = Enum.ScrollBarInset.None
+    TabContainer.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
     TabContainer.ScrollingEnabled = true
 
     local TabLayout = Instance.new("UIListLayout")
@@ -392,8 +395,6 @@ function Astral:Window(Options)
     PagesFrame.BackgroundTransparency = 0.2
     PagesFrame.Position = UDim2.new(0, 146, 0, 0)
     PagesFrame.Size = UDim2.new(1, -154, 1, -8)
-    PageFrame.ScrollingDirection = Enum.ScrollingDirection.Y
-    PageFrame.ScrollingEnabled = true
 
     local PagesCorner = Instance.new("UICorner")
     PagesCorner.CornerRadius = UDim.new(0, 8)
@@ -594,6 +595,11 @@ function Astral:Window(Options)
         PageFrame.ScrollBarThickness = 4
         PageFrame.ScrollBarImageColor3 = Astral.Theme.Accent
         PageFrame.Visible = false
+        -- Fix for horizontal scrolling
+        PageFrame.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
+        PageFrame.HorizontalScrollBarInset = Enum.ScrollBarInset.None
+        PageFrame.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
+        PageFrame.ScrollingEnabled = true
 
         local PagePadding = Instance.new("UIPadding")
         PagePadding.Parent = PageFrame
@@ -1078,7 +1084,10 @@ function Astral:Window(Options)
             DropdownList.ScrollBarThickness = 2
             DropdownList.BorderSizePixel = 0
             DropdownList.ScrollingEnabled = false
-            DropdownList.ScrollingDirection = Enum.ScrollingDirection.Y
+            -- Fix for horizontal scrolling
+            DropdownList.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
+            DropdownList.HorizontalScrollBarInset = Enum.ScrollBarInset.None
+            DropdownList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
@@ -1246,7 +1255,10 @@ function Astral:Window(Options)
             DropdownList.ScrollBarThickness = 2
             DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
             DropdownList.BorderSizePixel = 0
-            DropdownList.ScrollingDirection = Enum.ScrollingDirection.Y
+            -- Fix for horizontal scrolling
+            DropdownList.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
+            DropdownList.HorizontalScrollBarInset = Enum.ScrollBarInset.None
+            DropdownList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
