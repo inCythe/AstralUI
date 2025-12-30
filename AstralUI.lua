@@ -1,4 +1,5 @@
 local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
 
@@ -136,7 +137,7 @@ function Astral:Window(Options)
     
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "AstralUI"
-    ScreenGui.Parent = CoreGui
+    ScreenGui.Parent = (RunService:IsStudio() and Players.LocalPlayer.PlayerGui) or game.CoreGui
     ScreenGui.DisplayOrder = 999
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     ScreenGui.ResetOnSpawn = false
@@ -153,6 +154,7 @@ function Astral:Window(Options)
     MainFrame.Position = UDim2.new(0.5, -290, 0.5, -210)
     MainFrame.Size = UDim2.new(0, 580, 0, 420)
     MainFrame.ClipsDescendants = true
+    MainFrame.Active = true
 
     local MainCorner = Instance.new("UICorner")
     MainCorner.CornerRadius = UDim.new(0, 12)
