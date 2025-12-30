@@ -6,19 +6,19 @@ local Astral = {}
 
 -- THEME
 Astral.Theme = {
-    Main = Color3.fromRGB(15, 15, 20),
-    Secondary = Color3.fromRGB(25, 25, 30),
-    Tertiary = Color3.fromRGB(20, 20, 25),
-    Accent = Color3.fromRGB(88, 139, 255),
-    Text = Color3.fromRGB(245, 245, 250),
-    TextDark = Color3.fromRGB(150, 150, 160),
-    TextDarker = Color3.fromRGB(100, 100, 110),
-    Stroke = Color3.fromRGB(50, 50, 60),
-    StrokeDark = Color3.fromRGB(35, 35, 45),
-    HoverBright = Color3.fromRGB(35, 35, 42),
-    Success = Color3.fromRGB(80, 200, 120),
-    Warning = Color3.fromRGB(255, 180, 80),
-    Error = Color3.fromRGB(255, 100, 100),
+    Main = Color3.fromRGB(12, 12, 18),
+    Secondary = Color3.fromRGB(22, 22, 28),
+    Tertiary = Color3.fromRGB(32, 32, 40),
+    Accent = Color3.fromRGB(100, 150, 255),
+    Text = Color3.fromRGB(250, 250, 255),
+    TextDark = Color3.fromRGB(180, 180, 190),
+    TextDarker = Color3.fromRGB(120, 120, 135),
+    Stroke = Color3.fromRGB(55, 55, 70),
+    StrokeDark = Color3.fromRGB(40, 40, 55),
+    HoverBright = Color3.fromRGB(45, 45, 55),
+    Success = Color3.fromRGB(90, 220, 130),
+    Warning = Color3.fromRGB(255, 195, 90),
+    Error = Color3.fromRGB(255, 110, 110),
 }
 
 -- Clean up existing UI instances
@@ -148,7 +148,7 @@ function Astral:Window(Options)
     local MainFrame = Instance.new("Frame")
     MainFrame.Parent = ScreenGui
     MainFrame.BackgroundColor3 = Astral.Theme.Main
-    MainFrame.BackgroundTransparency = 0.15
+    MainFrame.BackgroundTransparency = 0.08
     MainFrame.Position = UDim2.new(0.5, -290, 0.5, -210)
     MainFrame.Size = UDim2.new(0, 580, 0, 420)
     MainFrame.ClipsDescendants = true
@@ -160,8 +160,8 @@ function Astral:Window(Options)
 
     local MainStroke = Instance.new("UIStroke")
     MainStroke.Color = Astral.Theme.Stroke
-    MainStroke.Thickness = 1.5
-    MainStroke.Transparency = 0.5
+    MainStroke.Thickness = 1.8
+    MainStroke.Transparency = 0.3
     MainStroke.Parent = MainFrame
 
     -- Title bar
@@ -194,7 +194,7 @@ function Astral:Window(Options)
         local Button = Instance.new("TextButton")
         Button.Parent = ControlsFrame
         Button.BackgroundColor3 = Astral.Theme.Tertiary
-        Button.BackgroundTransparency = 0.3
+        Button.BackgroundTransparency = 0.15
         Button.Position = Position
         Button.Size = UDim2.new(0, 28, 0, 28)
         Button.AutoButtonColor = false
@@ -207,7 +207,7 @@ function Astral:Window(Options)
         ButtonCorner.CornerRadius = UDim.new(0, 6)
         ButtonCorner.Parent = Button
         
-        AddHoverEffect(Button, Astral.Theme.HoverBright, Astral.Theme.Tertiary, 0.1, 0.3)
+        AddHoverEffect(Button, Astral.Theme.HoverBright, Astral.Theme.Tertiary, 0.05, 0.15)
         AddClickEffect(Button)
         return Button
     end
@@ -326,7 +326,7 @@ function Astral:Window(Options)
     local SidebarFrame = Instance.new("Frame")
     SidebarFrame.Parent = ContentFrame
     SidebarFrame.BackgroundColor3 = Astral.Theme.Secondary
-    SidebarFrame.BackgroundTransparency = 0.2
+    SidebarFrame.BackgroundTransparency = 0.1
     SidebarFrame.Position = UDim2.new(0, 8, 0, 0)
     SidebarFrame.Size = UDim2.new(0, 130, 1, -8)
 
@@ -336,15 +336,15 @@ function Astral:Window(Options)
 
     local SidebarStroke = Instance.new("UIStroke")
     SidebarStroke.Color = Astral.Theme.StrokeDark
-    SidebarStroke.Thickness = 1
-    SidebarStroke.Transparency = 0.5
+    SidebarStroke.Thickness = 1.2
+    SidebarStroke.Transparency = 0.3
     SidebarStroke.Parent = SidebarFrame
 
     -- Search box
     local SearchFrame = Instance.new("Frame")
     SearchFrame.Parent = SidebarFrame
     SearchFrame.BackgroundColor3 = Astral.Theme.Tertiary
-    SearchFrame.BackgroundTransparency = 0.3
+    SearchFrame.BackgroundTransparency = 0.2
     SearchFrame.Position = UDim2.new(0, 6, 0, 6)
     SearchFrame.Size = UDim2.new(1, -12, 0, 30)
 
@@ -390,7 +390,7 @@ function Astral:Window(Options)
     local PagesFrame = Instance.new("Frame")
     PagesFrame.Parent = ContentFrame
     PagesFrame.BackgroundColor3 = Astral.Theme.Secondary
-    PagesFrame.BackgroundTransparency = 0.2
+    PagesFrame.BackgroundTransparency = 0.1
     PagesFrame.Position = UDim2.new(0, 146, 0, 0)
     PagesFrame.Size = UDim2.new(1, -154, 1, -8)
 
@@ -465,7 +465,7 @@ function Astral:Window(Options)
         local NotificationFrame = Instance.new("Frame")
         NotificationFrame.Parent = ScreenGui
         NotificationFrame.BackgroundColor3 = Astral.Theme.Main
-        NotificationFrame.BackgroundTransparency = 0.1
+        NotificationFrame.BackgroundTransparency = 0.08
         NotificationFrame.Size = UDim2.new(0, 300, 0, 70)
         NotificationFrame.AnchorPoint = Vector2.new(1, 1)
         NotificationFrame.Position = UDim2.new(1.5, 0, 1, -20)
@@ -477,8 +477,8 @@ function Astral:Window(Options)
 
         local NotificationStroke = Instance.new("UIStroke")
         NotificationStroke.Color = TypeColors[Type]
-        NotificationStroke.Thickness = 1.5
-        NotificationStroke.Transparency = 0.5
+        NotificationStroke.Thickness = 1.8
+        NotificationStroke.Transparency = 0.3
         NotificationStroke.Parent = NotificationFrame
 
         local NotificationTitle = Instance.new("TextLabel")
@@ -542,7 +542,7 @@ function Astral:Window(Options)
         local TabButton = Instance.new("TextButton")
         TabButton.Parent = TabContainer
         TabButton.BackgroundColor3 = Astral.Theme.Tertiary
-        TabButton.BackgroundTransparency = 0.4
+        TabButton.BackgroundTransparency = 0.25
         TabButton.Size = UDim2.new(1, 0, 0, 28)
         TabButton.AutoButtonColor = false
         TabButton.Text = ""
@@ -579,7 +579,7 @@ function Astral:Window(Options)
         IndicatorFrame.Size = UDim2.new(0, 2, 0, 16)
         IndicatorFrame.Visible = false
 
-        AddHoverEffect(TabButton, Astral.Theme.HoverBright, Astral.Theme.Tertiary, 0.2, 0.4)
+        AddHoverEffect(TabButton, Astral.Theme.HoverBright, Astral.Theme.Tertiary, 0.1, 0.25)
         AddClickEffect(TabButton)
 
         -- Page frame
@@ -619,13 +619,13 @@ function Astral:Window(Options)
             end
             for _, TabData in pairs(AllTabs) do
                 TabData.Button.Indicator.Visible = false
-                TweenService:Create(TabData.Button, TweenInfo.new(0.2), {BackgroundTransparency = 0.4}):Play()
+                TweenService:Create(TabData.Button, TweenInfo.new(0.2), {BackgroundTransparency = 0.25}):Play()
                 TweenService:Create(TabData.Label, TweenInfo.new(0.2), {TextColor3 = Astral.Theme.TextDark}):Play()
                 TweenService:Create(TabData.Icon, TweenInfo.new(0.2), {ImageColor3 = Astral.Theme.TextDark}):Play()
             end
             PageFrame.Visible = true
             IndicatorFrame.Visible = true
-            TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundTransparency = 0.1}):Play()
+            TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundTransparency = 0.05}):Play()
             TweenService:Create(LabelText, TweenInfo.new(0.2), {TextColor3 = Astral.Theme.Text}):Play()
             TweenService:Create(IconImage, TweenInfo.new(0.2), {ImageColor3 = Astral.Theme.Accent}):Play()
         end
@@ -648,7 +648,7 @@ function Astral:Window(Options)
             local SectionFrame = Instance.new("Frame")
             SectionFrame.Parent = PageFrame
             SectionFrame.BackgroundColor3 = Astral.Theme.Tertiary
-            SectionFrame.BackgroundTransparency = 0.3
+            SectionFrame.BackgroundTransparency = 0.2
             SectionFrame.Size = UDim2.new(1, 0, 0, 0)
             SectionFrame.AutomaticSize = Enum.AutomaticSize.Y
 
@@ -660,7 +660,7 @@ function Astral:Window(Options)
             local HeaderFrame = Instance.new("Frame")
             HeaderFrame.Parent = SectionFrame
             HeaderFrame.BackgroundColor3 = Astral.Theme.Main
-            HeaderFrame.BackgroundTransparency = 0.3
+            HeaderFrame.BackgroundTransparency = 0.2
             HeaderFrame.Size = UDim2.new(1, 0, 0, 32)
 
             local HeaderCorner = Instance.new("UICorner")
@@ -720,7 +720,7 @@ function Astral:Window(Options)
             local ButtonFrame = Instance.new("TextButton")
             ButtonFrame.Parent = Parent
             ButtonFrame.BackgroundColor3 = Astral.Theme.Main
-            ButtonFrame.BackgroundTransparency = 0.3
+            ButtonFrame.BackgroundTransparency = 0.2
             ButtonFrame.Size = UDim2.new(1, 0, 0, 34)
             ButtonFrame.AutoButtonColor = false
             ButtonFrame.Text = ""
@@ -740,7 +740,7 @@ function Astral:Window(Options)
             ButtonLabel.TextSize = 12
             ButtonLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-            AddHoverEffect(ButtonFrame, Astral.Theme.HoverBright, Astral.Theme.Main, 0.1, 0.3)
+            AddHoverEffect(ButtonFrame, Astral.Theme.HoverBright, Astral.Theme.Main, 0.05, 0.2)
             AddClickEffect(ButtonFrame)
             ButtonFrame.MouseButton1Click:Connect(Callback)
         end
@@ -755,7 +755,7 @@ function Astral:Window(Options)
             local ToggleFrame = Instance.new("Frame")
             ToggleFrame.Parent = Parent
             ToggleFrame.BackgroundColor3 = Astral.Theme.Main
-            ToggleFrame.BackgroundTransparency = 0.3
+            ToggleFrame.BackgroundTransparency = 0.2
             ToggleFrame.Size = UDim2.new(1, 0, 0, 34)
             
             local ToggleCorner = Instance.new("UICorner")
@@ -823,7 +823,7 @@ function Astral:Window(Options)
             local SliderFrame = Instance.new("Frame")
             SliderFrame.Parent = Parent
             SliderFrame.BackgroundColor3 = Astral.Theme.Main
-            SliderFrame.BackgroundTransparency = 0.3
+            SliderFrame.BackgroundTransparency = 0.2
             SliderFrame.Size = UDim2.new(1, 0, 0, 50)
             
             local SliderCorner = Instance.new("UICorner")
@@ -844,7 +844,7 @@ function Astral:Window(Options)
             local ValueInput = Instance.new("TextBox")
             ValueInput.Parent = SliderFrame
             ValueInput.BackgroundColor3 = Astral.Theme.Tertiary
-            ValueInput.BackgroundTransparency = 0.3
+            ValueInput.BackgroundTransparency = 0.2
             ValueInput.Position = UDim2.new(1, -60, 0, 4)
             ValueInput.Size = UDim2.new(0, 48, 0, 20)
             ValueInput.Font = Enum.Font.GothamBold
@@ -958,7 +958,7 @@ function Astral:Window(Options)
             local TextBoxFrame = Instance.new("Frame")
             TextBoxFrame.Parent = Parent
             TextBoxFrame.BackgroundColor3 = Astral.Theme.Main
-            TextBoxFrame.BackgroundTransparency = 0.3
+            TextBoxFrame.BackgroundTransparency = 0.2
             TextBoxFrame.Size = UDim2.new(1, 0, 0, 44)
             
             local TextBoxCorner = Instance.new("UICorner")
@@ -979,7 +979,7 @@ function Astral:Window(Options)
             local InputBox = Instance.new("TextBox")
             InputBox.Parent = TextBoxFrame
             InputBox.BackgroundColor3 = Astral.Theme.Tertiary
-            InputBox.BackgroundTransparency = 0.3
+            InputBox.BackgroundTransparency = 0.2
             InputBox.Position = UDim2.new(0, 12, 0, 24)
             InputBox.Size = UDim2.new(1, -24, 0, 16)
             InputBox.Font = Enum.Font.Gotham
@@ -1017,7 +1017,7 @@ function Astral:Window(Options)
             local DropdownFrame = Instance.new("Frame")
             DropdownFrame.Parent = Parent
             DropdownFrame.BackgroundColor3 = Astral.Theme.Main
-            DropdownFrame.BackgroundTransparency = 0.3
+            DropdownFrame.BackgroundTransparency = 0.2
             DropdownFrame.Size = UDim2.new(1, 0, 0, 34)
             DropdownFrame.ClipsDescendants = true
             Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 6)
@@ -1057,6 +1057,7 @@ function Astral:Window(Options)
             SearchBox.Parent = Header
             SearchBox.Size = UDim2.new(1, -50, 1, 0)
             SearchBox.BackgroundColor3 = Astral.Theme.Tertiary
+            SearchBox.BackgroundTransparency = 0.2
             SearchBox.PlaceholderText = "Search..."
             SearchBox.Text = ""
             SearchBox.TextColor3 = Astral.Theme.Text
@@ -1069,7 +1070,7 @@ function Astral:Window(Options)
             ClearBtn.Position = UDim2.new(1, -45, 0, 0)
             ClearBtn.Size = UDim2.new(0, 45, 1, 0)
             ClearBtn.BackgroundColor3 = Astral.Theme.Error
-            ClearBtn.BackgroundTransparency = 0.4
+            ClearBtn.BackgroundTransparency = 0.2
             ClearBtn.Text = "CLEAR"
             ClearBtn.Font = Enum.Font.GothamBold
             ClearBtn.TextColor3 = Astral.Theme.Text
@@ -1104,10 +1105,11 @@ function Astral:Window(Options)
                     local OptionButton = Instance.new("TextButton")
                     OptionButton.Parent = DropdownList
                     OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
+                    OptionButton.BackgroundTransparency = IsSelected and 0.1 or 0.2
                     OptionButton.Size = UDim2.new(1, 0, 0, 26)
                     OptionButton.Text = Option
+                    OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
                     OptionButton.TextColor3 = IsSelected and Astral.Theme.Main or Astral.Theme.Text
-                    OptionButton.Font = Enum.Font.Gotham
                     OptionButton.TextSize = 11
                     Instance.new("UICorner", OptionButton).CornerRadius = UDim.new(0, 4)
                     
@@ -1166,7 +1168,7 @@ function Astral:Window(Options)
             local DropdownFrame = Instance.new("Frame")
             DropdownFrame.Parent = Parent
             DropdownFrame.BackgroundColor3 = Astral.Theme.Main
-            DropdownFrame.BackgroundTransparency = 0.3
+            DropdownFrame.BackgroundTransparency = 0.2
             DropdownFrame.Size = UDim2.new(1, 0, 0, 34)
             DropdownFrame.ClipsDescendants = true
             Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 6)
@@ -1216,6 +1218,7 @@ function Astral:Window(Options)
             SearchBox.Parent = Header
             SearchBox.Size = UDim2.new(1, -100, 1, 0)
             SearchBox.BackgroundColor3 = Astral.Theme.Tertiary
+            SearchBox.BackgroundTransparency = 0.2
             SearchBox.PlaceholderText = "Search options..."
             SearchBox.Text = ""
             SearchBox.TextColor3 = Astral.Theme.Text
@@ -1228,7 +1231,7 @@ function Astral:Window(Options)
             SelectAllBtn.Position = UDim2.new(1, -95, 0, 0)
             SelectAllBtn.Size = UDim2.new(0, 45, 1, 0)
             SelectAllBtn.BackgroundColor3 = Astral.Theme.Success
-            SelectAllBtn.BackgroundTransparency = 0.4
+            SelectAllBtn.BackgroundTransparency = 0.2
             SelectAllBtn.Text = "ALL"
             SelectAllBtn.Font = Enum.Font.GothamBold
             SelectAllBtn.TextColor3 = Astral.Theme.Text
@@ -1240,7 +1243,7 @@ function Astral:Window(Options)
             ClearAllBtn.Position = UDim2.new(1, -45, 0, 0)
             ClearAllBtn.Size = UDim2.new(0, 45, 1, 0)
             ClearAllBtn.BackgroundColor3 = Astral.Theme.Error
-            ClearAllBtn.BackgroundTransparency = 0.4
+            ClearAllBtn.BackgroundTransparency = 0.2
             ClearAllBtn.Text = "CLEAR"
             ClearAllBtn.Font = Enum.Font.GothamBold
             ClearAllBtn.TextColor3 = Astral.Theme.Text
@@ -1274,10 +1277,11 @@ function Astral:Window(Options)
                     local OptionButton = Instance.new("TextButton")
                     OptionButton.Parent = DropdownList
                     OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
+                    OptionButton.BackgroundTransparency = IsSelected and 0.1 or 0.2
                     OptionButton.Size = UDim2.new(1, 0, 0, 26)
                     OptionButton.Text = Option
+                    OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
                     OptionButton.TextColor3 = IsSelected and Astral.Theme.Main or Astral.Theme.Text
-                    OptionButton.Font = Enum.Font.Gotham
                     OptionButton.TextSize = 11
                     Instance.new("UICorner", OptionButton).CornerRadius = UDim.new(0, 4)
                     
@@ -1345,14 +1349,12 @@ function Astral:Window(Options)
             local KeybindFrame = Instance.new("Frame")
             KeybindFrame.Parent = Parent
             KeybindFrame.BackgroundColor3 = Astral.Theme.Main
-            KeybindFrame.BackgroundTransparency = 0.3
+            KeybindFrame.BackgroundTransparency = 0.2
             KeybindFrame.Size = UDim2.new(1, 0, 0, 34)
             
             local KeybindCorner = Instance.new("UICorner")
             KeybindCorner.CornerRadius = UDim.new(0, 6)
             KeybindCorner.Parent = KeybindFrame
-            
-            AddHoverEffect(KeybindFrame, Astral.Theme.HoverBright, Astral.Theme.Main, 0.1, 0.3)
 
             local KeybindLabel = Instance.new("TextLabel")
             KeybindLabel.Parent = KeybindFrame
@@ -1365,34 +1367,39 @@ function Astral:Window(Options)
             KeybindLabel.TextSize = 12
             KeybindLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-            local KeybindButton = Instance.new("TextButton")
+            local KeybindButton = Instance.new("Frame")
             KeybindButton.Parent = KeybindFrame
             KeybindButton.BackgroundColor3 = Astral.Theme.Tertiary
-            KeybindButton.BackgroundTransparency = 0.3
+            KeybindButton.BackgroundTransparency = 0.2
             KeybindButton.Position = UDim2.new(1, -70, 0.5, -12)
             KeybindButton.Size = UDim2.new(0, 58, 0, 24)
-            KeybindButton.Font = Enum.Font.GothamBold
-            KeybindButton.Text = Current.Name
-            KeybindButton.TextColor3 = Astral.Theme.Accent
-            KeybindButton.TextSize = 10
-            KeybindButton.AutoButtonColor = false
             
             local KeybindButtonCorner = Instance.new("UICorner")
             KeybindButtonCorner.CornerRadius = UDim.new(0, 4)
             KeybindButtonCorner.Parent = KeybindButton
 
+            local KeybindText = Instance.new("TextButton")
+            KeybindText.Parent = KeybindButton
+            KeybindText.BackgroundTransparency = 1
+            KeybindText.Size = UDim2.new(1, 0, 1, 0)
+            KeybindText.Font = Enum.Font.GothamBold
+            KeybindText.Text = Current.Name
+            KeybindText.TextColor3 = Astral.Theme.Accent
+            KeybindText.TextSize = 10
+            KeybindText.AutoButtonColor = false
+
             local Binding = false
-            KeybindButton.MouseButton1Click:Connect(function()
+            KeybindText.MouseButton1Click:Connect(function()
                 Binding = true
-                KeybindButton.Text = "..."
-                KeybindButton.TextColor3 = Astral.Theme.Warning
+                KeybindText.Text = "..."
+                KeybindText.TextColor3 = Astral.Theme.Warning
             end)
 
             UserInputService.InputBegan:Connect(function(input, GameProcessed)
                 if not GameProcessed and Binding and input.UserInputType == Enum.UserInputType.Keyboard then
                     Current = input.KeyCode
-                    KeybindButton.Text = Current.Name
-                    KeybindButton.TextColor3 = Astral.Theme.Accent
+                    KeybindText.Text = Current.Name
+                    KeybindText.TextColor3 = Astral.Theme.Accent
                     Binding = false
                     Callback(Current)
                 elseif not GameProcessed and input.KeyCode == Current then
@@ -1408,7 +1415,7 @@ function Astral:Window(Options)
             local LabelFrame = Instance.new("Frame")
             LabelFrame.Parent = Parent
             LabelFrame.BackgroundColor3 = Astral.Theme.Main
-            LabelFrame.BackgroundTransparency = 0.3
+            LabelFrame.BackgroundTransparency = 0.2
             LabelFrame.Size = UDim2.new(1, 0, 0, 30)
             
             local LabelCorner = Instance.new("UICorner")
