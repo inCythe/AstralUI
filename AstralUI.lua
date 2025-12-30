@@ -21,9 +21,31 @@ Astral.Theme = {
     Error = Color3.fromRGB(255, 100, 100),
 }
 
--- Prevent duplicate GUIs
-if CoreGui:FindFirstChild("AstralUI") then 
-    CoreGui.AstralUI:Destroy() 
+if gethui then
+	ScreenGui.Parent = gethui()
+elseif syn and syn.protect_gui then 
+	syn.protect_gui(ScreenGui)
+	ScreenGui.Parent = CoreGui
+elseif CoreGui:FindFirstChild("RobloxGui") then
+	ScreenGui.Parent = CoreGui:FindFirstChild("RobloxGui")
+else
+	ScreenGui.Parent = CoreGui
+end
+
+if gethui then
+	for _, Interface in ipairs(gethui():GetChildren()) do
+		if Interface.Name == ScreenGui.Name and Interface ~= ScreenGui then
+			Interface.Enabled = false
+			Interface.Name = "AstralUI-Old"
+		end
+	end
+else
+	for _, Interface in ipairs(CoreGui:GetChildren()) do
+		if Interface.Name == ScreenGui.Name and Interface ~= ScreenGui then
+			Interface.Enabled = false
+			Interface.Name = "AstralUI-Old"
+		end
+	end
 end
 
 --// UTILITY FUNCTIONS
