@@ -378,7 +378,7 @@ function Astral:Window(Options)
     -- Fix for horizontal scrolling
     TabContainer.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
     TabContainer.HorizontalScrollBarInset = Enum.ScrollBarInset.None
-    TabContainer.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
+    TabContainer.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
     TabContainer.ScrollingEnabled = true
 
     local TabLayout = Instance.new("UIListLayout")
@@ -598,7 +598,7 @@ function Astral:Window(Options)
         -- Fix for horizontal scrolling
         PageFrame.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
         PageFrame.HorizontalScrollBarInset = Enum.ScrollBarInset.None
-        PageFrame.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
+        PageFrame.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
         PageFrame.ScrollingEnabled = true
 
         local PagePadding = Instance.new("UIPadding")
@@ -1087,7 +1087,7 @@ function Astral:Window(Options)
             -- Fix for horizontal scrolling
             DropdownList.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
             DropdownList.HorizontalScrollBarInset = Enum.ScrollBarInset.None
-            DropdownList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
+            DropdownList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
@@ -1258,7 +1258,7 @@ function Astral:Window(Options)
             -- Fix for horizontal scrolling
             DropdownList.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
             DropdownList.HorizontalScrollBarInset = Enum.ScrollBarInset.None
-            DropdownList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
+            DropdownList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
