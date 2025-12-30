@@ -1380,8 +1380,6 @@ function Astral:Window(Options)
             local KeybindButtonCorner = Instance.new("UICorner")
             KeybindButtonCorner.CornerRadius = UDim.new(0, 4)
             KeybindButtonCorner.Parent = KeybindButton
-            
-            AddClickEffect(KeybindButton)
 
             local Binding = false
             KeybindButton.MouseButton1Click:Connect(function()
