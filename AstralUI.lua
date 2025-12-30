@@ -22,11 +22,6 @@ Astral.Theme = {
     Error = Color3.fromRGB(255, 100, 100),
 }
 
--- Prevent duplicate GUIs
-if CoreGui:FindFirstChild("AstralLib") then 
-    CoreGui.AstralLib:Destroy() 
-end
-
 --// UTILITY FUNCTIONS
 local function MakeDraggable(DragBar, WindowObject)
     local Dragging, DragInput, DragStart, StartPosition
@@ -133,8 +128,31 @@ local function CreateInputBlocker(Parent)
     return Blocker
 end
 
+--// CLEANUP FUNCTION
+local function CleanupExistingUI()
+    -- Clean up any existing Astral UI elements
+    for _, child in pairs(CoreGui:GetChildren()) do
+        if child.Name == "AstralLib" or child.Name == "AstralBubble" then
+            child:Destroy()
+        end
+    end
+    
+    -- Also check for any notifications or other UI elements
+    for _, child in pairs(CoreGui:GetChildren()) do
+        if child:IsA("ScreenGui") and (child.Name:find("Astral") or child.Name:find("Notification")) then
+            child:Destroy()
+        end
+    end
+    
+    -- Unbind any context actions
+    ContextActionService:UnbindAction("AstralBlockInput")
+end
+
 --// MAIN WINDOW
 function Astral:Window(Options)
+    -- Clean up any existing UI first
+    CleanupExistingUI()
+    
     local Name = Options.Name or "Astral V3"
     
     local ScreenGui = Instance.new("ScreenGui")
@@ -240,8 +258,7 @@ function Astral:Window(Options)
         })
         Tween:Play()
         task.wait(0.25)
-        ScreenGui:Destroy()
-        ContextActionService:UnbindAction("AstralBlockInput")
+        CleanupExistingUI()
     end)
 
     -- Minimize button
