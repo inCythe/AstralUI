@@ -4,6 +4,7 @@ local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
 
 local IsStudio = RunService:IsStudio()
+local LocalPlayer = Players.LocalPlayer
 
 local Astral = {}
 
