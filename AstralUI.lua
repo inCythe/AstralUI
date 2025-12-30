@@ -1103,7 +1103,7 @@ function Astral:Window(Options)
                     local IsSelected = (CurrentSelected == Option)
                     local OptionButton = Instance.new("TextButton")
                     OptionButton.Parent = DropdownList
-                    OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
+                    OptionButton.BackgroundColor3 = IsSelected and Color3.fromRGB(108, 159, 255) or Astral.Theme.Tertiary
                     OptionButton.Size = UDim2.new(1, 0, 0, 26)
                     OptionButton.Text = Option
                     OptionButton.TextColor3 = IsSelected and Astral.Theme.Main or Astral.Theme.Text
@@ -1209,12 +1209,12 @@ function Astral:Window(Options)
             local Header = Instance.new("Frame")
             Header.Parent = DropdownFrame
             Header.Position = UDim2.new(0, 6, 0, 38)
-            Header.Size = UDim2.new(1, -12, 0, 58)
+            Header.Size = UDim2.new(1, -12, 0, 28)
             Header.BackgroundTransparency = 1
 
             local SearchBox = Instance.new("TextBox")
             SearchBox.Parent = Header
-            SearchBox.Size = UDim2.new(1, 0, 0, 25)
+            SearchBox.Size = UDim2.new(1, -100, 1, 0)
             SearchBox.BackgroundColor3 = Astral.Theme.Tertiary
             SearchBox.PlaceholderText = "Search options..."
             SearchBox.Text = ""
@@ -1225,11 +1225,11 @@ function Astral:Window(Options)
 
             local SelectAllBtn = Instance.new("TextButton")
             SelectAllBtn.Parent = Header
-            SelectAllBtn.Position = UDim2.new(0, 0, 0, 30)
-            SelectAllBtn.Size = UDim2.new(0.5, -3, 0, 25)
+            SelectAllBtn.Position = UDim2.new(1, -95, 0, 0)
+            SelectAllBtn.Size = UDim2.new(0, 45, 1, 0)
             SelectAllBtn.BackgroundColor3 = Astral.Theme.Success
             SelectAllBtn.BackgroundTransparency = 0.4
-            SelectAllBtn.Text = "SELECT ALL"
+            SelectAllBtn.Text = "ALL"
             SelectAllBtn.Font = Enum.Font.GothamBold
             SelectAllBtn.TextColor3 = Astral.Theme.Text
             SelectAllBtn.TextSize = 9
@@ -1237,11 +1237,11 @@ function Astral:Window(Options)
 
             local ClearAllBtn = Instance.new("TextButton")
             ClearAllBtn.Parent = Header
-            ClearAllBtn.Position = UDim2.new(0.5, 3, 0, 30)
-            ClearAllBtn.Size = UDim2.new(0.5, -3, 0, 25)
+            ClearAllBtn.Position = UDim2.new(1, -45, 0, 0)
+            ClearAllBtn.Size = UDim2.new(0, 45, 1, 0)
             ClearAllBtn.BackgroundColor3 = Astral.Theme.Error
             ClearAllBtn.BackgroundTransparency = 0.4
-            ClearAllBtn.Text = "CLEAR ALL"
+            ClearAllBtn.Text = "CLEAR"
             ClearAllBtn.Font = Enum.Font.GothamBold
             ClearAllBtn.TextColor3 = Astral.Theme.Text
             ClearAllBtn.TextSize = 9
@@ -1250,7 +1250,7 @@ function Astral:Window(Options)
             local DropdownList = Instance.new("ScrollingFrame")
             DropdownList.Parent = DropdownFrame
             DropdownList.BackgroundTransparency = 1
-            DropdownList.Position = UDim2.new(0, 6, 0, 100)
+            DropdownList.Position = UDim2.new(0, 6, 0, 72)
             DropdownList.Size = UDim2.new(1, -12, 0, 120)
             DropdownList.ScrollBarThickness = 2
             DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
@@ -1273,7 +1273,7 @@ function Astral:Window(Options)
                     local IsSelected = Selected[Option]
                     local OptionButton = Instance.new("TextButton")
                     OptionButton.Parent = DropdownList
-                    OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
+                    OptionButton.BackgroundColor3 = IsSelected and Color3.fromRGB(108, 159, 255) or Astral.Theme.Tertiary
                     OptionButton.Size = UDim2.new(1, 0, 0, 26)
                     OptionButton.Text = Option
                     OptionButton.TextColor3 = IsSelected and Astral.Theme.Main or Astral.Theme.Text
@@ -1326,7 +1326,7 @@ function Astral:Window(Options)
 
             DropdownButton.MouseButton1Click:Connect(function()
                 Dropped = not Dropped
-                local TargetSize = Dropped and UDim2.new(1, 0, 0, 230) or UDim2.new(1, 0, 0, 34)
+                local TargetSize = Dropped and UDim2.new(1, 0, 0, 210) or UDim2.new(1, 0, 0, 34)
                 if Dropped then CenterElement(PageFrame, DropdownFrame) end
                 TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = TargetSize}):Play()
                 TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = Dropped and 180 or 0}):Play()
