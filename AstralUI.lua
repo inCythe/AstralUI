@@ -1,4 +1,6 @@
 local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
 
@@ -375,8 +377,6 @@ function Astral:Window(Options)
     TabContainer.ScrollBarThickness = 3
     TabContainer.ScrollBarImageColor3 = Astral.Theme.Accent
     TabContainer.BorderSizePixel = 0
-    TabContainer.ScrollingDirection = Enum.ScrollingDirection.Y
-    TabContainer.VerticalScrollBarInset = Enum.ScrollBarInset.Always
 
     local TabLayout = Instance.new("UIListLayout")
     TabLayout.Parent = TabContainer
@@ -592,9 +592,6 @@ function Astral:Window(Options)
         PageFrame.ScrollBarThickness = 4
         PageFrame.ScrollBarImageColor3 = Astral.Theme.Accent
         PageFrame.Visible = false
-        PageFrame.ScrollingDirection = Enum.ScrollingDirection.Y
-        PageFrame.VerticalScrollBarInset = Enum.ScrollBarInset.Always
-        PageFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
         local PagePadding = Instance.new("UIPadding")
         PagePadding.Parent = PageFrame
@@ -1078,8 +1075,7 @@ function Astral:Window(Options)
             DropdownList.Size = UDim2.new(1, -12, 0, 100)
             DropdownList.ScrollBarThickness = 2
             DropdownList.BorderSizePixel = 0
-            DropdownList.ScrollingDirection = Enum.ScrollingDirection.Y
-            DropdownList.VerticalScrollBarInset = Enum.ScrollBarInset.Always
+            DropdownList.ScrollingEnabled = false
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
@@ -1247,8 +1243,6 @@ function Astral:Window(Options)
             DropdownList.ScrollBarThickness = 2
             DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
             DropdownList.BorderSizePixel = 0
-            DropdownList.ScrollingDirection = Enum.ScrollingDirection.Y
-            DropdownList.VerticalScrollBarInset = Enum.ScrollBarInset.Always
 
             local DropdownLayout = Instance.new("UIListLayout")
             DropdownLayout.Parent = DropdownList
