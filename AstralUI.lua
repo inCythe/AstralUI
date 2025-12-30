@@ -4,7 +4,7 @@ local CoreGui = game:GetService("CoreGui")
 
 local Astral = {}
 
---// THEME
+-- THEME
 Astral.Theme = {
     Main = Color3.fromRGB(15, 15, 20),
     Secondary = Color3.fromRGB(25, 25, 30),
@@ -21,7 +21,7 @@ Astral.Theme = {
     Error = Color3.fromRGB(255, 100, 100),
 }
 
--- Prevent duplicate GUIs
+-- Clean up existing UI instances
 if CoreGui:FindFirstChild("AstralUI") then 
     for _, child in pairs(CoreGui:GetChildren()) do
         if child.Name == "AstralLib" or child.Name == "AstralBubble" then
@@ -29,7 +29,6 @@ if CoreGui:FindFirstChild("AstralUI") then
         end
     end
     
-    -- Also check for any notifications or other UI elements
     for _, child in pairs(CoreGui:GetChildren()) do
         if child:IsA("ScreenGui") and (child.Name:find("Astral") or child.Name:find("Notification")) then
             child:Destroy()
@@ -37,7 +36,7 @@ if CoreGui:FindFirstChild("AstralUI") then
     end 
 end
 
---// UTILITY FUNCTIONS
+-- UTILITY FUNCTIONS
 local function MakeDraggable(DragBar, WindowObject)
     local Dragging, DragInput, DragStart, StartPosition
 
@@ -122,7 +121,6 @@ local function CenterElement(ScrollingFrame, Element)
     if not ScrollingFrame or not Element then return end
     
     local RelativeY = Element.AbsolutePosition.Y - ScrollingFrame.AbsolutePosition.Y
-    
     local TargetY = ScrollingFrame.CanvasPosition.Y + RelativeY - (ScrollingFrame.AbsoluteSize.Y / 2) + (Element.AbsoluteSize.Y / 2)
     
     TweenService:Create(ScrollingFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
@@ -130,7 +128,7 @@ local function CenterElement(ScrollingFrame, Element)
     }):Play()
 end
 
---// MAIN WINDOW
+-- MAIN WINDOW FUNCTION
 function Astral:Window(Options)
     local Name = Options.Name or "Astral"
     
@@ -141,11 +139,12 @@ function Astral:Window(Options)
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     ScreenGui.ResetOnSpawn = false
 
-    -- Notification system internals
+    -- Notification system
     local NotificationQueue = {}
     local ActiveNotifications = {}
     local MaxNotifications = 5
 
+    -- Main frame
     local MainFrame = Instance.new("Frame")
     MainFrame.Parent = ScreenGui
     MainFrame.BackgroundColor3 = Astral.Theme.Main
@@ -184,7 +183,7 @@ function Astral:Window(Options)
 
     MakeDraggable(TitleFrame, MainFrame)
 
-    -- Controls
+    -- Window controls
     local ControlsFrame = Instance.new("Frame")
     ControlsFrame.Parent = TitleFrame
     ControlsFrame.BackgroundTransparency = 1
@@ -213,6 +212,7 @@ function Astral:Window(Options)
         return Button
     end
 
+    -- Close button
     local CloseButton = MakeButton("×", UDim2.new(1, -32, 0.5, -14), Astral.Theme.Error)
     CloseButton.TextSize = 18
     CloseButton.MouseButton1Click:Connect(function()
@@ -237,7 +237,6 @@ function Astral:Window(Options)
     Bubble.Name = "AstralBubble"
     Bubble.Parent = ScreenGui
     Bubble.BackgroundColor3 = Astral.Theme.Main
-    -- Spawn in the middle of the right side
     Bubble.Position = UDim2.new(1, -60, 0.5, -25)
     Bubble.Size = UDim2.new(0, 50, 0, 50)
     Bubble.ZIndex = 500
@@ -261,6 +260,7 @@ function Astral:Window(Options)
     BubbleStroke.Color = Astral.Theme.Stroke
     BubbleStroke.Parent = Bubble
 
+    -- Bubble drag functionality
     local BubbleDragging = false
     local DragInput, DragStart, StartPos
 
@@ -270,7 +270,6 @@ function Astral:Window(Options)
         local CenterX = ScreenSize.X / 2
         
         local TargetX = (CurrentPos.X + 25 < CenterX) and 10 or (ScreenSize.X - 60)
-        
         local TargetY = math.clamp(CurrentPos.Y, 10, ScreenSize.Y - 60)
         
         if TargetY < 100 then TargetY = 10 end
@@ -315,7 +314,7 @@ function Astral:Window(Options)
         end
     end)
 
-    -- Content Area
+    -- Content area
     local ContentFrame = Instance.new("Frame")
     ContentFrame.Parent = MainFrame
     ContentFrame.BackgroundTransparency = 1
@@ -341,7 +340,7 @@ function Astral:Window(Options)
     SidebarStroke.Transparency = 0.5
     SidebarStroke.Parent = SidebarFrame
 
-    -- Search Box
+    -- Search box
     local SearchFrame = Instance.new("Frame")
     SearchFrame.Parent = SidebarFrame
     SearchFrame.BackgroundColor3 = Astral.Theme.Tertiary
@@ -366,7 +365,7 @@ function Astral:Window(Options)
     SearchBox.TextSize = 11
     SearchBox.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Tab Container
+    -- Tab container
     local TabContainer = Instance.new("ScrollingFrame")
     TabContainer.Parent = SidebarFrame
     TabContainer.BackgroundTransparency = 1
@@ -375,7 +374,6 @@ function Astral:Window(Options)
     TabContainer.ScrollBarThickness = 3
     TabContainer.ScrollBarImageColor3 = Astral.Theme.Accent
     TabContainer.BorderSizePixel = 0
-    -- Fix for horizontal scrolling
     TabContainer.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
     TabContainer.HorizontalScrollBarInset = Enum.ScrollBarInset.None
     TabContainer.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
@@ -388,7 +386,7 @@ function Astral:Window(Options)
         TabContainer.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y + 10)
     end)
 
-    -- Page Container
+    -- Page container
     local PagesFrame = Instance.new("Frame")
     PagesFrame.Parent = ContentFrame
     PagesFrame.BackgroundColor3 = Astral.Theme.Secondary
@@ -404,6 +402,7 @@ function Astral:Window(Options)
     local FirstTab = true
     local AllTabs = {}
 
+    -- Search functionality
     SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
         local Text = SearchBox.Text:lower()
         for _, TabData in pairs(AllTabs) do
@@ -411,11 +410,10 @@ function Astral:Window(Options)
         end
     end)
 
-    --// NOTIFICATION LOGIC
+    -- NOTIFICATION FUNCTIONS
     local function UpdateNotificationPositions()
         for Index, Notification in ipairs(ActiveNotifications) do
-            local TargetYOffset = -20 - ((Index - 1) * 80) 
-            
+            local TargetYOffset = -20 - ((Index - 1) * 80)
             TweenService:Create(Notification, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
                 Position = UDim2.new(1, -20, 1, TargetYOffset)
             }):Play()
@@ -463,13 +461,12 @@ function Astral:Window(Options)
             return
         end
 
+        -- Create notification frame
         local NotificationFrame = Instance.new("Frame")
         NotificationFrame.Parent = ScreenGui
         NotificationFrame.BackgroundColor3 = Astral.Theme.Main
         NotificationFrame.BackgroundTransparency = 0.1
         NotificationFrame.Size = UDim2.new(0, 300, 0, 70)
-        
-
         NotificationFrame.AnchorPoint = Vector2.new(1, 1)
         NotificationFrame.Position = UDim2.new(1.5, 0, 1, -20)
         NotificationFrame.ZIndex = 100
@@ -512,7 +509,6 @@ function Astral:Window(Options)
         UpdateNotificationPositions()
 
         task.delay(Duration, function()
-            -- Exit animation
             local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
                 Position = UDim2.new(1.5, 0, 1, NotificationFrame.Position.Y.Offset),
                 BackgroundTransparency = 1
@@ -521,7 +517,6 @@ function Astral:Window(Options)
             ExitTween:Play()
             ExitTween.Completed:Connect(function()
                 NotificationFrame:Destroy()
-                -- Remove from active list and shift others down
                 for i, v in ipairs(ActiveNotifications) do
                     if v == NotificationFrame then
                         table.remove(ActiveNotifications, i)
@@ -530,7 +525,6 @@ function Astral:Window(Options)
                 end
                 UpdateNotificationPositions()
                 
-                -- Check queue
                 if #NotificationQueue > 0 then
                     local Next = table.remove(NotificationQueue, 1)
                     WindowFunctions:Notify(Next)
@@ -539,11 +533,12 @@ function Astral:Window(Options)
         end)
     end
 
-    --// TABS
+    -- TAB FUNCTIONS
     function WindowFunctions:Tab(Options)
         local TabName = Options.Name or "Tab"
         local TabIcon = Options.Icon or "rbxassetid://7733954760"
 
+        -- Tab button
         local TabButton = Instance.new("TextButton")
         TabButton.Parent = TabContainer
         TabButton.BackgroundColor3 = Astral.Theme.Tertiary
@@ -587,6 +582,7 @@ function Astral:Window(Options)
         AddHoverEffect(TabButton, Astral.Theme.HoverBright, Astral.Theme.Tertiary, 0.2, 0.4)
         AddClickEffect(TabButton)
 
+        -- Page frame
         local PageFrame = Instance.new("ScrollingFrame")
         PageFrame.Parent = PagesFrame
         PageFrame.BackgroundTransparency = 1
@@ -595,7 +591,6 @@ function Astral:Window(Options)
         PageFrame.ScrollBarThickness = 4
         PageFrame.ScrollBarImageColor3 = Astral.Theme.Accent
         PageFrame.Visible = false
-        -- Fix for horizontal scrolling
         PageFrame.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
         PageFrame.HorizontalScrollBarInset = Enum.ScrollBarInset.None
         PageFrame.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
@@ -615,6 +610,7 @@ function Astral:Window(Options)
             PageFrame.CanvasSize = UDim2.new(0, 0, 0, PageLayout.AbsoluteContentSize.Y + 16)
         end)
 
+        -- Tab activation function
         local function Activate()
             for _, Page in pairs(PagesFrame:GetChildren()) do
                 if Page:IsA("ScrollingFrame") then 
@@ -644,10 +640,11 @@ function Astral:Window(Options)
 
         local TabFunctions = {}
 
-        --// SECTIONS
+        -- SECTION FUNCTION
         function TabFunctions:Section(Options)
             local SectionName = Options.Name or "Section"
 
+            -- Section container
             local SectionFrame = Instance.new("Frame")
             SectionFrame.Parent = PageFrame
             SectionFrame.BackgroundColor3 = Astral.Theme.Tertiary
@@ -659,6 +656,7 @@ function Astral:Window(Options)
             SectionCorner.CornerRadius = UDim.new(0, 8)
             SectionCorner.Parent = SectionFrame
 
+            -- Header
             local HeaderFrame = Instance.new("Frame")
             HeaderFrame.Parent = SectionFrame
             HeaderFrame.BackgroundColor3 = Astral.Theme.Main
@@ -680,6 +678,7 @@ function Astral:Window(Options)
             SectionLabel.TextSize = 13
             SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+            -- Content area
             local SectionContent = Instance.new("Frame")
             SectionContent.Parent = SectionFrame
             SectionContent.BackgroundTransparency = 1
@@ -698,6 +697,7 @@ function Astral:Window(Options)
             SectionLayout.Parent = SectionContent
             SectionLayout.Padding = UDim.new(0, 6)
 
+            -- Section element functions
             local SectionFunctions = {}
             function SectionFunctions:Button(Options) return TabFunctions:Button(Options, SectionContent) end
             function SectionFunctions:Toggle(Options) return TabFunctions:Toggle(Options, SectionContent) end
@@ -711,7 +711,7 @@ function Astral:Window(Options)
             return SectionFunctions
         end
 
-        --// ELEMENTS
+        -- UI ELEMENT FUNCTIONS
         function TabFunctions:Button(Options, Parent)
             Parent = Parent or PageFrame
             local ButtonName = Options.Name or "Button"
@@ -1255,7 +1255,6 @@ function Astral:Window(Options)
             DropdownList.ScrollBarThickness = 2
             DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
             DropdownList.BorderSizePixel = 0
-            -- Fix for horizontal scrolling
             DropdownList.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
             DropdownList.HorizontalScrollBarInset = Enum.ScrollBarInset.None
             DropdownList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
