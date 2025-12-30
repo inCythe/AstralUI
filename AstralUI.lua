@@ -23,7 +23,18 @@ Astral.Theme = {
 
 -- Prevent duplicate GUIs
 if CoreGui:FindFirstChild("AstralUI") then 
-    CoreGui.AstralUI:Destroy() 
+    for _, child in pairs(CoreGui:GetChildren()) do
+        if child.Name == "AstralLib" or child.Name == "AstralBubble" then
+            child:Destroy()
+        end
+    end
+    
+    -- Also check for any notifications or other UI elements
+    for _, child in pairs(CoreGui:GetChildren()) do
+        if child:IsA("ScreenGui") and (child.Name:find("Astral") or child.Name:find("Notification")) then
+            child:Destroy()
+        end
+    end 
 end
 
 --// UTILITY FUNCTIONS
