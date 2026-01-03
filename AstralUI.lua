@@ -6,6 +6,218 @@ local Player = Players.LocalPlayer
 
 local Astral = {}
 
+-- =============== CONFIGURATION SYSTEM ===============
+Astral.Config = {
+	-- Window Configuration
+	Window = {
+		BaseWidth = 580,
+		BaseHeight = 420,
+		BasePadding = 8,
+		CornerRadius = 12,
+		BackgroundTransparency = 0.15,
+		StrokeThickness = 1.5,
+		StrokeTransparency = 0.4
+	},
+
+	-- Topbar Configuration
+	Topbar = {
+		Height = 36,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.2,
+		TitleFont = Enum.Font.GothamBold,
+		TitleSize = 14,
+		TitleAlignment = Enum.TextXAlignment.Left
+	},
+
+	-- Controls Configuration
+	Controls = {
+		ButtonSize = 26,
+		ButtonCornerRadius = 6,
+		CloseButtonText = "×",
+		CloseButtonSize = 18,
+		MinimizeButtonText = "−",
+		MinimizeButtonSize = 16
+	},
+
+	-- Bubble Configuration
+	Bubble = {
+		Size = 50,
+		IconSize = "rbxassetid://7733954760",
+		StrokeThickness = 2,
+		StrokeTransparency = 0.3
+	},
+
+	-- Sidebar Configuration
+	Sidebar = {
+		Width = 130,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.2,
+		StrokeThickness = 1,
+		StrokeTransparency = 0.4
+	},
+
+	-- Tab Configuration
+	Tab = {
+		Height = 34,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.25,
+		IconSize = 16,
+		LabelFont = Enum.Font.GothamMedium,
+		LabelSize = 11,
+		IndicatorWidth = 2,
+		IndicatorHeight = 16,
+		Padding = 8
+	},
+
+	-- Pages Configuration
+	Pages = {
+		CornerRadius = 8,
+		BackgroundTransparency = 0.2,
+		Padding = 8
+	},
+
+	-- Elements Configuration
+	Elements = {
+		Height = 34,
+		CornerRadius = 6,
+		BackgroundTransparency = 0.25,
+		LabelFont = Enum.Font.GothamMedium,
+		LabelSize = 12,
+		LabelAlignment = Enum.TextXAlignment.Left,
+		
+		-- Button specific
+		Button = {
+			HoverTransparency = 0.15,
+			NormalTransparency = 0.25
+		},
+		
+		-- Toggle specific
+		Toggle = {
+			Width = 38,
+			Height = 18,
+			CircleSize = 14
+		},
+		
+		-- Slider specific
+		Slider = {
+			Height = 50,
+			LabelHeight = 16,
+			InputWidth = 48,
+			InputHeight = 20,
+			InputTextSize = 11,
+			TrackHeight = 6,
+			BallSize = 14,
+			ValueInputFont = Enum.Font.GothamBold
+		},
+		
+		-- TextBox specific
+		TextBox = {
+			Height = 44,
+			LabelHeight = 16,
+			InputHeight = 16,
+			InputTextSize = 11,
+			PlaceholderColor = Color3.fromRGB(100, 100, 110),
+			InputCornerRadius = 4,
+			StrokeThickness = 1,
+			StrokeTransparency = 0.5
+		},
+		
+		-- Dropdown specific
+		Dropdown = {
+			Height = 34,
+			LabelTextSize = 12,
+			ArrowSize = 12,
+			ListAreaHeight = 100,
+			OptionHeight = 26,
+			OptionTextSize = 11,
+			SearchTextSize = 11,
+			ButtonTextSize = 9,
+			SearchPlaceholder = "Search...",
+			ClearButtonText = "CLEAR",
+			SelectAllButtonText = "ALL",
+			InputCornerRadius = 4,
+			StrokeThickness = 1,
+			StrokeTransparency = 0.5
+		},
+		
+		-- MultiDropdown specific
+		MultiDropdown = {
+			Height = 34,
+			ListAreaHeight = 120,
+			OptionHeight = 26,
+			OptionTextSize = 11,
+			SearchTextSize = 11,
+			ButtonTextSize = 9,
+			SearchPlaceholder = "Search options...",
+			ClearButtonText = "CLEAR",
+			SelectAllButtonText = "ALL"
+		},
+		
+		-- Keybind specific
+		Keybind = {
+			ButtonWidth = 58,
+			ButtonHeight = 24,
+			ButtonCornerRadius = 4,
+			ButtonTextSize = 10,
+			StrokeThickness = 1,
+			StrokeTransparency = 0.5
+		},
+		
+		-- Label specific
+		Label = {
+			Height = 30,
+			TextSize = 11,
+			Font = Enum.Font.Gotham
+		},
+		
+		-- Section specific
+		Section = {
+			CornerRadius = 8,
+			HeaderHeight = 34,
+			HeaderBackgroundTransparency = 0.2,
+			TitleSize = 13,
+			TitleFont = Enum.Font.GothamBold
+		}
+	},
+
+	-- Notification Configuration
+	Notification = {
+		Width = 300,
+		Height = 70,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.15,
+		StrokeThickness = 1.5,
+		TitleSize = 13,
+		ContentSize = 11,
+		TitleFont = Enum.Font.GothamBold,
+		ContentFont = Enum.Font.Gotham,
+		MaxNotifications = 5,
+		DefaultDuration = 3
+	},
+
+	-- ScrollBar Configuration
+	ScrollBar = {
+		Thickness = 4,
+		Transparency = 0.3,
+		AutoHideDelay = 0.5
+	},
+
+	-- Animation Configuration
+	Animation = {
+		HoverDuration = 0.15,
+		ClickDuration = 0.08,
+		RestoreDuration = 0.15,
+		TweenDuration = 0.2,
+		DropdownDuration = 0.2,
+		NotificationDuration = 0.3,
+		WindowCloseDuration = 0.25,
+		CenterElementDuration = 0.3,
+		EasingStyle = Enum.EasingStyle.Quart,
+		EasingDirection = Enum.EasingDirection.Out
+	}
+}
+
+-- =============== THEME SYSTEM ===============
 Astral.Theme = {
 	Main = Color3.fromRGB(15, 15, 20),
 	Secondary = Color3.fromRGB(25, 25, 30),
@@ -20,8 +232,49 @@ Astral.Theme = {
 	Success = Color3.fromRGB(80, 200, 120),
 	Warning = Color3.fromRGB(255, 180, 80),
 	Error = Color3.fromRGB(255, 100, 100),
+	
+	-- Type-specific colors for notifications
+	TypeColors = {
+		Info = Color3.fromRGB(88, 139, 255),
+		Success = Color3.fromRGB(80, 200, 120),
+		Warning = Color3.fromRGB(255, 180, 80),
+		Error = Color3.fromRGB(255, 100, 100)
+	}
 }
 
+-- Function to update theme
+function Astral:SetTheme(NewTheme)
+	for key, value in pairs(NewTheme) do
+		if Astral.Theme[key] ~= nil then
+			Astral.Theme[key] = value
+		end
+	end
+	
+	-- Update type colors to match accent if not explicitly set
+	if not NewTheme.TypeColors then
+		Astral.Theme.TypeColors.Info = Astral.Theme.Accent
+		Astral.Theme.TypeColors.Success = Astral.Theme.Success
+		Astral.Theme.TypeColors.Warning = Astral.Theme.Warning
+		Astral.Theme.TypeColors.Error = Astral.Theme.Error
+	end
+end
+
+-- Function to update config
+function Astral:SetConfig(NewConfig)
+	local function updateConfigTable(target, source)
+		for key, value in pairs(source) do
+			if type(value) == "table" and target[key] ~= nil and type(target[key]) == "table" then
+				updateConfigTable(target[key], value)
+			elseif target[key] ~= nil then
+				target[key] = value
+			end
+		end
+	end
+	
+	updateConfigTable(Astral.Config, NewConfig)
+end
+
+-- =============== UI SETUP ===============
 local IsStudio = game:GetService("RunService"):IsStudio()
 local TargetParent = IsStudio and Player.PlayerGui or CoreGui
 
@@ -95,7 +348,7 @@ local function AddHoverEffect(Object, HoverColor, NormalColor, HoverTransparency
 		if HoverTransparency then
 			Properties.BackgroundTransparency = HoverTransparency
 		end
-		TweenService:Create(Object, TweenInfo.new(0.15), Properties):Play()
+		TweenService:Create(Object, TweenInfo.new(Astral.Config.Animation.HoverDuration), Properties):Play()
 	end)
 
 	Object.MouseLeave:Connect(function()
@@ -103,7 +356,7 @@ local function AddHoverEffect(Object, HoverColor, NormalColor, HoverTransparency
 		if NormalTransparency then
 			Properties.BackgroundTransparency = NormalTransparency
 		end
-		TweenService:Create(Object, TweenInfo.new(0.15), Properties):Play()
+		TweenService:Create(Object, TweenInfo.new(Astral.Config.Animation.HoverDuration), Properties):Play()
 	end)
 end
 
@@ -111,7 +364,7 @@ local function AddClickEffect(Object)
 	local OriginalSize = Object.Size
 
 	Object.MouseButton1Down:Connect(function()
-		TweenService:Create(Object, TweenInfo.new(0.08), {
+		TweenService:Create(Object, TweenInfo.new(Astral.Config.Animation.ClickDuration), {
 			Size = UDim2.new(
 				OriginalSize.X.Scale * 0.98,
 				OriginalSize.X.Offset,
@@ -122,7 +375,7 @@ local function AddClickEffect(Object)
 	end)
 
 	local function Restore()
-		TweenService:Create(Object, TweenInfo.new(0.15), {Size = OriginalSize}):Play()
+		TweenService:Create(Object, TweenInfo.new(Astral.Config.Animation.RestoreDuration), {Size = OriginalSize}):Play()
 	end
 
 	Object.MouseButton1Up:Connect(Restore)
@@ -132,55 +385,49 @@ end
 local function CenterElement(ScrollingFrame, Element, ElementFutureHeight)
 	if not ScrollingFrame or not Element then return end
 
-	-- Function to perform the centering calculation
 	local function PerformCentering()
 		local ScrollingFrameCanvasSize = ScrollingFrame.CanvasSize.Y.Offset
 		local ScrollingFrameHeight = ScrollingFrame.AbsoluteSize.Y
 		local ElementPosition = Element.AbsolutePosition.Y - ScrollingFrame.AbsolutePosition.Y + ScrollingFrame.CanvasPosition.Y
 		local ElementHeight = ElementFutureHeight or Element.AbsoluteSize.Y
 
-		-- Calculate position to show the entire element
 		local ElementTop = ElementPosition
 		local ElementBottom = ElementPosition + ElementHeight
 
 		local TargetPosition
 
-		-- Check if element fits in view
 		if ElementHeight <= ScrollingFrameHeight then
-			-- Center the element if it fits
 			TargetPosition = ElementPosition - (ScrollingFrameHeight / 2) + (ElementHeight / 2)
 		else
-			-- If element is larger than view, align to top
 			TargetPosition = ElementTop
 		end
 
-		-- Clamp to valid scroll range
 		local MaxScroll = math.max(0, ScrollingFrameCanvasSize - ScrollingFrameHeight)
 		TargetPosition = math.clamp(TargetPosition, 0, MaxScroll)
 
-		TweenService:Create(ScrollingFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+		TweenService:Create(ScrollingFrame, TweenInfo.new(
+			Astral.Config.Animation.CenterElementDuration,
+			Astral.Config.Animation.EasingStyle,
+			Astral.Config.Animation.EasingDirection
+		), {
 			CanvasPosition = Vector2.new(0, TargetPosition)
 		}):Play()
 	end
 
-	-- If future height is provided, wait for canvas size to actually change
 	if ElementFutureHeight then
 		task.spawn(function()
 			local InitialCanvasSize = ScrollingFrame.CanvasSize.Y.Offset
 			local MaxWaitTime = 0.5
 			local StartTime = tick()
 
-			-- Wait until canvas size changes or timeout
 			while ScrollingFrame.CanvasSize.Y.Offset == InitialCanvasSize and (tick() - StartTime) < MaxWaitTime do
 				task.wait()
 			end
 
-			-- Extra frame wait to ensure layout is complete
 			task.wait()
 			PerformCentering()
 		end)
 	else
-		-- No future height, center immediately
 		PerformCentering()
 	end
 end
@@ -197,49 +444,44 @@ local function CreateScrollBar(ScrollingFrame)
 	local function ShowScrollBar()
 		if not ScrollBarVisible then
 			ScrollBarVisible = true
-			TweenService:Create(ScrollingFrame, TweenInfo.new(0.2), {
-				ScrollBarThickness = 4,
-				ScrollBarImageTransparency = 0.3
+			TweenService:Create(ScrollingFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {
+				ScrollBarThickness = Astral.Config.ScrollBar.Thickness,
+				ScrollBarImageTransparency = Astral.Config.ScrollBar.Transparency
 			}):Play()
 		end
 		LastScrollTime = tick()
 	end
 
 	local function HideScrollBar()
-		if ScrollBarVisible and not IsDragging and not IsHovering and tick() - LastScrollTime > 0.5 then
+		if ScrollBarVisible and not IsDragging and not IsHovering and tick() - LastScrollTime > Astral.Config.ScrollBar.AutoHideDelay then
 			ScrollBarVisible = false
-			TweenService:Create(ScrollingFrame, TweenInfo.new(0.5), {
+			TweenService:Create(ScrollingFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration * 2.5), {
 				ScrollBarThickness = 0,
 				ScrollBarImageTransparency = 1
 			}):Play()
 		end
 	end
 
-	-- Show on scroll
 	ScrollingFrame:GetPropertyChangedSignal("CanvasPosition"):Connect(ShowScrollBar)
 
-	-- Auto-hide after delay
 	game:GetService("RunService").Heartbeat:Connect(function()
-		if ScrollBarVisible and not IsDragging and not IsHovering and tick() - LastScrollTime > 0.5 then
+		if ScrollBarVisible and not IsDragging and not IsHovering and tick() - LastScrollTime > Astral.Config.ScrollBar.AutoHideDelay then
 			HideScrollBar()
 		end
 	end)
 
-	-- Show on mouse enter frame
 	ScrollingFrame.MouseEnter:Connect(function()
 		IsHovering = true
 		ShowScrollBar()
 	end)
 
-	-- Hide on mouse leave frame
 	ScrollingFrame.MouseLeave:Connect(function()
 		IsHovering = false
-		if not IsDragging and tick() - LastScrollTime > 0.5 then
+		if not IsDragging and tick() - LastScrollTime > Astral.Config.ScrollBar.AutoHideDelay then
 			HideScrollBar()
 		end
 	end)
 
-	-- Handle scrollbar dragging
 	local DragStart = nil
 	local StartCanvasPosition = nil
 
@@ -249,7 +491,6 @@ local function CreateScrollBar(ScrollingFrame)
 			local ScrollBarPosition = ScrollingFrame.AbsolutePosition + Vector2.new(ScrollingFrame.AbsoluteSize.X - 10, 0)
 			local ScrollBarSize = Vector2.new(10, ScrollingFrame.AbsoluteSize.Y)
 
-			-- Check if mouse is over scrollbar area
 			if MousePosition.X >= ScrollBarPosition.X and MousePosition.X <= ScrollBarPosition.X + ScrollBarSize.X and
 				MousePosition.Y >= ScrollBarPosition.Y and MousePosition.Y <= ScrollBarPosition.Y + ScrollBarSize.Y then
 				IsDragging = true
@@ -301,14 +542,14 @@ function Astral:Window(Options)
 
 	local NotificationQueue = {}
 	local ActiveNotifications = {}
-	local MaxNotifications = 5
+	local MaxNotifications = Astral.Config.Notification.MaxNotifications
 
-	local BaseWidth = 580
-	local BaseHeight = 420
-	local BasePadding = 8
-	local ElementHeight = 34
-	local TopbarHeight = 36
-	local ButtonSize = 26
+	local BaseWidth = Astral.Config.Window.BaseWidth
+	local BaseHeight = Astral.Config.Window.BaseHeight
+	local BasePadding = Astral.Config.Window.BasePadding
+	local ElementHeight = Astral.Config.Elements.Height
+	local TopbarHeight = Astral.Config.Topbar.Height
+	local ButtonSize = Astral.Config.Controls.ButtonSize
 
 	local CurrentWidth = ApplyScale(BaseWidth)
 	local CurrentHeight = ApplyScale(BaseHeight)
@@ -316,33 +557,33 @@ function Astral:Window(Options)
 	local MainFrame = Instance.new("Frame")
 	MainFrame.Parent = ScreenGui
 	MainFrame.BackgroundColor3 = Astral.Theme.Main
-	MainFrame.BackgroundTransparency = 0.15
+	MainFrame.BackgroundTransparency = Astral.Config.Window.BackgroundTransparency
 	MainFrame.Position = UDim2.new(0.5, -CurrentWidth / 2, 0.5, -CurrentHeight / 2)
 	MainFrame.Size = UDim2.new(0, CurrentWidth, 0, CurrentHeight)
 	MainFrame.ClipsDescendants = true
 	MainFrame.Active = true
 
 	local MainCorner = Instance.new("UICorner")
-	MainCorner.CornerRadius = UDim.new(0, ApplyScale(12))
+	MainCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Window.CornerRadius))
 	MainCorner.Parent = MainFrame
 
 	local MainStroke = Instance.new("UIStroke")
 	MainStroke.Color = Astral.Theme.Stroke
-	MainStroke.Thickness = ApplyScale(1.5)
-	MainStroke.Transparency = 0.4
+	MainStroke.Thickness = ApplyScale(Astral.Config.Window.StrokeThickness)
+	MainStroke.Transparency = Astral.Config.Window.StrokeTransparency
 	MainStroke.Parent = MainFrame
 
 	local TopbarFrame = Instance.new("Frame")
 	TopbarFrame.Name = "Topbar"
 	TopbarFrame.Parent = MainFrame
 	TopbarFrame.BackgroundColor3 = Astral.Theme.Tertiary
-	TopbarFrame.BackgroundTransparency = 0.2
+	TopbarFrame.BackgroundTransparency = Astral.Config.Topbar.BackgroundTransparency
 	TopbarFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 0, ApplyScale(BasePadding))
 	TopbarFrame.Size = UDim2.new(1, -ApplyScale(88), 0, ApplyScale(TopbarHeight))
 	TopbarFrame.ZIndex = 5
 
 	local TopbarCorner = Instance.new("UICorner")
-	TopbarCorner.CornerRadius = UDim.new(0, ApplyScale(8))
+	TopbarCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Topbar.CornerRadius))
 	TopbarCorner.Parent = TopbarFrame
 
 	local TitleLabel = Instance.new("TextLabel")
@@ -350,11 +591,11 @@ function Astral:Window(Options)
 	TitleLabel.BackgroundTransparency = 1
 	TitleLabel.Size = UDim2.new(1, 0, 1, 0)
 	ApplyPadding(TitleLabel, ApplyScale(BasePadding))
-	TitleLabel.Font = Enum.Font.GothamBold
+	TitleLabel.Font = Astral.Config.Topbar.TitleFont
 	TitleLabel.Text = Name
 	TitleLabel.TextColor3 = Astral.Theme.Text
-	TitleLabel.TextSize = ApplyScale(14)
-	TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+	TitleLabel.TextSize = ApplyScale(Astral.Config.Topbar.TitleSize)
+	TitleLabel.TextXAlignment = Astral.Config.Topbar.TitleAlignment
 
 	MakeDraggable(TopbarFrame, MainFrame)
 
@@ -369,39 +610,57 @@ function Astral:Window(Options)
 		local Button = Instance.new("TextButton")
 		Button.Parent = ControlsFrame
 		Button.BackgroundColor3 = Astral.Theme.Tertiary
-		Button.BackgroundTransparency = 0.25
+		Button.BackgroundTransparency = Astral.Config.Elements.Button.NormalTransparency
 		Button.Position = Position
 		Button.Size = UDim2.new(0, ApplyScale(ButtonSize), 0, ApplyScale(ButtonSize))
 		Button.AutoButtonColor = false
 		Button.Font = Enum.Font.GothamBold
 		Button.Text = Text
 		Button.TextColor3 = Color
-		Button.TextSize = ApplyScale(14)
+		Button.TextSize = ApplyScale(Astral.Config.Controls.CloseButtonSize)
 		Button.ZIndex = 11
 
 		local ButtonCorner = Instance.new("UICorner")
-		ButtonCorner.CornerRadius = UDim.new(0, ApplyScale(6))
+		ButtonCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Controls.ButtonCornerRadius))
 		ButtonCorner.Parent = Button
 
-		AddHoverEffect(Button, Astral.Theme.HoverBright, Astral.Theme.Tertiary, 0.15, 0.25)
+		AddHoverEffect(
+			Button, 
+			Astral.Theme.HoverBright, 
+			Astral.Theme.Tertiary, 
+			Astral.Config.Elements.Button.HoverTransparency, 
+			Astral.Config.Elements.Button.NormalTransparency
+		)
 		AddClickEffect(Button)
 		return Button
 	end
 
-	local CloseButton = MakeButton("×", UDim2.new(1, -ApplyScale(ButtonSize + BasePadding), 0.5, -ApplyScale(ButtonSize / 2)), Astral.Theme.Error)
-	CloseButton.TextSize = ApplyScale(18)
+	local CloseButton = MakeButton(
+		Astral.Config.Controls.CloseButtonText, 
+		UDim2.new(1, -ApplyScale(ButtonSize + BasePadding), 0.5, -ApplyScale(ButtonSize / 2)), 
+		Astral.Theme.Error
+	)
+	CloseButton.TextSize = ApplyScale(Astral.Config.Controls.CloseButtonSize)
 	CloseButton.MouseButton1Click:Connect(function()
-		local Tween = TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
+		local Tween = TweenService:Create(MainFrame, TweenInfo.new(
+			Astral.Config.Animation.WindowCloseDuration, 
+			Enum.EasingStyle.Back, 
+			Enum.EasingDirection.In
+		), {
 			Size = UDim2.new(0, 0, 0, 0),
 			Position = UDim2.new(0.5, 0, 0.5, 0)
 		})
 		Tween:Play()
-		task.wait(0.25)
+		task.wait(Astral.Config.Animation.WindowCloseDuration)
 		ScreenGui:Destroy()
 	end)
 
-	local MinimizeButton = MakeButton("−", UDim2.new(1, -ApplyScale(ButtonSize * 2 + BasePadding * 1.5), 0.5, -ApplyScale(ButtonSize / 2)), Astral.Theme.TextDark)
-	MinimizeButton.TextSize = ApplyScale(16)
+	local MinimizeButton = MakeButton(
+		Astral.Config.Controls.MinimizeButtonText, 
+		UDim2.new(1, -ApplyScale(ButtonSize * 2 + BasePadding * 1.5), 0.5, -ApplyScale(ButtonSize / 2)), 
+		Astral.Theme.TextDark
+	)
+	MinimizeButton.TextSize = ApplyScale(Astral.Config.Controls.MinimizeButtonSize)
 	MinimizeButton.MouseButton1Click:Connect(function()
 		MainFrame.Visible = not MainFrame.Visible
 	end)
@@ -411,7 +670,7 @@ function Astral:Window(Options)
 	Bubble.Parent = ScreenGui
 	Bubble.BackgroundColor3 = Astral.Theme.Main
 	Bubble.Position = UDim2.new(1, -ApplyScale(70), 0.5, -ApplyScale(25))
-	Bubble.Size = UDim2.new(0, ApplyScale(50), 0, ApplyScale(50))
+	Bubble.Size = UDim2.new(0, ApplyScale(Astral.Config.Bubble.Size), 0, ApplyScale(Astral.Config.Bubble.Size))
 	Bubble.ZIndex = 500
 	Bubble.Text = ""
 	Bubble.AutoButtonColor = false
@@ -425,14 +684,14 @@ function Astral:Window(Options)
 	BubbleIcon.BackgroundTransparency = 1
 	BubbleIcon.Size = UDim2.new(1, 0, 1, 0)
 	BubbleIcon.Position = UDim2.new(0, 0, 0, 0)
-	BubbleIcon.Image = Options.Icon or "rbxassetid://7733954760"
+	BubbleIcon.Image = Options.Icon or Astral.Config.Bubble.IconSize
 	BubbleIcon.ImageColor3 = Astral.Theme.Accent
 	BubbleIcon.ScaleType = Enum.ScaleType.Fit
 
 	local BubbleStroke = Instance.new("UIStroke")
-	BubbleStroke.Thickness = ApplyScale(2)
+	BubbleStroke.Thickness = ApplyScale(Astral.Config.Bubble.StrokeThickness)
 	BubbleStroke.Color = Astral.Theme.Stroke
-	BubbleStroke.Transparency = 0.3
+	BubbleStroke.Transparency = Astral.Config.Bubble.StrokeTransparency
 	BubbleStroke.Parent = Bubble
 
 	local BubbleDragging = false
@@ -443,15 +702,17 @@ function Astral:Window(Options)
 		local CurrentPos = Bubble.AbsolutePosition
 		local CenterX = ScreenSize.X / 2
 
-		-- Add margin from edges
 		local TargetX = (CurrentPos.X + ApplyScale(25) < CenterX) and ApplyScale(15) or (ScreenSize.X - ApplyScale(65))
 		local TargetY = math.clamp(CurrentPos.Y, ApplyScale(15), ScreenSize.Y - ApplyScale(65))
 
-		-- Add margin from top/bottom
 		if TargetY < ApplyScale(100) then TargetY = ApplyScale(15) end
 		if TargetY > ScreenSize.Y - ApplyScale(165) then TargetY = ScreenSize.Y - ApplyScale(65) end
 
-		TweenService:Create(Bubble, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+		TweenService:Create(Bubble, TweenInfo.new(
+			Astral.Config.Animation.TweenDuration, 
+			Enum.EasingStyle.Back, 
+			Enum.EasingDirection.Out
+		), {
 			Position = UDim2.new(0, TargetX, 0, TargetY)
 		}):Play()
 	end
@@ -500,17 +761,17 @@ function Astral:Window(Options)
 	local SidebarFrame = Instance.new("Frame")
 	SidebarFrame.Parent = ContentFrame
 	SidebarFrame.BackgroundColor3 = Astral.Theme.Tertiary
-	SidebarFrame.BackgroundTransparency = 0.2
+	SidebarFrame.BackgroundTransparency = Astral.Config.Sidebar.BackgroundTransparency
 	SidebarFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 0, 0)
-	SidebarFrame.Size = UDim2.new(0, ApplyScale(130), 1, -ApplyScale(BasePadding))
+	SidebarFrame.Size = UDim2.new(0, ApplyScale(Astral.Config.Sidebar.Width), 1, -ApplyScale(BasePadding))
 	local SidebarCorner = Instance.new("UICorner")
-	SidebarCorner.CornerRadius = UDim.new(0, ApplyScale(8))
+	SidebarCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Sidebar.CornerRadius))
 	SidebarCorner.Parent = SidebarFrame
 
 	local SidebarStroke = Instance.new("UIStroke")
 	SidebarStroke.Color = Astral.Theme.StrokeDark
-	SidebarStroke.Thickness = ApplyScale(1)
-	SidebarStroke.Transparency = 0.4
+	SidebarStroke.Thickness = ApplyScale(Astral.Config.Sidebar.StrokeThickness)
+	SidebarStroke.Transparency = Astral.Config.Sidebar.StrokeTransparency
 	SidebarStroke.Parent = SidebarFrame
 
 	local TabContainer = Instance.new("ScrollingFrame")
@@ -531,27 +792,27 @@ function Astral:Window(Options)
 
 	local TabLayout = Instance.new("UIListLayout")
 	TabLayout.Parent = TabContainer
-	TabLayout.Padding = UDim.new(0, ApplyScale(BasePadding))
+	TabLayout.Padding = UDim.new(0, ApplyScale(Astral.Config.Tab.Padding))
 	TabLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-		TabContainer.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y + ApplyScale(BasePadding))
+		TabContainer.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y + ApplyScale(Astral.Config.Tab.Padding))
 	end)
 
 	local PagesFrame = Instance.new("Frame")
 	PagesFrame.Parent = ContentFrame
 	PagesFrame.BackgroundColor3 = Astral.Theme.Secondary
-	PagesFrame.BackgroundTransparency = 0.2
-	PagesFrame.Position = UDim2.new(0, ApplyScale(130 + BasePadding * 2), 0, 0)
-	PagesFrame.Size = UDim2.new(1, -ApplyScale(130 + BasePadding * 3), 1, -ApplyScale(BasePadding))
+	PagesFrame.BackgroundTransparency = Astral.Config.Pages.BackgroundTransparency
+	PagesFrame.Position = UDim2.new(0, ApplyScale(Astral.Config.Sidebar.Width + BasePadding * 2), 0, 0)
+	PagesFrame.Size = UDim2.new(1, -ApplyScale(Astral.Config.Sidebar.Width + BasePadding * 3), 1, -ApplyScale(BasePadding))
 
 	local PagesCorner = Instance.new("UICorner")
-	PagesCorner.CornerRadius = UDim.new(0, ApplyScale(8))
+	PagesCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Pages.CornerRadius))
 	PagesCorner.Parent = PagesFrame
 
 	local PagesContainer = Instance.new("Frame")
 	PagesContainer.Parent = PagesFrame
 	PagesContainer.BackgroundTransparency = 1
 	PagesContainer.Size = UDim2.new(1, 0, 1, 0)
-	ApplyPadding(PagesContainer, ApplyScale(BasePadding))
+	ApplyPadding(PagesContainer, ApplyScale(Astral.Config.Pages.Padding))
 	PagesContainer.ClipsDescendants = true
 
 	local WindowFunctions = {}
@@ -561,7 +822,11 @@ function Astral:Window(Options)
 	local function UpdateNotificationPositions()
 		for Index, Notification in ipairs(ActiveNotifications) do
 			local TargetYOffset = -ApplyScale(20) - ((Index - 1) * ApplyScale(80))
-			TweenService:Create(Notification, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+			TweenService:Create(Notification, TweenInfo.new(
+				Astral.Config.Animation.NotificationDuration,
+				Astral.Config.Animation.EasingStyle,
+				Astral.Config.Animation.EasingDirection
+			), {
 				Position = UDim2.new(1, -ApplyScale(20), 1, TargetYOffset)
 			}):Play()
 		end
@@ -575,12 +840,12 @@ function Astral:Window(Options)
 			end
 		end
 
-		local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(0.3), {
+		local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(Astral.Config.Animation.NotificationDuration), {
 			Position = UDim2.new(1, ApplyScale(20), NotificationFrame.Position.Y.Scale, NotificationFrame.Position.Y.Offset)
 		})
 		ExitTween:Play()
 
-		task.wait(0.3)
+		task.wait(Astral.Config.Animation.NotificationDuration)
 		NotificationFrame:Destroy()
 		UpdateNotificationPositions()
 
@@ -593,15 +858,10 @@ function Astral:Window(Options)
 	function WindowFunctions:Notify(Options)
 		local Title = Options.Title or "Notification"
 		local Content = Options.Content or "Message"
-		local Duration = Options.Duration or 3
+		local Duration = Options.Duration or Astral.Config.Notification.DefaultDuration
 		local Type = Options.Type or "Info"
 
-		local TypeColors = {
-			Info = Astral.Theme.Accent,
-			Success = Astral.Theme.Success,
-			Warning = Astral.Theme.Warning,
-			Error = Astral.Theme.Error
-		}
+		local TypeColors = Astral.Theme.TypeColors
 
 		if #ActiveNotifications >= MaxNotifications then
 			table.insert(NotificationQueue, Options)
@@ -611,20 +871,20 @@ function Astral:Window(Options)
 		local NotificationFrame = Instance.new("Frame")
 		NotificationFrame.Parent = ScreenGui
 		NotificationFrame.BackgroundColor3 = Astral.Theme.Main
-		NotificationFrame.BackgroundTransparency = 0.15
-		NotificationFrame.Size = UDim2.new(0, ApplyScale(300), 0, ApplyScale(70))
+		NotificationFrame.BackgroundTransparency = Astral.Config.Notification.BackgroundTransparency
+		NotificationFrame.Size = UDim2.new(0, ApplyScale(Astral.Config.Notification.Width), 0, ApplyScale(Astral.Config.Notification.Height))
 		NotificationFrame.AnchorPoint = Vector2.new(1, 1)
 		NotificationFrame.Position = UDim2.new(1.5, 0, 1, -ApplyScale(20))
 		NotificationFrame.ZIndex = 100
 
 		local NotificationCorner = Instance.new("UICorner")
-		NotificationCorner.CornerRadius = UDim.new(0, ApplyScale(8))
+		NotificationCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Notification.CornerRadius))
 		NotificationCorner.Parent = NotificationFrame
 
 		local NotificationStroke = Instance.new("UIStroke")
 		NotificationStroke.Color = TypeColors[Type]
-		NotificationStroke.Thickness = ApplyScale(1.5)
-		NotificationStroke.Transparency = 0.4
+		NotificationStroke.Thickness = ApplyScale(Astral.Config.Notification.StrokeThickness)
+		NotificationStroke.Transparency = Astral.Config.Notification.StrokeThickness
 		NotificationStroke.Parent = NotificationFrame
 
 		local NotificationTitle = Instance.new("TextLabel")
@@ -632,10 +892,10 @@ function Astral:Window(Options)
 		NotificationTitle.BackgroundTransparency = 1
 		NotificationTitle.Size = UDim2.new(1, 0, 0, ApplyScale(18))
 		ApplyPadding(NotificationTitle, ApplyScale(BasePadding))
-		NotificationTitle.Font = Enum.Font.GothamBold
+		NotificationTitle.Font = Astral.Config.Notification.TitleFont
 		NotificationTitle.Text = Title
 		NotificationTitle.TextColor3 = Astral.Theme.Text
-		NotificationTitle.TextSize = ApplyScale(13)
+		NotificationTitle.TextSize = ApplyScale(Astral.Config.Notification.TitleSize)
 		NotificationTitle.TextXAlignment = Enum.TextXAlignment.Left
 
 		local NotificationContent = Instance.new("TextLabel")
@@ -644,10 +904,10 @@ function Astral:Window(Options)
 		NotificationContent.Position = UDim2.new(0, 0, 0, ApplyScale(28))
 		NotificationContent.Size = UDim2.new(1, 0, 1, -ApplyScale(36))
 		ApplyPadding(NotificationContent, ApplyScale(BasePadding))
-		NotificationContent.Font = Enum.Font.Gotham
+		NotificationContent.Font = Astral.Config.Notification.ContentFont
 		NotificationContent.Text = Content
 		NotificationContent.TextColor3 = Astral.Theme.TextDark
-		NotificationContent.TextSize = ApplyScale(11)
+		NotificationContent.TextSize = ApplyScale(Astral.Config.Notification.ContentSize)
 		NotificationContent.TextXAlignment = Enum.TextXAlignment.Left
 		NotificationContent.TextYAlignment = Enum.TextYAlignment.Top
 		NotificationContent.TextWrapped = true
@@ -656,7 +916,11 @@ function Astral:Window(Options)
 		UpdateNotificationPositions()
 
 		task.delay(Duration, function()
-			local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+			local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(
+				Astral.Config.Animation.NotificationDuration,
+				Enum.EasingStyle.Quart,
+				Enum.EasingDirection.In
+			), {
 				Position = UDim2.new(1.5, 0, 1, NotificationFrame.Position.Y.Offset),
 				BackgroundTransparency = 1
 			})
@@ -717,7 +981,7 @@ function Astral:Window(Options)
 
 		Scale = newScale
 
-		TweenService:Create(MainFrame, TweenInfo.new(0.3), {
+		TweenService:Create(MainFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {
 			Size = UDim2.new(0, CurrentWidth, 0, CurrentHeight),
 			Position = UDim2.new(0.5, -CurrentWidth/2, 0.5, -CurrentHeight/2)
 		}):Play()
@@ -734,20 +998,20 @@ function Astral:Window(Options)
 		local TabButton = Instance.new("TextButton")
 		TabButton.Parent = TabContainer
 		TabButton.BackgroundColor3 = Astral.Theme.Main
-		TabButton.BackgroundTransparency = 0.25
-		TabButton.Size = UDim2.new(1, 0, 0, ApplyScale(ElementHeight))
+		TabButton.BackgroundTransparency = Astral.Config.Tab.BackgroundTransparency
+		TabButton.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Tab.Height))
 		TabButton.AutoButtonColor = false
 		TabButton.Text = ""
 
 		local TabButtonCorner = Instance.new("UICorner")
-		TabButtonCorner.CornerRadius = UDim.new(0, ApplyScale(8))
+		TabButtonCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Tab.CornerRadius))
 		TabButtonCorner.Parent = TabButton
 
 		local IconImage = Instance.new("ImageLabel")
 		IconImage.Parent = TabButton
 		IconImage.BackgroundTransparency = 1
-		IconImage.Position = UDim2.new(0, ApplyScale(BasePadding), 0.5, -ApplyScale(8))
-		IconImage.Size = UDim2.new(0, ApplyScale(16), 0, ApplyScale(16))
+		IconImage.Position = UDim2.new(0, ApplyScale(BasePadding), 0.5, -ApplyScale(Astral.Config.Tab.IconSize / 2))
+		IconImage.Size = UDim2.new(0, ApplyScale(Astral.Config.Tab.IconSize), 0, ApplyScale(Astral.Config.Tab.IconSize))
 		IconImage.Image = TabIcon
 		IconImage.ImageColor3 = Astral.Theme.TextDark
 
@@ -756,10 +1020,10 @@ function Astral:Window(Options)
 		LabelText.BackgroundTransparency = 1
 		LabelText.Position = UDim2.new(0, ApplyScale(30), 0, 0)
 		LabelText.Size = UDim2.new(1, -ApplyScale(35), 1, 0)
-		LabelText.Font = Enum.Font.GothamMedium
+		LabelText.Font = Astral.Config.Tab.LabelFont
 		LabelText.Text = TabName
 		LabelText.TextColor3 = Astral.Theme.TextDark
-		LabelText.TextSize = ApplyScale(11)
+		LabelText.TextSize = ApplyScale(Astral.Config.Tab.LabelSize)
 		LabelText.TextXAlignment = Enum.TextXAlignment.Left
 
 		local IndicatorFrame = Instance.new("Frame")
@@ -767,8 +1031,8 @@ function Astral:Window(Options)
 		IndicatorFrame.Parent = TabButton
 		IndicatorFrame.BackgroundColor3 = Astral.Theme.Accent
 		IndicatorFrame.BorderSizePixel = 0
-		IndicatorFrame.Position = UDim2.new(0, ApplyScale(2), 0.5, -ApplyScale(8))
-		IndicatorFrame.Size = UDim2.new(0, ApplyScale(2), 0, ApplyScale(16))
+		IndicatorFrame.Position = UDim2.new(0, ApplyScale(2), 0.5, -ApplyScale(Astral.Config.Tab.IndicatorHeight / 2))
+		IndicatorFrame.Size = UDim2.new(0, ApplyScale(Astral.Config.Tab.IndicatorWidth), 0, ApplyScale(Astral.Config.Tab.IndicatorHeight))
 		IndicatorFrame.Visible = false
 
 		AddHoverEffect(TabButton, Astral.Theme.HoverBright, Astral.Theme.Main, 0.2, 0.3)
@@ -790,13 +1054,13 @@ function Astral:Window(Options)
 		PageFrame.ScrollingEnabled = true
 
 		CreateScrollBar(PageFrame)
-		ApplyPadding(PageFrame, ApplyScale(BasePadding))
+		ApplyPadding(PageFrame, ApplyScale(Astral.Config.Pages.Padding))
 
 		local PageLayout = Instance.new("UIListLayout")
 		PageLayout.Parent = PageFrame
-		PageLayout.Padding = UDim.new(0, ApplyScale(BasePadding))
+		PageLayout.Padding = UDim.new(0, ApplyScale(Astral.Config.Pages.Padding))
 		PageLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-			PageFrame.CanvasSize = UDim2.new(0, 0, 0, PageLayout.AbsoluteContentSize.Y + ApplyScale(BasePadding * 2))
+			PageFrame.CanvasSize = UDim2.new(0, 0, 0, PageLayout.AbsoluteContentSize.Y + ApplyScale(Astral.Config.Pages.Padding * 2))
 		end)
 
 		local function Activate()
@@ -807,21 +1071,21 @@ function Astral:Window(Options)
 			end
 			for _, TabData in pairs(AllTabs) do
 				TabData.Button.Indicator.Visible = false
-				TweenService:Create(TabData.Button, TweenInfo.new(0.2), {
+				TweenService:Create(TabData.Button, TweenInfo.new(Astral.Config.Animation.TweenDuration), {
 					BackgroundColor3 = Astral.Theme.Main,
-					BackgroundTransparency = 0.25
+					BackgroundTransparency = Astral.Config.Tab.BackgroundTransparency
 				}):Play()
-				TweenService:Create(TabData.Label, TweenInfo.new(0.2), {TextColor3 = Astral.Theme.TextDark}):Play()
-				TweenService:Create(TabData.Icon, TweenInfo.new(0.2), {ImageColor3 = Astral.Theme.TextDark}):Play()
+				TweenService:Create(TabData.Label, TweenInfo.new(Astral.Config.Animation.TweenDuration), {TextColor3 = Astral.Theme.TextDark}):Play()
+				TweenService:Create(TabData.Icon, TweenInfo.new(Astral.Config.Animation.TweenDuration), {ImageColor3 = Astral.Theme.TextDark}):Play()
 			end
 			PageFrame.Visible = true
 			IndicatorFrame.Visible = true
-			TweenService:Create(TabButton, TweenInfo.new(0.2), {
+			TweenService:Create(TabButton, TweenInfo.new(Astral.Config.Animation.TweenDuration), {
 				BackgroundColor3 = Color3.fromRGB(5, 5, 8),
 				BackgroundTransparency = 0.1
 			}):Play()
-			TweenService:Create(LabelText, TweenInfo.new(0.2), {TextColor3 = Astral.Theme.Text}):Play()
-			TweenService:Create(IconImage, TweenInfo.new(0.2), {ImageColor3 = Astral.Theme.Accent}):Play()
+			TweenService:Create(LabelText, TweenInfo.new(Astral.Config.Animation.TweenDuration), {TextColor3 = Astral.Theme.Text}):Play()
+			TweenService:Create(IconImage, TweenInfo.new(Astral.Config.Animation.TweenDuration), {ImageColor3 = Astral.Theme.Accent}):Play()
 		end
 
 		TabButton.MouseButton1Click:Connect(Activate)
@@ -840,21 +1104,21 @@ function Astral:Window(Options)
 			local SectionFrame = Instance.new("Frame")
 			SectionFrame.Parent = PageFrame
 			SectionFrame.BackgroundColor3 = Astral.Theme.Tertiary
-			SectionFrame.BackgroundTransparency = 0.25
+			SectionFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
 			SectionFrame.Size = UDim2.new(1, 0, 0, 0)
 			SectionFrame.AutomaticSize = Enum.AutomaticSize.Y
 
 			local SectionCorner = Instance.new("UICorner")
-			SectionCorner.CornerRadius = UDim.new(0, ApplyScale(8))
+			SectionCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Section.CornerRadius))
 			SectionCorner.Parent = SectionFrame
 
 			local HeaderFrame = Instance.new("Frame")
 			HeaderFrame.Parent = SectionFrame
 			HeaderFrame.BackgroundColor3 = Astral.Theme.Main
-			HeaderFrame.BackgroundTransparency = 0.2
-			HeaderFrame.Size = UDim2.new(1, 0, 0, ApplyScale(ElementHeight))
+			HeaderFrame.BackgroundTransparency = Astral.Config.Elements.Section.HeaderBackgroundTransparency
+			HeaderFrame.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.Section.HeaderHeight))
 			local HeaderCorner = Instance.new("UICorner")
-			HeaderCorner.CornerRadius = UDim.new(0, ApplyScale(8))
+			HeaderCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Section.CornerRadius))
 			HeaderCorner.Parent = HeaderFrame
 
 			local SectionLabel = Instance.new("TextLabel")
@@ -862,16 +1126,16 @@ function Astral:Window(Options)
 			SectionLabel.BackgroundTransparency = 1
 			SectionLabel.Size = UDim2.new(1, 0, 1, 0)
 			ApplyPadding(SectionLabel, ApplyScale(BasePadding))
-			SectionLabel.Font = Enum.Font.GothamBold
+			SectionLabel.Font = Astral.Config.Elements.Section.TitleFont
 			SectionLabel.Text = SectionName
 			SectionLabel.TextColor3 = Astral.Theme.Text
-			SectionLabel.TextSize = ApplyScale(13)
+			SectionLabel.TextSize = ApplyScale(Astral.Config.Elements.Section.TitleSize)
 			SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 			local SectionContent = Instance.new("Frame")
 			SectionContent.Parent = SectionFrame
 			SectionContent.BackgroundTransparency = 1
-			SectionContent.Position = UDim2.new(0, 0, 0, ApplyScale(ElementHeight))
+			SectionContent.Position = UDim2.new(0, 0, 0, ApplyScale(Astral.Config.Elements.Section.HeaderHeight))
 			SectionContent.Size = UDim2.new(1, 0, 0, 0)
 			SectionContent.AutomaticSize = Enum.AutomaticSize.Y
 
@@ -902,13 +1166,13 @@ function Astral:Window(Options)
 			local ButtonFrame = Instance.new("TextButton")
 			ButtonFrame.Parent = Parent
 			ButtonFrame.BackgroundColor3 = Astral.Theme.Main
-			ButtonFrame.BackgroundTransparency = 0.25
-			ButtonFrame.Size = UDim2.new(1, 0, 0, ApplyScale(ElementHeight))
+			ButtonFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			ButtonFrame.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.Height))
 			ButtonFrame.AutoButtonColor = false
 			ButtonFrame.Text = ""
 
 			local ButtonCorner = Instance.new("UICorner")
-			ButtonCorner.CornerRadius = UDim.new(0, ApplyScale(6))
+			ButtonCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
 			ButtonCorner.Parent = ButtonFrame
 
 			local ButtonLabel = Instance.new("TextLabel")
@@ -916,13 +1180,19 @@ function Astral:Window(Options)
 			ButtonLabel.BackgroundTransparency = 1
 			ButtonLabel.Size = UDim2.new(1, 0, 1, 0)
 			ApplyPadding(ButtonLabel, ApplyScale(BasePadding))
-			ButtonLabel.Font = Enum.Font.GothamMedium
+			ButtonLabel.Font = Astral.Config.Elements.LabelFont
 			ButtonLabel.Text = ButtonName
 			ButtonLabel.TextColor3 = Astral.Theme.Text
-			ButtonLabel.TextSize = ApplyScale(12)
-			ButtonLabel.TextXAlignment = Enum.TextXAlignment.Left
+			ButtonLabel.TextSize = ApplyScale(Astral.Config.Elements.LabelSize)
+			ButtonLabel.TextXAlignment = Astral.Config.Elements.LabelAlignment
 
-			AddHoverEffect(ButtonFrame, Astral.Theme.HoverBright, Astral.Theme.Main, 0.15, 0.25)
+			AddHoverEffect(
+				ButtonFrame, 
+				Astral.Theme.HoverBright, 
+				Astral.Theme.Main, 
+				Astral.Config.Elements.Button.HoverTransparency, 
+				Astral.Config.Elements.Button.NormalTransparency
+			)
 			AddClickEffect(ButtonFrame)
 			ButtonFrame.MouseButton1Click:Connect(Callback)
 		end
@@ -937,11 +1207,11 @@ function Astral:Window(Options)
 			local ToggleFrame = Instance.new("Frame")
 			ToggleFrame.Parent = Parent
 			ToggleFrame.BackgroundColor3 = Astral.Theme.Main
-			ToggleFrame.BackgroundTransparency = 0.25
-			ToggleFrame.Size = UDim2.new(1, 0, 0, ApplyScale(ElementHeight))
+			ToggleFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			ToggleFrame.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.Height))
 
 			local ToggleCorner = Instance.new("UICorner")
-			ToggleCorner.CornerRadius = UDim.new(0, ApplyScale(6))
+			ToggleCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
 			ToggleCorner.Parent = ToggleFrame
 
 			local ToggleLabel = Instance.new("TextLabel")
@@ -949,17 +1219,17 @@ function Astral:Window(Options)
 			ToggleLabel.BackgroundTransparency = 1
 			ToggleLabel.Size = UDim2.new(1, 0, 1, 0)
 			ApplyPadding(ToggleLabel, ApplyScale(BasePadding))
-			ToggleLabel.Font = Enum.Font.GothamMedium
+			ToggleLabel.Font = Astral.Config.Elements.LabelFont
 			ToggleLabel.Text = ToggleName
 			ToggleLabel.TextColor3 = Astral.Theme.Text
-			ToggleLabel.TextSize = ApplyScale(12)
-			ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+			ToggleLabel.TextSize = ApplyScale(Astral.Config.Elements.LabelSize)
+			ToggleLabel.TextXAlignment = Astral.Config.Elements.LabelAlignment
 
 			local CheckButton = Instance.new("TextButton")
 			CheckButton.Parent = ToggleFrame
 			CheckButton.BackgroundColor3 = State and Astral.Theme.Accent or Astral.Theme.Tertiary
-			CheckButton.Position = UDim2.new(1, -ApplyScale(46), 0.5, -ApplyScale(9))
-			CheckButton.Size = UDim2.new(0, ApplyScale(38), 0, ApplyScale(18))
+			CheckButton.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Toggle.Width + 8), 0.5, -ApplyScale(Astral.Config.Elements.Toggle.Height / 2))
+			CheckButton.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Toggle.Width), 0, ApplyScale(Astral.Config.Elements.Toggle.Height))
 			CheckButton.AutoButtonColor = false
 			CheckButton.Text = ""
 
@@ -970,18 +1240,18 @@ function Astral:Window(Options)
 			local CircleFrame = Instance.new("Frame")
 			CircleFrame.Parent = CheckButton
 			CircleFrame.BackgroundColor3 = Astral.Theme.Text
-			CircleFrame.Size = UDim2.new(0, ApplyScale(14), 0, ApplyScale(14))
-			CircleFrame.Position = State and UDim2.new(1, -ApplyScale(16), 0.5, -ApplyScale(7)) or UDim2.new(0, ApplyScale(2), 0.5, -ApplyScale(7))
+			CircleFrame.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Toggle.CircleSize), 0, ApplyScale(Astral.Config.Elements.Toggle.CircleSize))
+			CircleFrame.Position = State and UDim2.new(1, -ApplyScale(Astral.Config.Elements.Toggle.CircleSize + 2), 0.5, -ApplyScale(Astral.Config.Elements.Toggle.CircleSize / 2)) or UDim2.new(0, ApplyScale(2), 0.5, -ApplyScale(Astral.Config.Elements.Toggle.CircleSize / 2))
 
 			local CircleCorner = Instance.new("UICorner")
 			CircleCorner.CornerRadius = UDim.new(1, 0)
 			CircleCorner.Parent = CircleFrame
 
 			local function Update()
-				local Position = State and UDim2.new(1, -ApplyScale(16), 0.5, -ApplyScale(7)) or UDim2.new(0, ApplyScale(2), 0.5, -ApplyScale(7))
+				local Position = State and UDim2.new(1, -ApplyScale(Astral.Config.Elements.Toggle.CircleSize + 2), 0.5, -ApplyScale(Astral.Config.Elements.Toggle.CircleSize / 2)) or UDim2.new(0, ApplyScale(2), 0.5, -ApplyScale(Astral.Config.Elements.Toggle.CircleSize / 2))
 				local Color = State and Astral.Theme.Accent or Astral.Theme.Tertiary
-				TweenService:Create(CircleFrame, TweenInfo.new(0.2), {Position = Position}):Play()
-				TweenService:Create(CheckButton, TweenInfo.new(0.2), {BackgroundColor3 = Color}):Play()
+				TweenService:Create(CircleFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {Position = Position}):Play()
+				TweenService:Create(CheckButton, TweenInfo.new(Astral.Config.Animation.TweenDuration), {BackgroundColor3 = Color}):Play()
 				Callback(State)
 			end
 
@@ -1005,47 +1275,47 @@ function Astral:Window(Options)
 			local SliderFrame = Instance.new("Frame")
 			SliderFrame.Parent = Parent
 			SliderFrame.BackgroundColor3 = Astral.Theme.Main
-			SliderFrame.BackgroundTransparency = 0.25
-			SliderFrame.Size = UDim2.new(1, 0, 0, ApplyScale(50))
+			SliderFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			SliderFrame.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.Slider.Height))
 
 			local SliderCorner = Instance.new("UICorner")
-			SliderCorner.CornerRadius = UDim.new(0, ApplyScale(6))
+			SliderCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
 			SliderCorner.Parent = SliderFrame
 
 			local SliderLabel = Instance.new("TextLabel")
 			SliderLabel.Parent = SliderFrame
 			SliderLabel.BackgroundTransparency = 1
-			SliderLabel.Size = UDim2.new(1, 0, 0, ApplyScale(16))
+			SliderLabel.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.Slider.LabelHeight))
 			ApplyPadding(SliderLabel, ApplyScale(BasePadding))
-			SliderLabel.Font = Enum.Font.GothamMedium
+			SliderLabel.Font = Astral.Config.Elements.LabelFont
 			SliderLabel.Text = SliderName
 			SliderLabel.TextColor3 = Astral.Theme.Text
-			SliderLabel.TextSize = ApplyScale(12)
-			SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+			SliderLabel.TextSize = ApplyScale(Astral.Config.Elements.LabelSize)
+			SliderLabel.TextXAlignment = Astral.Config.Elements.LabelAlignment
 
 			local ValueInput = Instance.new("TextBox")
 			ValueInput.Parent = SliderFrame
 			ValueInput.BackgroundColor3 = Astral.Theme.Tertiary
-			ValueInput.BackgroundTransparency = 0.25
-			ValueInput.Position = UDim2.new(1, -ApplyScale(60), 0, ApplyScale(4))
-			ValueInput.Size = UDim2.new(0, ApplyScale(48), 0, ApplyScale(20))
-			ValueInput.Font = Enum.Font.GothamBold
+			ValueInput.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			ValueInput.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Slider.InputWidth + 12), 0, ApplyScale(4))
+			ValueInput.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Slider.InputWidth), 0, ApplyScale(Astral.Config.Elements.Slider.InputHeight))
+			ValueInput.Font = Astral.Config.Elements.Slider.ValueInputFont
 			ValueInput.Text = tostring(Value)
 			ValueInput.TextColor3 = Astral.Theme.Accent
-			ValueInput.TextSize = ApplyScale(11)
+			ValueInput.TextSize = ApplyScale(Astral.Config.Elements.Slider.InputTextSize)
 			ValueInput.ClearTextOnFocus = false
 
 			local InputStroke = Instance.new("UIStroke")
 			InputStroke.Parent = ValueInput
 			InputStroke.Color = Astral.Theme.Stroke
-			InputStroke.Thickness = ApplyScale(1)
-			InputStroke.Transparency = 0.5
+			InputStroke.Thickness = ApplyScale(Astral.Config.Elements.TextBox.StrokeThickness)
+			InputStroke.Transparency = Astral.Config.Elements.TextBox.StrokeTransparency
 
 			local BackgroundFrame = Instance.new("Frame")
 			BackgroundFrame.Parent = SliderFrame
 			BackgroundFrame.BackgroundColor3 = Astral.Theme.Tertiary
-			BackgroundFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 1, -ApplyScale(18))
-			BackgroundFrame.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, ApplyScale(6))
+			BackgroundFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 1, -ApplyScale(Astral.Config.Elements.Slider.TrackHeight + 12))
+			BackgroundFrame.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, ApplyScale(Astral.Config.Elements.Slider.TrackHeight))
 
 			local BackgroundCorner = Instance.new("UICorner")
 			BackgroundCorner.CornerRadius = UDim.new(1, 0)
@@ -1063,8 +1333,8 @@ function Astral:Window(Options)
 			local BallFrame = Instance.new("Frame")
 			BallFrame.Parent = BackgroundFrame
 			BallFrame.BackgroundColor3 = Astral.Theme.Text
-			BallFrame.Size = UDim2.new(0, ApplyScale(14), 0, ApplyScale(14))
-			BallFrame.Position = UDim2.new((Value - Min) / (Max - Min), -ApplyScale(7), 0.5, -ApplyScale(7))
+			BallFrame.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Slider.BallSize), 0, ApplyScale(Astral.Config.Elements.Slider.BallSize))
+			BallFrame.Position = UDim2.new((Value - Min) / (Max - Min), -ApplyScale(Astral.Config.Elements.Slider.BallSize / 2), 0.5, -ApplyScale(Astral.Config.Elements.Slider.BallSize / 2))
 			BallFrame.ZIndex = 2
 
 			local BallCorner = Instance.new("UICorner")
@@ -1084,7 +1354,7 @@ function Astral:Window(Options)
 				local VisualPercentage = (Value - Min) / (Max - Min)
 
 				TweenService:Create(FillFrame, TweenInfo.new(0.05), {Size = UDim2.new(VisualPercentage, 0, 1, 0)}):Play()
-				TweenService:Create(BallFrame, TweenInfo.new(0.05), {Position = UDim2.new(VisualPercentage, -ApplyScale(7), 0.5, -ApplyScale(7))}):Play()
+				TweenService:Create(BallFrame, TweenInfo.new(0.05), {Position = UDim2.new(VisualPercentage, -ApplyScale(Astral.Config.Elements.Slider.BallSize / 2), 0.5, -ApplyScale(Astral.Config.Elements.Slider.BallSize / 2))}):Play()
 
 				ValueInput.Text = tostring(Value)
 				Callback(Value)
@@ -1126,8 +1396,8 @@ function Astral:Window(Options)
 				if InputValue then
 					Value = math.clamp(math.floor(InputValue / Increment + 0.5) * Increment, Min, Max)
 					local VisualPercentage = (Value - Min) / (Max - Min)
-					TweenService:Create(FillFrame, TweenInfo.new(0.2), {Size = UDim2.new(VisualPercentage, 0, 1, 0)}):Play()
-					TweenService:Create(BallFrame, TweenInfo.new(0.2), {Position = UDim2.new(VisualPercentage, -ApplyScale(7), 0.5, -ApplyScale(7))}):Play()
+					TweenService:Create(FillFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {Size = UDim2.new(VisualPercentage, 0, 1, 0)}):Play()
+					TweenService:Create(BallFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {Position = UDim2.new(VisualPercentage, -ApplyScale(Astral.Config.Elements.Slider.BallSize / 2), 0.5, -ApplyScale(Astral.Config.Elements.Slider.BallSize / 2))}):Play()
 					ValueInput.Text = tostring(Value)
 					Callback(Value)
 				else
@@ -1146,48 +1416,48 @@ function Astral:Window(Options)
 			local TextBoxFrame = Instance.new("Frame")
 			TextBoxFrame.Parent = Parent
 			TextBoxFrame.BackgroundColor3 = Astral.Theme.Main
-			TextBoxFrame.BackgroundTransparency = 0.25
-			TextBoxFrame.Size = UDim2.new(1, 0, 0, ApplyScale(44))
+			TextBoxFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			TextBoxFrame.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.TextBox.Height))
 
 			local TextBoxCorner = Instance.new("UICorner")
-			TextBoxCorner.CornerRadius = UDim.new(0, ApplyScale(6))
+			TextBoxCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
 			TextBoxCorner.Parent = TextBoxFrame
 
 			local TextBoxLabel = Instance.new("TextLabel")
 			TextBoxLabel.Parent = TextBoxFrame
 			TextBoxLabel.BackgroundTransparency = 1
-			TextBoxLabel.Size = UDim2.new(1, 0, 0, ApplyScale(16))
+			TextBoxLabel.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.TextBox.LabelHeight))
 			ApplyPadding(TextBoxLabel, ApplyScale(BasePadding))
-			TextBoxLabel.Font = Enum.Font.GothamMedium
+			TextBoxLabel.Font = Astral.Config.Elements.LabelFont
 			TextBoxLabel.Text = TextBoxName
 			TextBoxLabel.TextColor3 = Astral.Theme.Text
-			TextBoxLabel.TextSize = ApplyScale(12)
-			TextBoxLabel.TextXAlignment = Enum.TextXAlignment.Left
+			TextBoxLabel.TextSize = ApplyScale(Astral.Config.Elements.LabelSize)
+			TextBoxLabel.TextXAlignment = Astral.Config.Elements.LabelAlignment
 
 			local InputBox = Instance.new("TextBox")
 			InputBox.Parent = TextBoxFrame
 			InputBox.BackgroundColor3 = Astral.Theme.Tertiary
-			InputBox.BackgroundTransparency = 0.25
-			InputBox.Position = UDim2.new(0, ApplyScale(BasePadding), 0, ApplyScale(24))
-			InputBox.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, ApplyScale(16))
+			InputBox.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			InputBox.Position = UDim2.new(0, ApplyScale(BasePadding), 0, ApplyScale(Astral.Config.Elements.TextBox.LabelHeight + 8))
+			InputBox.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, ApplyScale(Astral.Config.Elements.TextBox.InputHeight))
 			InputBox.Font = Enum.Font.Gotham
 			InputBox.PlaceholderText = Placeholder
-			InputBox.PlaceholderColor3 = Astral.Theme.TextDarker
+			InputBox.PlaceholderColor3 = Astral.Config.Elements.TextBox.PlaceholderColor
 			InputBox.Text = Default
 			InputBox.TextColor3 = Astral.Theme.Text
-			InputBox.TextSize = ApplyScale(11)
+			InputBox.TextSize = ApplyScale(Astral.Config.Elements.TextBox.InputTextSize)
 			InputBox.TextXAlignment = Enum.TextXAlignment.Left
 			InputBox.ClearTextOnFocus = false
 
 			local InputCorner = Instance.new("UICorner")
-			InputCorner.CornerRadius = UDim.new(0, ApplyScale(4))
+			InputCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.TextBox.InputCornerRadius))
 			InputCorner.Parent = InputBox
 
 			local InputStroke = Instance.new("UIStroke")
 			InputStroke.Parent = InputBox
 			InputStroke.Color = Astral.Theme.Stroke
-			InputStroke.Thickness = ApplyScale(1)
-			InputStroke.Transparency = 0.5
+			InputStroke.Thickness = ApplyScale(Astral.Config.Elements.TextBox.StrokeThickness)
+			InputStroke.Transparency = Astral.Config.Elements.TextBox.StrokeTransparency
 
 			InputBox.Focused:Connect(function()
 				CenterElement(PageFrame, TextBoxFrame)
@@ -1208,27 +1478,22 @@ function Astral:Window(Options)
 			local Callback = Options.Callback or function() end
 			local Dropped = false
 
-			-- Fixed heights (not scaled)
-			local BaseElementHeight = ElementHeight  -- Keep original height
-			local ListAreaHeight = 100  -- Fixed list area height
-			local BasePaddingValue = BasePadding  -- Fixed padding
+			local BaseElementHeight = Astral.Config.Elements.Dropdown.Height
+			local ListAreaHeight = Astral.Config.Elements.Dropdown.ListAreaHeight
+			local BasePaddingValue = BasePadding
 
-			-- Calculate expanded height (not scaled)
-			local ExpandedHeight = BaseElementHeight +  -- Main element
-				BaseElementHeight + BasePaddingValue +  -- Header
-				ListAreaHeight + BasePaddingValue * 2  -- List area with padding
+			local ExpandedHeight = BaseElementHeight + BaseElementHeight + BasePaddingValue + ListAreaHeight + BasePaddingValue * 2
 
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
 			DropdownFrame.BackgroundColor3 = Astral.Theme.Main
-			DropdownFrame.BackgroundTransparency = 0.25
-			DropdownFrame.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))  -- Only width scales
+			DropdownFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			DropdownFrame.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
 			DropdownFrame.ClipsDescendants = true
 			local DropdownCorner = Instance.new("UICorner")
-			DropdownCorner.CornerRadius = UDim.new(0, ApplyScale(6))
+			DropdownCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
 			DropdownCorner.Parent = DropdownFrame
 
-			-- Add bottom padding to the dropdown frame
 			local DropdownPadding = Instance.new("UIPadding")
 			DropdownPadding.Parent = DropdownFrame
 			DropdownPadding.PaddingBottom = UDim.new(0, ApplyScale(BasePaddingValue))
@@ -1236,32 +1501,32 @@ function Astral:Window(Options)
 			local DropdownButton = Instance.new("TextButton")
 			DropdownButton.Parent = DropdownFrame
 			DropdownButton.BackgroundTransparency = 1
-			DropdownButton.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))  -- Only width scales
+			DropdownButton.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
 			DropdownButton.Text = ""
 
 			local DropdownLabel = Instance.new("TextLabel")
 			DropdownLabel.Parent = DropdownButton
 			DropdownLabel.Size = UDim2.new(1, 0, 1, 0)
 			ApplyPadding(DropdownLabel, ApplyScale(BasePaddingValue))
-			DropdownLabel.Font = Enum.Font.GothamMedium
+			DropdownLabel.Font = Astral.Config.Elements.LabelFont
 			DropdownLabel.Text = DropdownName .. (CurrentSelected and (": " .. tostring(CurrentSelected)) or "")
 			DropdownLabel.TextColor3 = Astral.Theme.Text
-			DropdownLabel.TextSize = 12  -- Fixed text size
+			DropdownLabel.TextSize = Astral.Config.Elements.Dropdown.LabelTextSize
 			DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
 			DropdownLabel.BackgroundTransparency = 1
 
 			local ArrowImage = Instance.new("ImageLabel")
 			ArrowImage.Parent = DropdownButton
 			ArrowImage.BackgroundTransparency = 1
-			ArrowImage.Position = UDim2.new(1, -ApplyScale(26), 0.5, -6)  -- Fixed Y position
-			ArrowImage.Size = UDim2.new(0, ApplyScale(12), 0, 12)  -- Fixed height
+			ArrowImage.Position = UDim2.new(1, -ApplyScale(26), 0.5, -Astral.Config.Elements.Dropdown.ArrowSize / 2)
+			ArrowImage.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Dropdown.ArrowSize), 0, Astral.Config.Elements.Dropdown.ArrowSize)
 			ArrowImage.Image = "rbxassetid://6031091004"
 			ArrowImage.ImageColor3 = Astral.Theme.Accent
 
 			local Header = Instance.new("Frame")
 			Header.Parent = DropdownFrame
 			Header.Position = UDim2.new(0, ApplyScale(BasePaddingValue), 0, ApplyScale(BaseElementHeight + BasePaddingValue))
-			Header.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(BaseElementHeight))  -- Only width scales
+			Header.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(BaseElementHeight))
 			Header.BackgroundTransparency = 1
 			Header.Visible = false
 
@@ -1269,41 +1534,41 @@ function Astral:Window(Options)
 			SearchBox.Parent = Header
 			SearchBox.Size = UDim2.new(1, -ApplyScale(50), 1, 0)
 			SearchBox.BackgroundColor3 = Astral.Theme.Tertiary
-			SearchBox.BackgroundTransparency = 0.25
-			SearchBox.PlaceholderText = "Search..."
+			SearchBox.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			SearchBox.PlaceholderText = Astral.Config.Elements.Dropdown.SearchPlaceholder
 			SearchBox.Text = ""
 			SearchBox.TextColor3 = Astral.Theme.Text
 			SearchBox.Font = Enum.Font.Gotham
-			SearchBox.TextSize = 11  -- Fixed text size
+			SearchBox.TextSize = Astral.Config.Elements.Dropdown.SearchTextSize
 			local SearchBoxCorner = Instance.new("UICorner")
-			SearchBoxCorner.CornerRadius = UDim.new(0, ApplyScale(4))
+			SearchBoxCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 			SearchBoxCorner.Parent = SearchBox
 
 			local SearchStroke = Instance.new("UIStroke")
 			SearchStroke.Parent = SearchBox
 			SearchStroke.Color = Astral.Theme.Stroke
-			SearchStroke.Thickness = ApplyScale(1)
-			SearchStroke.Transparency = 0.5
+			SearchStroke.Thickness = ApplyScale(Astral.Config.Elements.Dropdown.StrokeThickness)
+			SearchStroke.Transparency = Astral.Config.Elements.Dropdown.StrokeTransparency
 
 			local ClearBtn = Instance.new("TextButton")
 			ClearBtn.Parent = Header
 			ClearBtn.Position = UDim2.new(1, -ApplyScale(45), 0, 0)
 			ClearBtn.Size = UDim2.new(0, ApplyScale(45), 1, 0)
 			ClearBtn.BackgroundColor3 = Astral.Theme.Error
-			ClearBtn.BackgroundTransparency = 0.25
-			ClearBtn.Text = "CLEAR"
+			ClearBtn.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			ClearBtn.Text = Astral.Config.Elements.Dropdown.ClearButtonText
 			ClearBtn.Font = Enum.Font.GothamBold
 			ClearBtn.TextColor3 = Astral.Theme.Text
-			ClearBtn.TextSize = 9  -- Fixed text size
+			ClearBtn.TextSize = Astral.Config.Elements.Dropdown.ButtonTextSize
 			local ClearBtnCorner = Instance.new("UICorner")
-			ClearBtnCorner.CornerRadius = UDim.new(0, ApplyScale(4))
+			ClearBtnCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 			ClearBtnCorner.Parent = ClearBtn
 
 			local DropdownList = Instance.new("ScrollingFrame")
 			DropdownList.Parent = DropdownFrame
 			DropdownList.BackgroundTransparency = 1
 			DropdownList.Position = UDim2.new(0, ApplyScale(BasePaddingValue), 0, ApplyScale(BaseElementHeight * 2 + BasePaddingValue * 2))
-			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(ListAreaHeight))  -- Only width scales
+			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(ListAreaHeight))
 			DropdownList.ScrollBarThickness = 0
 			DropdownList.ScrollBarImageTransparency = 1
 			DropdownList.BorderSizePixel = 0
@@ -1331,14 +1596,14 @@ function Astral:Window(Options)
 					local OptionButton = Instance.new("TextButton")
 					OptionButton.Parent = DropdownList
 					OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
-					OptionButton.BackgroundTransparency = IsSelected and 0.15 or 0.25
-					OptionButton.Size = UDim2.new(1, 0, 0, 26)  -- Fixed height
+					OptionButton.BackgroundTransparency = IsSelected and 0.15 or Astral.Config.Elements.BackgroundTransparency
+					OptionButton.Size = UDim2.new(1, 0, 0, Astral.Config.Elements.Dropdown.OptionHeight)
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
 					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
-					OptionButton.TextSize = 11  -- Fixed text size
+					OptionButton.TextSize = Astral.Config.Elements.Dropdown.OptionTextSize
 					local OptionCorner = Instance.new("UICorner")
-					OptionCorner.CornerRadius = UDim.new(0, ApplyScale(4))
+					OptionCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 					OptionCorner.Parent = OptionButton
 
 					OptionButton.MouseButton1Click:Connect(function()
@@ -1370,24 +1635,22 @@ function Astral:Window(Options)
 					Header.Visible = true
 					DropdownList.Visible = true
 
-					-- Start centering immediately with future height
 					CenterElement(PageFrame, DropdownFrame, ApplyScale(ExpandedHeight))
 
-					-- Animate dropdown expansion using the calculated expanded height
-					TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {
+					TweenService:Create(DropdownFrame, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Size = UDim2.new(1, 0, 0, ApplyScale(ExpandedHeight))
 					}):Play()
-					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {
+					TweenService:Create(ArrowImage, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Rotation = 180
 					}):Play()
 				else
 					Header.Visible = false
 					DropdownList.Visible = false
 
-					TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {
+					TweenService:Create(DropdownFrame, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
 					}):Play()
-					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {
+					TweenService:Create(ArrowImage, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Rotation = 0
 					}):Play()
 				end
@@ -1414,27 +1677,22 @@ function Astral:Window(Options)
 				end
 			end
 
-			-- Fixed heights (not scaled)
-			local BaseElementHeight = ElementHeight  -- Keep original height
-			local ListAreaHeight = 120  -- Fixed list area height
-			local BasePaddingValue = BasePadding  -- Fixed padding
+			local BaseElementHeight = Astral.Config.Elements.MultiDropdown.Height
+			local ListAreaHeight = Astral.Config.Elements.MultiDropdown.ListAreaHeight
+			local BasePaddingValue = BasePadding
 
-			-- Calculate expanded height (not scaled)
-			local ExpandedHeight = BaseElementHeight +  -- Main element
-				BaseElementHeight + BasePaddingValue +  -- Header
-				ListAreaHeight + BasePaddingValue * 2  -- List area with padding
+			local ExpandedHeight = BaseElementHeight + BaseElementHeight + BasePaddingValue + ListAreaHeight + BasePaddingValue * 2
 
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
 			DropdownFrame.BackgroundColor3 = Astral.Theme.Main
-			DropdownFrame.BackgroundTransparency = 0.25
-			DropdownFrame.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))  -- Only width scales
+			DropdownFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			DropdownFrame.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
 			DropdownFrame.ClipsDescendants = true
 			local DropdownCorner = Instance.new("UICorner")
-			DropdownCorner.CornerRadius = UDim.new(0, ApplyScale(6))
+			DropdownCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
 			DropdownCorner.Parent = DropdownFrame
 
-			-- Add bottom padding to the dropdown frame
 			local DropdownPadding = Instance.new("UIPadding")
 			DropdownPadding.Parent = DropdownFrame
 			DropdownPadding.PaddingBottom = UDim.new(0, ApplyScale(BasePaddingValue))
@@ -1442,16 +1700,16 @@ function Astral:Window(Options)
 			local DropdownButton = Instance.new("TextButton")
 			DropdownButton.Parent = DropdownFrame
 			DropdownButton.BackgroundTransparency = 1
-			DropdownButton.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))  -- Only width scales
+			DropdownButton.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
 			DropdownButton.Text = ""
 
 			local DropdownLabel = Instance.new("TextLabel")
 			DropdownLabel.Parent = DropdownButton
 			DropdownLabel.Size = UDim2.new(1, 0, 1, 0)
 			ApplyPadding(DropdownLabel, ApplyScale(BasePaddingValue))
-			DropdownLabel.Font = Enum.Font.GothamMedium
+			DropdownLabel.Font = Astral.Config.Elements.LabelFont
 			DropdownLabel.TextColor3 = Astral.Theme.Text
-			DropdownLabel.TextSize = 12  -- Fixed text size
+			DropdownLabel.TextSize = Astral.Config.Elements.MultiDropdown.LabelTextSize
 			DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
 			DropdownLabel.BackgroundTransparency = 1
 			DropdownLabel.TextTruncate = Enum.TextTruncate.AtEnd
@@ -1469,15 +1727,15 @@ function Astral:Window(Options)
 			local ArrowImage = Instance.new("ImageLabel")
 			ArrowImage.Parent = DropdownButton
 			ArrowImage.BackgroundTransparency = 1
-			ArrowImage.Position = UDim2.new(1, -ApplyScale(26), 0.5, -6)  -- Fixed Y position
-			ArrowImage.Size = UDim2.new(0, ApplyScale(12), 0, 12)  -- Fixed height
+			ArrowImage.Position = UDim2.new(1, -ApplyScale(26), 0.5, -Astral.Config.Elements.Dropdown.ArrowSize / 2)
+			ArrowImage.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Dropdown.ArrowSize), 0, Astral.Config.Elements.Dropdown.ArrowSize)
 			ArrowImage.Image = "rbxassetid://6031091004"
 			ArrowImage.ImageColor3 = Astral.Theme.Accent
 
 			local Header = Instance.new("Frame")
 			Header.Parent = DropdownFrame
 			Header.Position = UDim2.new(0, ApplyScale(BasePaddingValue), 0, ApplyScale(BaseElementHeight + BasePaddingValue))
-			Header.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(BaseElementHeight))  -- Only width scales
+			Header.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(BaseElementHeight))
 			Header.BackgroundTransparency = 1
 			Header.Visible = false
 
@@ -1485,34 +1743,34 @@ function Astral:Window(Options)
 			SearchBox.Parent = Header
 			SearchBox.Size = UDim2.new(1, -ApplyScale(100), 1, 0)
 			SearchBox.BackgroundColor3 = Astral.Theme.Tertiary
-			SearchBox.BackgroundTransparency = 0.25
-			SearchBox.PlaceholderText = "Search options..."
+			SearchBox.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			SearchBox.PlaceholderText = Astral.Config.Elements.MultiDropdown.SearchPlaceholder
 			SearchBox.Text = ""
 			SearchBox.TextColor3 = Astral.Theme.Text
 			SearchBox.Font = Enum.Font.Gotham
-			SearchBox.TextSize = 11  -- Fixed text size
+			SearchBox.TextSize = Astral.Config.Elements.MultiDropdown.SearchTextSize
 			local SearchBoxCorner = Instance.new("UICorner")
-			SearchBoxCorner.CornerRadius = UDim.new(0, ApplyScale(4))
+			SearchBoxCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 			SearchBoxCorner.Parent = SearchBox
 
 			local SearchStroke = Instance.new("UIStroke")
 			SearchStroke.Parent = SearchBox
 			SearchStroke.Color = Astral.Theme.Stroke
-			SearchStroke.Thickness = ApplyScale(1)
-			SearchStroke.Transparency = 0.5
+			SearchStroke.Thickness = ApplyScale(Astral.Config.Elements.Dropdown.StrokeThickness)
+			SearchStroke.Transparency = Astral.Config.Elements.Dropdown.StrokeTransparency
 
 			local SelectAllBtn = Instance.new("TextButton")
 			SelectAllBtn.Parent = Header
 			SelectAllBtn.Position = UDim2.new(1, -ApplyScale(95), 0, 0)
 			SelectAllBtn.Size = UDim2.new(0, ApplyScale(45), 1, 0)
 			SelectAllBtn.BackgroundColor3 = Astral.Theme.Success
-			SelectAllBtn.BackgroundTransparency = 0.25
-			SelectAllBtn.Text = "ALL"
+			SelectAllBtn.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			SelectAllBtn.Text = Astral.Config.Elements.MultiDropdown.SelectAllButtonText
 			SelectAllBtn.Font = Enum.Font.GothamBold
 			SelectAllBtn.TextColor3 = Astral.Theme.Text
-			SelectAllBtn.TextSize = 9  -- Fixed text size
+			SelectAllBtn.TextSize = Astral.Config.Elements.MultiDropdown.ButtonTextSize
 			local SelectAllCorner = Instance.new("UICorner")
-			SelectAllCorner.CornerRadius = UDim.new(0, ApplyScale(4))
+			SelectAllCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 			SelectAllCorner.Parent = SelectAllBtn
 
 			local ClearAllBtn = Instance.new("TextButton")
@@ -1520,20 +1778,20 @@ function Astral:Window(Options)
 			ClearAllBtn.Position = UDim2.new(1, -ApplyScale(45), 0, 0)
 			ClearAllBtn.Size = UDim2.new(0, ApplyScale(45), 1, 0)
 			ClearAllBtn.BackgroundColor3 = Astral.Theme.Error
-			ClearAllBtn.BackgroundTransparency = 0.25
-			ClearAllBtn.Text = "CLEAR"
+			ClearAllBtn.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			ClearAllBtn.Text = Astral.Config.Elements.MultiDropdown.ClearButtonText
 			ClearAllBtn.Font = Enum.Font.GothamBold
 			ClearAllBtn.TextColor3 = Astral.Theme.Text
-			ClearAllBtn.TextSize = 9  -- Fixed text size
+			ClearAllBtn.TextSize = Astral.Config.Elements.MultiDropdown.ButtonTextSize
 			local ClearAllCorner = Instance.new("UICorner")
-			ClearAllCorner.CornerRadius = UDim.new(0, ApplyScale(4))
+			ClearAllCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 			ClearAllCorner.Parent = ClearAllBtn
 
 			local DropdownList = Instance.new("ScrollingFrame")
 			DropdownList.Parent = DropdownFrame
 			DropdownList.BackgroundTransparency = 1
 			DropdownList.Position = UDim2.new(0, ApplyScale(BasePaddingValue), 0, ApplyScale(BaseElementHeight * 2 + BasePaddingValue * 2))
-			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(ListAreaHeight))  -- Only width scales
+			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(ListAreaHeight))
 			DropdownList.ScrollBarThickness = 0
 			DropdownList.ScrollBarImageTransparency = 1
 			DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
@@ -1560,14 +1818,14 @@ function Astral:Window(Options)
 					local OptionButton = Instance.new("TextButton")
 					OptionButton.Parent = DropdownList
 					OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
-					OptionButton.BackgroundTransparency = IsSelected and 0.15 or 0.25
-					OptionButton.Size = UDim2.new(1, 0, 0, 26)  -- Fixed height
+					OptionButton.BackgroundTransparency = IsSelected and 0.15 or Astral.Config.Elements.BackgroundTransparency
+					OptionButton.Size = UDim2.new(1, 0, 0, Astral.Config.Elements.MultiDropdown.OptionHeight)
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
 					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
-					OptionButton.TextSize = 11  -- Fixed text size
+					OptionButton.TextSize = Astral.Config.Elements.MultiDropdown.OptionTextSize
 					local OptionCorner = Instance.new("UICorner")
-					OptionCorner.CornerRadius = UDim.new(0, ApplyScale(4))
+					OptionCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 					OptionCorner.Parent = OptionButton
 
 					OptionButton.MouseButton1Click:Connect(function()
@@ -1620,24 +1878,22 @@ function Astral:Window(Options)
 					Header.Visible = true
 					DropdownList.Visible = true
 
-					-- Start centering immediately with future height
 					CenterElement(PageFrame, DropdownFrame, ApplyScale(ExpandedHeight))
 
-					-- Animate dropdown expansion using the calculated expanded height
-					TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {
+					TweenService:Create(DropdownFrame, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Size = UDim2.new(1, 0, 0, ApplyScale(ExpandedHeight))
 					}):Play()
-					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {
+					TweenService:Create(ArrowImage, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Rotation = 180
 					}):Play()
 				else
 					Header.Visible = false
 					DropdownList.Visible = false
 
-					TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {
+					TweenService:Create(DropdownFrame, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
 					}):Play()
-					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {
+					TweenService:Create(ArrowImage, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Rotation = 0
 					}):Play()
 				end
@@ -1654,11 +1910,11 @@ function Astral:Window(Options)
 			local KeybindFrame = Instance.new("Frame")
 			KeybindFrame.Parent = Parent
 			KeybindFrame.BackgroundColor3 = Astral.Theme.Main
-			KeybindFrame.BackgroundTransparency = 0.25
-			KeybindFrame.Size = UDim2.new(1, 0, 0, ApplyScale(ElementHeight))
+			KeybindFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			KeybindFrame.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.Height))
 
 			local KeybindCorner = Instance.new("UICorner")
-			KeybindCorner.CornerRadius = UDim.new(0, ApplyScale(6))
+			KeybindCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
 			KeybindCorner.Parent = KeybindFrame
 
 			local KeybindLabel = Instance.new("TextLabel")
@@ -1666,28 +1922,28 @@ function Astral:Window(Options)
 			KeybindLabel.BackgroundTransparency = 1
 			KeybindLabel.Size = UDim2.new(1, 0, 1, 0)
 			ApplyPadding(KeybindLabel, ApplyScale(BasePadding))
-			KeybindLabel.Font = Enum.Font.GothamMedium
+			KeybindLabel.Font = Astral.Config.Elements.LabelFont
 			KeybindLabel.Text = KeybindName
 			KeybindLabel.TextColor3 = Astral.Theme.Text
-			KeybindLabel.TextSize = ApplyScale(12)
-			KeybindLabel.TextXAlignment = Enum.TextXAlignment.Left
+			KeybindLabel.TextSize = ApplyScale(Astral.Config.Elements.LabelSize)
+			KeybindLabel.TextXAlignment = Astral.Config.Elements.LabelAlignment
 
 			local KeybindButton = Instance.new("Frame")
 			KeybindButton.Parent = KeybindFrame
 			KeybindButton.BackgroundColor3 = Astral.Theme.Tertiary
-			KeybindButton.BackgroundTransparency = 0.25
-			KeybindButton.Position = UDim2.new(1, -ApplyScale(70), 0.5, -ApplyScale(12))
-			KeybindButton.Size = UDim2.new(0, ApplyScale(58), 0, ApplyScale(24))
+			KeybindButton.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			KeybindButton.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Keybind.ButtonWidth + 12), 0.5, -ApplyScale(Astral.Config.Elements.Keybind.ButtonHeight / 2))
+			KeybindButton.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Keybind.ButtonWidth), 0, ApplyScale(Astral.Config.Elements.Keybind.ButtonHeight))
 
 			local KeybindButtonCorner = Instance.new("UICorner")
-			KeybindButtonCorner.CornerRadius = UDim.new(0, ApplyScale(4))
+			KeybindButtonCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Keybind.ButtonCornerRadius))
 			KeybindButtonCorner.Parent = KeybindButton
 
 			local KeybindStroke = Instance.new("UIStroke")
 			KeybindStroke.Parent = KeybindButton
 			KeybindStroke.Color = Astral.Theme.Stroke
-			KeybindStroke.Thickness = ApplyScale(1)
-			KeybindStroke.Transparency = 0.5
+			KeybindStroke.Thickness = ApplyScale(Astral.Config.Elements.Keybind.StrokeThickness)
+			KeybindStroke.Transparency = Astral.Config.Elements.Keybind.StrokeTransparency
 
 			local KeybindText = Instance.new("TextButton")
 			KeybindText.Parent = KeybindButton
@@ -1696,7 +1952,7 @@ function Astral:Window(Options)
 			KeybindText.Font = Enum.Font.GothamBold
 			KeybindText.Text = Current.Name
 			KeybindText.TextColor3 = Astral.Theme.Accent
-			KeybindText.TextSize = ApplyScale(10)
+			KeybindText.TextSize = ApplyScale(Astral.Config.Elements.Keybind.ButtonTextSize)
 			KeybindText.AutoButtonColor = false
 
 			local Binding = false
@@ -1726,11 +1982,11 @@ function Astral:Window(Options)
 			local LabelFrame = Instance.new("Frame")
 			LabelFrame.Parent = Parent
 			LabelFrame.BackgroundColor3 = Astral.Theme.Main
-			LabelFrame.BackgroundTransparency = 0.25
-			LabelFrame.Size = UDim2.new(1, 0, 0, ApplyScale(30))
+			LabelFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			LabelFrame.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.Label.Height))
 
 			local LabelCorner = Instance.new("UICorner")
-			LabelCorner.CornerRadius = UDim.new(0, ApplyScale(6))
+			LabelCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
 			LabelCorner.Parent = LabelFrame
 
 			local Label = Instance.new("TextLabel")
@@ -1738,10 +1994,10 @@ function Astral:Window(Options)
 			Label.BackgroundTransparency = 1
 			Label.Size = UDim2.new(1, 0, 1, 0)
 			ApplyPadding(Label, ApplyScale(BasePadding))
-			Label.Font = Enum.Font.Gotham
+			Label.Font = Astral.Config.Elements.Label.Font
 			Label.Text = LabelText
 			Label.TextColor3 = Astral.Theme.TextDark
-			Label.TextSize = ApplyScale(11)
+			Label.TextSize = ApplyScale(Astral.Config.Elements.Label.TextSize)
 			Label.TextXAlignment = Enum.TextXAlignment.Left
 			Label.TextWrapped = true
 
