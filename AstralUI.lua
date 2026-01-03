@@ -787,8 +787,15 @@ function Astral:Window(Options)
 		PageFrame.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
 		PageFrame.ScrollingEnabled = true
 
+		-- Apply inner padding to PageFrame to prevent clipping
+		local PageFramePadding = Instance.new("UIPadding")
+		PageFramePadding.Parent = PageFrame
+		PageFramePadding.PaddingTop = UDim.new(0, ApplyScale(BasePadding / 2))
+		PageFramePadding.PaddingRight = UDim.new(0, ApplyScale(BasePadding / 2))
+		PageFramePadding.PaddingBottom = UDim.new(0, ApplyScale(BasePadding / 2))
+		PageFramePadding.PaddingLeft = UDim.new(0, ApplyScale(BasePadding / 2))
+
 		CreateScrollBar(PageFrame)
-		ApplyPadding(PageFrame, ApplyScale(BasePadding))
 
 		local PageLayout = Instance.new("UIListLayout")
 		PageLayout.Parent = PageFrame
@@ -1202,7 +1209,6 @@ function Astral:Window(Options)
 			end)
 		end
 
-		-- Dropdown function
 		function TabFunctions:Dropdown(Options, Parent)
 			Parent = Parent or PageFrame
 			local DropdownName = Options.Name or "Dropdown"
@@ -1211,9 +1217,11 @@ function Astral:Window(Options)
 			local Callback = Options.Callback or function() end
 			local Dropped = false
 
+			-- Use properly scaled values
 			local BaseElementHeight = ApplyScale(ElementHeight)
-			local ListMaxHeight = 120
-			local HeaderHeight = 30
+			local ListMaxHeight = ApplyScale(120)  -- Scale this too
+			local HeaderHeight = ApplyScale(30)    -- Scale this too
+			local OptionHeight = ApplyScale(26)    -- Scale this too
 			
 			local TotalHeightWhenDropped = BaseElementHeight + HeaderHeight + ListMaxHeight + ApplyScale(BasePadding * 3)
 
@@ -1228,6 +1236,7 @@ function Astral:Window(Options)
 			DropdownCorner.CornerRadius = UDim.new(0, ApplyScale(6))
 			DropdownCorner.Parent = DropdownFrame
 			
+			-- Apply consistent padding
 			local DropdownPadding = Instance.new("UIPadding")
 			DropdownPadding.Parent = DropdownFrame
 			DropdownPadding.PaddingLeft = UDim.new(0, ApplyScale(BasePadding))
@@ -1307,7 +1316,8 @@ function Astral:Window(Options)
 
 			local DropdownList = Instance.new("ScrollingFrame")
 			DropdownList.Parent = DropdownFrame
-			DropdownList.BackgroundTransparency = 1
+			DropdownList.BackgroundColor3 = Astral.Theme.Main
+			DropdownList.BackgroundTransparency = 0.1
 			DropdownList.Position = UDim2.new(0, 0, 0, BaseElementHeight + HeaderHeight - ApplyScale(BasePadding * 2))
 			DropdownList.Size = UDim2.new(1, 0, 0, ListMaxHeight)
 			DropdownList.ScrollBarThickness = 0
@@ -1320,16 +1330,23 @@ function Astral:Window(Options)
 			DropdownList.ScrollingEnabled = false
 			DropdownList.Visible = false
 			
+			-- Add padding and corner to prevent clipping
+			local ListCorner = Instance.new("UICorner")
+			ListCorner.CornerRadius = UDim.new(0, ApplyScale(4))
+			ListCorner.Parent = DropdownList
+			
 			local ListPadding = Instance.new("UIPadding")
 			ListPadding.Parent = DropdownList
 			ListPadding.PaddingTop = UDim.new(0, ApplyScale(BasePadding))
 			ListPadding.PaddingBottom = UDim.new(0, ApplyScale(BasePadding))
+			ListPadding.PaddingLeft = UDim.new(0, ApplyScale(BasePadding / 2))
+			ListPadding.PaddingRight = UDim.new(0, ApplyScale(BasePadding / 2))
 
 			CreateScrollBar(DropdownList)
 
 			local DropdownLayout = Instance.new("UIListLayout")
 			DropdownLayout.Parent = DropdownList
-			DropdownLayout.Padding = UDim.new(0, ApplyScale(BasePadding))
+			DropdownLayout.Padding = UDim.new(0, ApplyScale(BasePadding / 2))  -- Reduced padding for options
 
 			local function Refresh(filter)
 				for _, Child in pairs(DropdownList:GetChildren()) do
@@ -1343,7 +1360,7 @@ function Astral:Window(Options)
 					OptionButton.Parent = DropdownList
 					OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
 					OptionButton.BackgroundTransparency = IsSelected and 0.15 or 0.25
-					OptionButton.Size = UDim2.new(1, 0, 0, ApplyScale(26))
+					OptionButton.Size = UDim2.new(1, 0, 0, OptionHeight)
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
 					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
@@ -1403,7 +1420,6 @@ function Astral:Window(Options)
 			end)
 		end
 
-		-- Multi-dropdown function
 		function TabFunctions:MultiDropdown(Options, Parent)
 			Parent = Parent or PageFrame
 			local DropdownName = Options.Name or "Multi-Dropdown"
@@ -1424,9 +1440,11 @@ function Astral:Window(Options)
 				end
 			end
 
+			-- Use properly scaled values
 			local BaseElementHeight = ApplyScale(ElementHeight)
-			local ListMaxHeight = 140
-			local HeaderHeight = 30
+			local ListMaxHeight = ApplyScale(140)  -- Scale this too
+			local HeaderHeight = ApplyScale(30)    -- Scale this too
+			local OptionHeight = ApplyScale(26)    -- Scale this too
 			
 			local TotalHeightWhenDropped = BaseElementHeight + HeaderHeight + ListMaxHeight + ApplyScale(BasePadding * 3)
 
@@ -1543,7 +1561,8 @@ function Astral:Window(Options)
 
 			local DropdownList = Instance.new("ScrollingFrame")
 			DropdownList.Parent = DropdownFrame
-			DropdownList.BackgroundTransparency = 1
+			DropdownList.BackgroundColor3 = Astral.Theme.Main
+			DropdownList.BackgroundTransparency = 0.1
 			DropdownList.Position = UDim2.new(0, 0, 0, BaseElementHeight + HeaderHeight - ApplyScale(BasePadding * 2))
 			DropdownList.Size = UDim2.new(1, 0, 0, ListMaxHeight)
 			DropdownList.ScrollBarThickness = 0
@@ -1555,16 +1574,23 @@ function Astral:Window(Options)
 			DropdownList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
 			DropdownList.Visible = false
 			
+			-- Add padding and corner to prevent clipping
+			local ListCorner = Instance.new("UICorner")
+			ListCorner.CornerRadius = UDim.new(0, ApplyScale(4))
+			ListCorner.Parent = DropdownList
+			
 			local ListPadding = Instance.new("UIPadding")
 			ListPadding.Parent = DropdownList
 			ListPadding.PaddingTop = UDim.new(0, ApplyScale(BasePadding))
 			ListPadding.PaddingBottom = UDim.new(0, ApplyScale(BasePadding))
+			ListPadding.PaddingLeft = UDim.new(0, ApplyScale(BasePadding / 2))
+			ListPadding.PaddingRight = UDim.new(0, ApplyScale(BasePadding / 2))
 
 			CreateScrollBar(DropdownList)
 
 			local DropdownLayout = Instance.new("UIListLayout")
 			DropdownLayout.Parent = DropdownList
-			DropdownLayout.Padding = UDim.new(0, ApplyScale(BasePadding))
+			DropdownLayout.Padding = UDim.new(0, ApplyScale(BasePadding / 2))  -- Reduced padding for options
 
 			local function Refresh(filter)
 				for _, Child in pairs(DropdownList:GetChildren()) do
@@ -1578,7 +1604,7 @@ function Astral:Window(Options)
 					OptionButton.Parent = DropdownList
 					OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
 					OptionButton.BackgroundTransparency = IsSelected and 0.15 or 0.25
-					OptionButton.Size = UDim2.new(1, 0, 0, ApplyScale(26))
+					OptionButton.Size = UDim2.new(1, 0, 0, OptionHeight)
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
 					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
