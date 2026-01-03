@@ -1211,10 +1211,10 @@ function Astral:Window(Options)
 			local Dropped = false
 
 			local BaseElementHeight = ApplyScale(ElementHeight)
-			local ItemHeight = ApplyScale(22) -- Smaller base size for items
-			local ItemPadding = ApplyScale(3) -- Tighter padding
-			local HeaderHeight = ApplyScale(28) -- Compact header
-			local ListMaxHeight = ApplyScale(110) -- Restrict total height
+			local ItemHeight = ApplyScale(24) -- Adjusted for better scaling
+			local ItemPadding = ApplyScale(2)
+			local HeaderHeight = ApplyScale(28)
+			local ListMaxHeight = ApplyScale(120)
 			
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
@@ -1271,7 +1271,7 @@ function Astral:Window(Options)
 			SearchBox.Text = ""
 			SearchBox.TextColor3 = Astral.Theme.Text
 			SearchBox.Font = Enum.Font.Gotham
-			SearchBox.TextSize = ApplyScale(11)
+			SearchBox.TextSize = ApplyScale(10)
 			SearchBox.TextXAlignment = Enum.TextXAlignment.Left
 			
 			local SearchPadding = Instance.new("UIPadding")
@@ -1328,7 +1328,7 @@ function Astral:Window(Options)
 					return 
 				end
 
-				-- Calculate exact height based on count to avoid layout lag
+				-- Calculate exact height based on count
 				local CalculatedContentHeight = (Count * ItemHeight) + (math.max(0, Count - 1) * ItemPadding)
 				local ViewableHeight = math.min(CalculatedContentHeight, ListMaxHeight)
 				local TotalHeight = BaseElementHeight + HeaderHeight + ViewableHeight + ApplyScale(BasePadding)
@@ -1360,7 +1360,7 @@ function Astral:Window(Options)
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
 					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
-					OptionButton.TextSize = ApplyScale(11)
+					OptionButton.TextSize = ApplyScale(10)
 					
 					local OptionCorner = Instance.new("UICorner")
 					OptionCorner.CornerRadius = UDim.new(0, ApplyScale(4))
@@ -1423,10 +1423,10 @@ function Astral:Window(Options)
 			end
 
 			local BaseElementHeight = ApplyScale(ElementHeight)
-			local ItemHeight = ApplyScale(22) -- Smaller base size for items
-			local ItemPadding = ApplyScale(3)
+			local ItemHeight = ApplyScale(24) 
+			local ItemPadding = ApplyScale(2)
 			local HeaderHeight = ApplyScale(28)
-			local ListMaxHeight = ApplyScale(110)
+			local ListMaxHeight = ApplyScale(120)
 			
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
@@ -1491,7 +1491,7 @@ function Astral:Window(Options)
 			SearchBox.Text = ""
 			SearchBox.TextColor3 = Astral.Theme.Text
 			SearchBox.Font = Enum.Font.Gotham
-			SearchBox.TextSize = ApplyScale(11)
+			SearchBox.TextSize = ApplyScale(10)
 			SearchBox.TextXAlignment = Enum.TextXAlignment.Left
 			
 			local SearchPadding = Instance.new("UIPadding")
@@ -1594,7 +1594,7 @@ function Astral:Window(Options)
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
 					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
-					OptionButton.TextSize = ApplyScale(11)
+					OptionButton.TextSize = ApplyScale(10)
 					
 					local OptionCorner = Instance.new("UICorner")
 					OptionCorner.CornerRadius = UDim.new(0, ApplyScale(4))
