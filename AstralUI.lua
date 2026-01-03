@@ -503,7 +503,6 @@ function Astral:Window(Options)
 	SidebarFrame.BackgroundTransparency = 0.2
 	SidebarFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 0, 0)
 	SidebarFrame.Size = UDim2.new(0, ApplyScale(130), 1, -ApplyScale(BasePadding))
-
 	local SidebarCorner = Instance.new("UICorner")
 	SidebarCorner.CornerRadius = UDim.new(0, ApplyScale(8))
 	SidebarCorner.Parent = SidebarFrame
@@ -854,7 +853,6 @@ function Astral:Window(Options)
 			HeaderFrame.BackgroundColor3 = Astral.Theme.Main
 			HeaderFrame.BackgroundTransparency = 0.2
 			HeaderFrame.Size = UDim2.new(1, 0, 0, ApplyScale(ElementHeight))
-
 			local HeaderCorner = Instance.new("UICorner")
 			HeaderCorner.CornerRadius = UDim.new(0, ApplyScale(8))
 			HeaderCorner.Parent = HeaderFrame
@@ -1210,23 +1208,21 @@ function Astral:Window(Options)
 			local Callback = Options.Callback or function() end
 			local Dropped = false
 
-			-- Calculate scaled heights
-			local ScaledElementHeight = ApplyScale(ElementHeight)
-			local ScaledBasePadding = ApplyScale(BasePadding)
+			-- Fixed heights (not scaled)
+			local BaseElementHeight = ElementHeight  -- Keep original height
+			local ListAreaHeight = 100  -- Fixed list area height
+			local BasePaddingValue = BasePadding  -- Fixed padding
 
-			-- Dropdown expanded height includes: 
-			-- 1. Base element height
-			-- 2. Header height (ElementHeight + BasePadding)
-			-- 3. List area (100px with padding)
-			local ExpandedHeight = ScaledElementHeight + -- Base height
-				ScaledElementHeight + ScaledBasePadding + -- Header height with padding
-				ApplyScale(100) + ApplyScale(BasePadding * 2) -- List area with padding
+			-- Calculate expanded height (not scaled)
+			local ExpandedHeight = BaseElementHeight +  -- Main element
+				BaseElementHeight + BasePaddingValue +  -- Header
+				ListAreaHeight + BasePaddingValue * 2  -- List area with padding
 
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
 			DropdownFrame.BackgroundColor3 = Astral.Theme.Main
 			DropdownFrame.BackgroundTransparency = 0.25
-			DropdownFrame.Size = UDim2.new(1, 0, 0, ScaledElementHeight)
+			DropdownFrame.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))  -- Only width scales
 			DropdownFrame.ClipsDescendants = true
 			local DropdownCorner = Instance.new("UICorner")
 			DropdownCorner.CornerRadius = UDim.new(0, ApplyScale(6))
@@ -1235,37 +1231,37 @@ function Astral:Window(Options)
 			-- Add bottom padding to the dropdown frame
 			local DropdownPadding = Instance.new("UIPadding")
 			DropdownPadding.Parent = DropdownFrame
-			DropdownPadding.PaddingBottom = UDim.new(0, ScaledBasePadding)
+			DropdownPadding.PaddingBottom = UDim.new(0, ApplyScale(BasePaddingValue))
 
 			local DropdownButton = Instance.new("TextButton")
 			DropdownButton.Parent = DropdownFrame
 			DropdownButton.BackgroundTransparency = 1
-			DropdownButton.Size = UDim2.new(1, 0, 0, ScaledElementHeight)
+			DropdownButton.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))  -- Only width scales
 			DropdownButton.Text = ""
 
 			local DropdownLabel = Instance.new("TextLabel")
 			DropdownLabel.Parent = DropdownButton
 			DropdownLabel.Size = UDim2.new(1, 0, 1, 0)
-			ApplyPadding(DropdownLabel, ScaledBasePadding)
+			ApplyPadding(DropdownLabel, ApplyScale(BasePaddingValue))
 			DropdownLabel.Font = Enum.Font.GothamMedium
 			DropdownLabel.Text = DropdownName .. (CurrentSelected and (": " .. tostring(CurrentSelected)) or "")
 			DropdownLabel.TextColor3 = Astral.Theme.Text
-			DropdownLabel.TextSize = ApplyScale(12)
+			DropdownLabel.TextSize = 12  -- Fixed text size
 			DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
 			DropdownLabel.BackgroundTransparency = 1
 
 			local ArrowImage = Instance.new("ImageLabel")
 			ArrowImage.Parent = DropdownButton
 			ArrowImage.BackgroundTransparency = 1
-			ArrowImage.Position = UDim2.new(1, -ApplyScale(26), 0.5, -ApplyScale(6))
-			ArrowImage.Size = UDim2.new(0, ApplyScale(12), 0, ApplyScale(12))
+			ArrowImage.Position = UDim2.new(1, -ApplyScale(26), 0.5, -6)  -- Fixed Y position
+			ArrowImage.Size = UDim2.new(0, ApplyScale(12), 0, 12)  -- Fixed height
 			ArrowImage.Image = "rbxassetid://6031091004"
 			ArrowImage.ImageColor3 = Astral.Theme.Accent
 
 			local Header = Instance.new("Frame")
 			Header.Parent = DropdownFrame
-			Header.Position = UDim2.new(0, ScaledBasePadding, 0, ScaledElementHeight + ScaledBasePadding)
-			Header.Size = UDim2.new(1, -ScaledBasePadding * 2, 0, ScaledElementHeight)
+			Header.Position = UDim2.new(0, ApplyScale(BasePaddingValue), 0, ApplyScale(BaseElementHeight + BasePaddingValue))
+			Header.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(BaseElementHeight))  -- Only width scales
 			Header.BackgroundTransparency = 1
 			Header.Visible = false
 
@@ -1278,7 +1274,7 @@ function Astral:Window(Options)
 			SearchBox.Text = ""
 			SearchBox.TextColor3 = Astral.Theme.Text
 			SearchBox.Font = Enum.Font.Gotham
-			SearchBox.TextSize = ApplyScale(11)
+			SearchBox.TextSize = 11  -- Fixed text size
 			local SearchBoxCorner = Instance.new("UICorner")
 			SearchBoxCorner.CornerRadius = UDim.new(0, ApplyScale(4))
 			SearchBoxCorner.Parent = SearchBox
@@ -1298,7 +1294,7 @@ function Astral:Window(Options)
 			ClearBtn.Text = "CLEAR"
 			ClearBtn.Font = Enum.Font.GothamBold
 			ClearBtn.TextColor3 = Astral.Theme.Text
-			ClearBtn.TextSize = ApplyScale(9)
+			ClearBtn.TextSize = 9  -- Fixed text size
 			local ClearBtnCorner = Instance.new("UICorner")
 			ClearBtnCorner.CornerRadius = UDim.new(0, ApplyScale(4))
 			ClearBtnCorner.Parent = ClearBtn
@@ -1306,8 +1302,8 @@ function Astral:Window(Options)
 			local DropdownList = Instance.new("ScrollingFrame")
 			DropdownList.Parent = DropdownFrame
 			DropdownList.BackgroundTransparency = 1
-			DropdownList.Position = UDim2.new(0, ScaledBasePadding, 0, ScaledElementHeight * 2 + ScaledBasePadding * 2)
-			DropdownList.Size = UDim2.new(1, -ScaledBasePadding * 2, 0, ApplyScale(100))
+			DropdownList.Position = UDim2.new(0, ApplyScale(BasePaddingValue), 0, ApplyScale(BaseElementHeight * 2 + BasePaddingValue * 2))
+			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(ListAreaHeight))  -- Only width scales
 			DropdownList.ScrollBarThickness = 0
 			DropdownList.ScrollBarImageTransparency = 1
 			DropdownList.BorderSizePixel = 0
@@ -1322,7 +1318,7 @@ function Astral:Window(Options)
 
 			local DropdownLayout = Instance.new("UIListLayout")
 			DropdownLayout.Parent = DropdownList
-			DropdownLayout.Padding = UDim.new(0, ScaledBasePadding)
+			DropdownLayout.Padding = UDim.new(0, ApplyScale(BasePaddingValue))
 
 			local function Refresh(filter)
 				for _, Child in pairs(DropdownList:GetChildren()) do
@@ -1336,11 +1332,11 @@ function Astral:Window(Options)
 					OptionButton.Parent = DropdownList
 					OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
 					OptionButton.BackgroundTransparency = IsSelected and 0.15 or 0.25
-					OptionButton.Size = UDim2.new(1, 0, 0, ApplyScale(26))
+					OptionButton.Size = UDim2.new(1, 0, 0, 26)  -- Fixed height
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
 					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
-					OptionButton.TextSize = ApplyScale(11)
+					OptionButton.TextSize = 11  -- Fixed text size
 					local OptionCorner = Instance.new("UICorner")
 					OptionCorner.CornerRadius = UDim.new(0, ApplyScale(4))
 					OptionCorner.Parent = OptionButton
@@ -1355,7 +1351,7 @@ function Astral:Window(Options)
 
 				local ContentHeight = DropdownLayout.AbsoluteContentSize.Y
 				DropdownList.CanvasSize = UDim2.new(0, 0, 0, ContentHeight)
-				DropdownList.ScrollingEnabled = ContentHeight > ApplyScale(100)
+				DropdownList.ScrollingEnabled = ContentHeight > ApplyScale(ListAreaHeight)
 			end
 
 			SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
@@ -1375,11 +1371,11 @@ function Astral:Window(Options)
 					DropdownList.Visible = true
 
 					-- Start centering immediately with future height
-					CenterElement(PageFrame, DropdownFrame, ExpandedHeight)
+					CenterElement(PageFrame, DropdownFrame, ApplyScale(ExpandedHeight))
 
 					-- Animate dropdown expansion using the calculated expanded height
 					TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {
-						Size = UDim2.new(1, 0, 0, ExpandedHeight)
+						Size = UDim2.new(1, 0, 0, ApplyScale(ExpandedHeight))
 					}):Play()
 					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {
 						Rotation = 180
@@ -1389,7 +1385,7 @@ function Astral:Window(Options)
 					DropdownList.Visible = false
 
 					TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {
-						Size = UDim2.new(1, 0, 0, ScaledElementHeight)
+						Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
 					}):Play()
 					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {
 						Rotation = 0
@@ -1418,23 +1414,21 @@ function Astral:Window(Options)
 				end
 			end
 
-			-- Calculate scaled heights
-			local ScaledElementHeight = ApplyScale(ElementHeight)
-			local ScaledBasePadding = ApplyScale(BasePadding)
+			-- Fixed heights (not scaled)
+			local BaseElementHeight = ElementHeight  -- Keep original height
+			local ListAreaHeight = 120  -- Fixed list area height
+			local BasePaddingValue = BasePadding  -- Fixed padding
 
-			-- Multi-dropdown expanded height includes: 
-			-- 1. Base element height
-			-- 2. Header height (ElementHeight + BasePadding)
-			-- 3. List area (120px with padding)
-			local ExpandedHeight = ScaledElementHeight + -- Base height
-				ScaledElementHeight + ScaledBasePadding + -- Header height with padding
-				ApplyScale(120) + ApplyScale(BasePadding * 2) -- List area with padding
+			-- Calculate expanded height (not scaled)
+			local ExpandedHeight = BaseElementHeight +  -- Main element
+				BaseElementHeight + BasePaddingValue +  -- Header
+				ListAreaHeight + BasePaddingValue * 2  -- List area with padding
 
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
 			DropdownFrame.BackgroundColor3 = Astral.Theme.Main
 			DropdownFrame.BackgroundTransparency = 0.25
-			DropdownFrame.Size = UDim2.new(1, 0, 0, ScaledElementHeight)
+			DropdownFrame.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))  -- Only width scales
 			DropdownFrame.ClipsDescendants = true
 			local DropdownCorner = Instance.new("UICorner")
 			DropdownCorner.CornerRadius = UDim.new(0, ApplyScale(6))
@@ -1443,21 +1437,21 @@ function Astral:Window(Options)
 			-- Add bottom padding to the dropdown frame
 			local DropdownPadding = Instance.new("UIPadding")
 			DropdownPadding.Parent = DropdownFrame
-			DropdownPadding.PaddingBottom = UDim.new(0, ScaledBasePadding)
+			DropdownPadding.PaddingBottom = UDim.new(0, ApplyScale(BasePaddingValue))
 
 			local DropdownButton = Instance.new("TextButton")
 			DropdownButton.Parent = DropdownFrame
 			DropdownButton.BackgroundTransparency = 1
-			DropdownButton.Size = UDim2.new(1, 0, 0, ScaledElementHeight)
+			DropdownButton.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))  -- Only width scales
 			DropdownButton.Text = ""
 
 			local DropdownLabel = Instance.new("TextLabel")
 			DropdownLabel.Parent = DropdownButton
 			DropdownLabel.Size = UDim2.new(1, 0, 1, 0)
-			ApplyPadding(DropdownLabel, ScaledBasePadding)
+			ApplyPadding(DropdownLabel, ApplyScale(BasePaddingValue))
 			DropdownLabel.Font = Enum.Font.GothamMedium
 			DropdownLabel.TextColor3 = Astral.Theme.Text
-			DropdownLabel.TextSize = ApplyScale(12)
+			DropdownLabel.TextSize = 12  -- Fixed text size
 			DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
 			DropdownLabel.BackgroundTransparency = 1
 			DropdownLabel.TextTruncate = Enum.TextTruncate.AtEnd
@@ -1475,15 +1469,15 @@ function Astral:Window(Options)
 			local ArrowImage = Instance.new("ImageLabel")
 			ArrowImage.Parent = DropdownButton
 			ArrowImage.BackgroundTransparency = 1
-			ArrowImage.Position = UDim2.new(1, -ApplyScale(26), 0.5, -ApplyScale(6))
-			ArrowImage.Size = UDim2.new(0, ApplyScale(12), 0, ApplyScale(12))
+			ArrowImage.Position = UDim2.new(1, -ApplyScale(26), 0.5, -6)  -- Fixed Y position
+			ArrowImage.Size = UDim2.new(0, ApplyScale(12), 0, 12)  -- Fixed height
 			ArrowImage.Image = "rbxassetid://6031091004"
 			ArrowImage.ImageColor3 = Astral.Theme.Accent
 
 			local Header = Instance.new("Frame")
 			Header.Parent = DropdownFrame
-			Header.Position = UDim2.new(0, ScaledBasePadding, 0, ScaledElementHeight + ScaledBasePadding)
-			Header.Size = UDim2.new(1, -ScaledBasePadding * 2, 0, ScaledElementHeight)
+			Header.Position = UDim2.new(0, ApplyScale(BasePaddingValue), 0, ApplyScale(BaseElementHeight + BasePaddingValue))
+			Header.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(BaseElementHeight))  -- Only width scales
 			Header.BackgroundTransparency = 1
 			Header.Visible = false
 
@@ -1496,7 +1490,7 @@ function Astral:Window(Options)
 			SearchBox.Text = ""
 			SearchBox.TextColor3 = Astral.Theme.Text
 			SearchBox.Font = Enum.Font.Gotham
-			SearchBox.TextSize = ApplyScale(11)
+			SearchBox.TextSize = 11  -- Fixed text size
 			local SearchBoxCorner = Instance.new("UICorner")
 			SearchBoxCorner.CornerRadius = UDim.new(0, ApplyScale(4))
 			SearchBoxCorner.Parent = SearchBox
@@ -1516,7 +1510,7 @@ function Astral:Window(Options)
 			SelectAllBtn.Text = "ALL"
 			SelectAllBtn.Font = Enum.Font.GothamBold
 			SelectAllBtn.TextColor3 = Astral.Theme.Text
-			SelectAllBtn.TextSize = ApplyScale(9)
+			SelectAllBtn.TextSize = 9  -- Fixed text size
 			local SelectAllCorner = Instance.new("UICorner")
 			SelectAllCorner.CornerRadius = UDim.new(0, ApplyScale(4))
 			SelectAllCorner.Parent = SelectAllBtn
@@ -1530,7 +1524,7 @@ function Astral:Window(Options)
 			ClearAllBtn.Text = "CLEAR"
 			ClearAllBtn.Font = Enum.Font.GothamBold
 			ClearAllBtn.TextColor3 = Astral.Theme.Text
-			ClearAllBtn.TextSize = ApplyScale(9)
+			ClearAllBtn.TextSize = 9  -- Fixed text size
 			local ClearAllCorner = Instance.new("UICorner")
 			ClearAllCorner.CornerRadius = UDim.new(0, ApplyScale(4))
 			ClearAllCorner.Parent = ClearAllBtn
@@ -1538,8 +1532,8 @@ function Astral:Window(Options)
 			local DropdownList = Instance.new("ScrollingFrame")
 			DropdownList.Parent = DropdownFrame
 			DropdownList.BackgroundTransparency = 1
-			DropdownList.Position = UDim2.new(0, ScaledBasePadding, 0, ScaledElementHeight * 2 + ScaledBasePadding * 2)
-			DropdownList.Size = UDim2.new(1, -ScaledBasePadding * 2, 0, ApplyScale(120))
+			DropdownList.Position = UDim2.new(0, ApplyScale(BasePaddingValue), 0, ApplyScale(BaseElementHeight * 2 + BasePaddingValue * 2))
+			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(ListAreaHeight))  -- Only width scales
 			DropdownList.ScrollBarThickness = 0
 			DropdownList.ScrollBarImageTransparency = 1
 			DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
@@ -1553,7 +1547,7 @@ function Astral:Window(Options)
 
 			local DropdownLayout = Instance.new("UIListLayout")
 			DropdownLayout.Parent = DropdownList
-			DropdownLayout.Padding = UDim.new(0, ScaledBasePadding)
+			DropdownLayout.Padding = UDim.new(0, ApplyScale(BasePaddingValue))
 
 			local function Refresh(filter)
 				for _, Child in pairs(DropdownList:GetChildren()) do
@@ -1567,11 +1561,11 @@ function Astral:Window(Options)
 					OptionButton.Parent = DropdownList
 					OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
 					OptionButton.BackgroundTransparency = IsSelected and 0.15 or 0.25
-					OptionButton.Size = UDim2.new(1, 0, 0, ApplyScale(26))
+					OptionButton.Size = UDim2.new(1, 0, 0, 26)  -- Fixed height
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
 					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
-					OptionButton.TextSize = ApplyScale(11)
+					OptionButton.TextSize = 11  -- Fixed text size
 					local OptionCorner = Instance.new("UICorner")
 					OptionCorner.CornerRadius = UDim.new(0, ApplyScale(4))
 					OptionCorner.Parent = OptionButton
@@ -1591,7 +1585,7 @@ function Astral:Window(Options)
 						Callback(SelectionOrder)
 					end)
 				end
-				DropdownList.CanvasSize = UDim2.new(0, 0, 0, DropdownLayout.AbsoluteContentSize.Y + ScaledBasePadding)
+				DropdownList.CanvasSize = UDim2.new(0, 0, 0, DropdownLayout.AbsoluteContentSize.Y + ApplyScale(BasePaddingValue))
 			end
 
 			SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
@@ -1627,11 +1621,11 @@ function Astral:Window(Options)
 					DropdownList.Visible = true
 
 					-- Start centering immediately with future height
-					CenterElement(PageFrame, DropdownFrame, ExpandedHeight)
+					CenterElement(PageFrame, DropdownFrame, ApplyScale(ExpandedHeight))
 
 					-- Animate dropdown expansion using the calculated expanded height
 					TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {
-						Size = UDim2.new(1, 0, 0, ExpandedHeight)
+						Size = UDim2.new(1, 0, 0, ApplyScale(ExpandedHeight))
 					}):Play()
 					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {
 						Rotation = 180
@@ -1641,7 +1635,7 @@ function Astral:Window(Options)
 					DropdownList.Visible = false
 
 					TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {
-						Size = UDim2.new(1, 0, 0, ScaledElementHeight)
+						Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
 					}):Play()
 					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {
 						Rotation = 0
