@@ -6,255 +6,231 @@ local Player = Players.LocalPlayer
 
 local Astral = {}
 
--- =============== CONFIGURATION SYSTEM ===============
+-- Main configuration system
 Astral.Config = {
-	-- Window Configuration
 	Window = {
-		BaseWidth = 580,
-		BaseHeight = 420,
-		BasePadding = 8,
-		CornerRadius = 12,
-		BackgroundTransparency = 0.15,
-		StrokeThickness = 1.5,
-		StrokeTransparency = 0.4
+		BaseWidth = 580,               -- Default window width
+		BaseHeight = 420,              -- Default window height
+		BasePadding = 8,               -- Default padding between elements
+		CornerRadius = 12,             -- Main window corner rounding
+		BackgroundTransparency = 0.15, -- Window background transparency
+		StrokeThickness = 1.5,         -- Window border thickness
+		StrokeTransparency = 0.4       -- Window border transparency
 	},
 
-	-- Topbar Configuration
 	Topbar = {
-		Height = 36,
-		CornerRadius = 8,
-		BackgroundTransparency = 0.2,
-		TitleFont = Enum.Font.GothamBold,
-		TitleSize = 14,
-		TitleAlignment = Enum.TextXAlignment.Left
+		Height = 36,                    -- Topbar height
+		CornerRadius = 8,               -- Topbar corner rounding
+		BackgroundTransparency = 0.2,   -- Topbar background transparency
+		TitleFont = Enum.Font.GothamBold, -- Title font
+		TitleSize = 14,                 -- Title text size
+		TitleAlignment = Enum.TextXAlignment.Left -- Title alignment
 	},
 
-	-- Controls Configuration
 	Controls = {
-		ButtonSize = 26,
-		ButtonCornerRadius = 6,
-		CloseButtonText = "×",
-		CloseButtonSize = 18,
-		MinimizeButtonText = "−",
-		MinimizeButtonSize = 16
+		ButtonSize = 26,                -- Control button size
+		ButtonCornerRadius = 6,         -- Control button corner rounding
+		CloseButtonText = "×",          -- Close button text
+		CloseButtonSize = 18,           -- Close button text size
+		MinimizeButtonText = "−",       -- Minimize button text
+		MinimizeButtonSize = 16         -- Minimize button text size
 	},
 
-	-- Bubble Configuration
 	Bubble = {
-		Size = 50,
-		IconSize = "rbxassetid://7733954760",
-		StrokeThickness = 2,
-		StrokeTransparency = 0.3,
-		SnapMargin = 5, -- Very small snap margin
-		EdgeMargin = 15, -- Margin from screen edges
-		TopBottomMargin = 15, -- Margin from top/bottom
-		MinDistanceFromCenter = 25 -- Minimum distance from center for snapping
+		Size = 50,                      -- Bubble diameter
+		Icon = "rbxassetid://7733954760", -- Bubble icon ID
+		StrokeThickness = 2,            -- Bubble border thickness
+		StrokeTransparency = 0.3,       -- Bubble border transparency
+		SnapMargin = 3,                 -- Very small snap margin
+		EdgeMargin = 8,                 -- Small margin from screen edges
+		TopBottomMargin = 8             -- Small margin from top/bottom
 	},
 
-	-- Sidebar Configuration
 	Sidebar = {
-		Width = 130,
-		CornerRadius = 8,
-		BackgroundTransparency = 0.2,
-		StrokeThickness = 1,
-		StrokeTransparency = 0.4
+		Width = 130,                    -- Sidebar width
+		CornerRadius = 8,               -- Sidebar corner rounding
+		BackgroundTransparency = 0.2,   -- Sidebar background transparency
+		StrokeThickness = 1,            -- Sidebar border thickness
+		StrokeTransparency = 0.4        -- Sidebar border transparency
 	},
 
-	-- Tab Configuration
 	Tab = {
-		Height = 34,
-		CornerRadius = 8,
-		BackgroundTransparency = 0.25,
-		IconSize = 16,
-		LabelFont = Enum.Font.GothamMedium,
-		LabelSize = 11,
-		IndicatorWidth = 2,
-		IndicatorHeight = 16,
-		Padding = 8
+		Height = 34,                    -- Tab button height
+		CornerRadius = 8,               -- Tab button corner rounding
+		BackgroundTransparency = 0.25,  -- Tab button background transparency
+		IconSize = 16,                  -- Tab icon size
+		LabelFont = Enum.Font.GothamMedium, -- Tab label font
+		LabelSize = 11,                 -- Tab label text size
+		IndicatorWidth = 2,             -- Active tab indicator width
+		IndicatorHeight = 16,           -- Active tab indicator height
+		Padding = 8                     -- Tab spacing
 	},
 
-	-- Pages Configuration
 	Pages = {
-		CornerRadius = 8,
-		BackgroundTransparency = 0.2,
-		Padding = 8
+		CornerRadius = 8,               -- Page frame corner rounding
+		BackgroundTransparency = 0.2,   -- Page background transparency
+		Padding = 8                     -- Page content padding
 	},
 
-	-- Elements Configuration
 	Elements = {
-		Height = 34,
-		CornerRadius = 6,
-		BackgroundTransparency = 0.25,
-		LabelFont = Enum.Font.GothamMedium,
-		LabelSize = 12,
-		LabelAlignment = Enum.TextXAlignment.Left,
+		Height = 34,                    -- Standard element height
+		CornerRadius = 6,               -- Element corner rounding
+		BackgroundTransparency = 0.25,  -- Element background transparency
+		LabelFont = Enum.Font.GothamMedium, -- Element label font
+		LabelSize = 12,                 -- Element label text size
+		LabelAlignment = Enum.TextXAlignment.Left, -- Element label alignment
 		
-		-- Button specific
 		Button = {
-			HoverTransparency = 0.15,
-			NormalTransparency = 0.25
+			HoverTransparency = 0.15,   -- Button hover transparency
+			NormalTransparency = 0.25   -- Button normal transparency
 		},
 		
-		-- Toggle specific
 		Toggle = {
-			Width = 38,
-			Height = 18,
-			CircleSize = 14
+			Width = 38,                  -- Toggle switch width
+			Height = 18,                 -- Toggle switch height
+			CircleSize = 14              -- Toggle circle size
 		},
 		
-		-- Slider specific
 		Slider = {
-			Height = 50,
-			LabelHeight = 16,
-			InputWidth = 48,
-			InputHeight = 20,
-			InputTextSize = 11,
-			TrackHeight = 6,
-			BallSize = 14,
-			ValueInputFont = Enum.Font.GothamBold
+			Height = 50,                 -- Slider height
+			LabelHeight = 16,            -- Slider label height
+			InputWidth = 48,             -- Value input width
+			InputHeight = 20,            -- Value input height
+			InputTextSize = 11,          -- Value input text size
+			TrackHeight = 6,             -- Slider track height
+			BallSize = 14,               -- Slider ball size
+			ValueInputFont = Enum.Font.GothamBold -- Value input font
 		},
 		
-		-- TextBox specific
 		TextBox = {
-			Height = 44,
-			LabelHeight = 16,
-			InputHeight = 16,
-			InputTextSize = 11,
-			PlaceholderColor = Color3.fromRGB(100, 100, 110),
-			InputCornerRadius = 4,
-			StrokeThickness = 1,
-			StrokeTransparency = 0.5
+			Height = 44,                 -- TextBox height
+			LabelHeight = 16,            -- TextBox label height
+			InputHeight = 16,            -- TextBox input height
+			InputTextSize = 11,          -- TextBox input text size
+			PlaceholderColor = Color3.fromRGB(100, 100, 110), -- Placeholder text color
+			InputCornerRadius = 4,       -- TextBox input corner rounding
+			StrokeThickness = 1,         -- TextBox border thickness
+			StrokeTransparency = 0.5     -- TextBox border transparency
 		},
 		
-		-- Dropdown specific
 		Dropdown = {
-			Height = 34,
-			LabelTextSize = 12,
-			ArrowSize = 12,
-			ListAreaHeight = 100,
-			OptionHeight = 26,
-			OptionTextSize = 11,
-			SearchTextSize = 11,
-			ButtonTextSize = 9,
-			SearchPlaceholder = "Search...",
-			ClearButtonText = "CLEAR",
-			SelectAllButtonText = "ALL",
-			InputCornerRadius = 4,
-			StrokeThickness = 1,
-			StrokeTransparency = 0.5
+			Height = 34,                 -- Dropdown height
+			LabelTextSize = 12,          -- Dropdown label text size
+			ArrowSize = 12,              -- Dropdown arrow size
+			ListAreaHeight = 100,        -- Dropdown list area height
+			OptionHeight = 26,           -- Dropdown option height
+			OptionTextSize = 11,         -- Dropdown option text size
+			SearchTextSize = 11,         -- Search box text size
+			ButtonTextSize = 9,          -- Action button text size
+			SearchPlaceholder = "Search...", -- Search placeholder text
+			ClearButtonText = "CLEAR",   -- Clear button text
+			SelectAllButtonText = "ALL", -- Select all button text
+			InputCornerRadius = 4,       -- Input corner rounding
+			StrokeThickness = 1,         -- Input border thickness
+			StrokeTransparency = 0.5     -- Input border transparency
 		},
 		
-		-- MultiDropdown specific
 		MultiDropdown = {
-			Height = 34,
-			ListAreaHeight = 120,
-			OptionHeight = 26,
-			OptionTextSize = 11,
-			SearchTextSize = 11,
-			ButtonTextSize = 9,
-			SearchPlaceholder = "Search options...",
-			ClearButtonText = "CLEAR",
-			SelectAllButtonText = "ALL"
+			Height = 34,                 -- Multi-dropdown height
+			ListAreaHeight = 120,        -- Multi-dropdown list area height
+			OptionHeight = 26,           -- Multi-dropdown option height
+			OptionTextSize = 11,         -- Multi-dropdown option text size
+			SearchTextSize = 11,         -- Search box text size
+			ButtonTextSize = 9,          -- Action button text size
+			SearchPlaceholder = "Search options...", -- Search placeholder text
+			ClearButtonText = "CLEAR",   -- Clear button text
+			SelectAllButtonText = "ALL"  -- Select all button text
 		},
 		
-		-- Keybind specific
 		Keybind = {
-			ButtonWidth = 58,
-			ButtonHeight = 24,
-			ButtonCornerRadius = 4,
-			ButtonTextSize = 10,
-			StrokeThickness = 1,
-			StrokeTransparency = 0.5
+			ButtonWidth = 58,            -- Keybind button width
+			ButtonHeight = 24,           -- Keybind button height
+			ButtonCornerRadius = 4,      -- Keybind button corner rounding
+			ButtonTextSize = 10,         -- Keybind button text size
+			StrokeThickness = 1,         -- Keybind border thickness
+			StrokeTransparency = 0.5     -- Keybind border transparency
 		},
 		
-		-- Label specific
 		Label = {
-			Height = 30,
-			TextSize = 11,
-			Font = Enum.Font.Gotham
+			Height = 30,                 -- Label height
+			TextSize = 11,               -- Label text size
+			Font = Enum.Font.Gotham      -- Label font
 		},
 		
-		-- Section specific
 		Section = {
-			CornerRadius = 8,
-			HeaderHeight = 34,
-			HeaderBackgroundTransparency = 0.2,
-			TitleSize = 13,
-			TitleFont = Enum.Font.GothamBold
+			CornerRadius = 8,            -- Section corner rounding
+			HeaderHeight = 34,           -- Section header height
+			HeaderBackgroundTransparency = 0.2, -- Section header transparency
+			TitleSize = 13,              -- Section title text size
+			TitleFont = Enum.Font.GothamBold -- Section title font
 		}
 	},
 
-	-- Notification Configuration
 	Notification = {
-		Width = 300,
-		Height = 70,
-		CornerRadius = 8,
-		BackgroundTransparency = 0.15,
-		StrokeThickness = 1.5,
-		TitleSize = 13,
-		ContentSize = 11,
-		TitleFont = Enum.Font.GothamBold,
-		ContentFont = Enum.Font.Gotham,
-		MaxNotifications = 5,
-		DefaultDuration = 3
+		Width = 300,                     -- Notification width
+		Height = 70,                     -- Notification height
+		CornerRadius = 8,                -- Notification corner rounding
+		BackgroundTransparency = 0.15,   -- Notification background transparency
+		StrokeThickness = 1.5,           -- Notification border thickness
+		TitleSize = 13,                  -- Notification title text size
+		ContentSize = 11,                -- Notification content text size
+		TitleFont = Enum.Font.GothamBold, -- Notification title font
+		ContentFont = Enum.Font.Gotham,  -- Notification content font
+		MaxNotifications = 5,            -- Maximum simultaneous notifications
+		DefaultDuration = 3              -- Default notification duration in seconds
 	},
 
-	-- ScrollBar Configuration
 	ScrollBar = {
-		Thickness = 4,
-		Transparency = 0.3,
-		AutoHideDelay = 0.5
+		Thickness = 4,                   -- Scrollbar thickness
+		Transparency = 0.3,              -- Scrollbar transparency
+		AutoHideDelay = 0.5              -- Scrollbar auto-hide delay in seconds
 	},
 
-	-- Animation Configuration
 	Animation = {
-		HoverDuration = 0.15,
-		ClickDuration = 0.08,
-		RestoreDuration = 0.15,
-		TweenDuration = 0.2,
-		DropdownDuration = 0.2,
-		NotificationDuration = 0.3,
-		WindowCloseDuration = 0.25,
-		CenterElementDuration = 0.3,
-		EasingStyle = Enum.EasingStyle.Quart,
-		EasingDirection = Enum.EasingDirection.Out
+		HoverDuration = 0.15,            -- Hover animation duration
+		ClickDuration = 0.08,            -- Click animation duration
+		RestoreDuration = 0.15,          -- Restore animation duration
+		TweenDuration = 0.2,             -- General tween duration
+		DropdownDuration = 0.2,          -- Dropdown animation duration
+		NotificationDuration = 0.3,      -- Notification animation duration
+		WindowCloseDuration = 0.25,      -- Window close animation duration
+		CenterElementDuration = 0.3,     -- Center element animation duration
+		EasingStyle = Enum.EasingStyle.Quart, -- Default easing style
+		EasingDirection = Enum.EasingDirection.Out -- Default easing direction
 	}
 }
 
--- =============== THEME SYSTEM ===============
+-- Color theme system
 Astral.Theme = {
-	Main = Color3.fromRGB(15, 15, 20),
-	Secondary = Color3.fromRGB(25, 25, 30),
-	Tertiary = Color3.fromRGB(20, 20, 25),
-	Accent = Color3.fromRGB(88, 139, 255),
-	Text = Color3.fromRGB(245, 245, 250),
-	TextDark = Color3.fromRGB(150, 150, 160),
-	TextDarker = Color3.fromRGB(100, 100, 110),
-	Stroke = Color3.fromRGB(50, 50, 60),
-	StrokeDark = Color3.fromRGB(35, 35, 45),
-	HoverBright = Color3.fromRGB(35, 35, 42),
-	Success = Color3.fromRGB(80, 200, 120),
-	Warning = Color3.fromRGB(255, 180, 80),
-	Error = Color3.fromRGB(255, 100, 100),
+	Main = Color3.fromRGB(15, 15, 20),       -- Primary background color
+	Secondary = Color3.fromRGB(25, 25, 30),  -- Secondary background color
+	Tertiary = Color3.fromRGB(20, 20, 25),   -- Tertiary background color
+	Accent = Color3.fromRGB(88, 139, 255),   -- Primary accent color
+	Text = Color3.fromRGB(245, 245, 250),    -- Primary text color
+	TextDark = Color3.fromRGB(150, 150, 160),-- Secondary text color
+	TextDarker = Color3.fromRGB(100, 100, 110),-- Tertiary text color
+	Stroke = Color3.fromRGB(50, 50, 60),     -- Primary border color
+	StrokeDark = Color3.fromRGB(35, 35, 45), -- Secondary border color
+	HoverBright = Color3.fromRGB(35, 35, 42),-- Hover state color
+	Success = Color3.fromRGB(80, 200, 120),  -- Success color
+	Warning = Color3.fromRGB(255, 180, 80),  -- Warning color
+	Error = Color3.fromRGB(255, 100, 100),   -- Error color
 	
-	-- Type-specific colors for notifications
 	TypeColors = {
-		Info = Color3.fromRGB(88, 139, 255),
-		Success = Color3.fromRGB(80, 200, 120),
-		Warning = Color3.fromRGB(255, 180, 80),
-		Error = Color3.fromRGB(255, 100, 100)
+		Info = Color3.fromRGB(88, 139, 255),    -- Info notification color
+		Success = Color3.fromRGB(80, 200, 120), -- Success notification color
+		Warning = Color3.fromRGB(255, 180, 80), -- Warning notification color
+		Error = Color3.fromRGB(255, 100, 100)   -- Error notification color
 	}
 }
 
--- Function to update theme
 function Astral:SetTheme(NewTheme)
-	for key, value in pairs(NewTheme) do
-		if Astral.Theme[key] ~= nil then
-			Astral.Theme[key] = value
+	for Key, Value in pairs(NewTheme) do
+		if Astral.Theme[Key] ~= nil then
+			Astral.Theme[Key] = Value
 		end
 	end
 	
-	-- Update type colors to match accent if not explicitly set
 	if not NewTheme.TypeColors then
 		Astral.Theme.TypeColors.Info = Astral.Theme.Accent
 		Astral.Theme.TypeColors.Success = Astral.Theme.Success
@@ -263,35 +239,33 @@ function Astral:SetTheme(NewTheme)
 	end
 end
 
--- Function to update config
 function Astral:SetConfig(NewConfig)
-	local function updateConfigTable(target, source)
-		for key, value in pairs(source) do
-			if type(value) == "table" and target[key] ~= nil and type(target[key]) == "table" then
-				updateConfigTable(target[key], value)
-			elseif target[key] ~= nil then
-				target[key] = value
+	local function UpdateConfigTable(Target, Source)
+		for Key, Value in pairs(Source) do
+			if type(Value) == "table" and Target[Key] ~= nil and type(Target[Key]) == "table" then
+				UpdateConfigTable(Target[Key], Value)
+			elseif Target[Key] ~= nil then
+				Target[Key] = Value
 			end
 		end
 	end
 	
-	updateConfigTable(Astral.Config, NewConfig)
+	UpdateConfigTable(Astral.Config, NewConfig)
 end
 
--- =============== UI SETUP ===============
 local IsStudio = game:GetService("RunService"):IsStudio()
 local TargetParent = IsStudio and Player.PlayerGui or CoreGui
 
 if TargetParent:FindFirstChild("AstralUI") then
-	for _, child in pairs(TargetParent:GetChildren()) do
-		if child.Name == "AstralLib" or child.Name == "AstralBubble" then
-			child:Destroy()
+	for _, Child in pairs(TargetParent:GetChildren()) do
+		if Child.Name == "AstralLib" or Child.Name == "AstralBubble" then
+			Child:Destroy()
 		end
 	end
 
-	for _, child in pairs(TargetParent:GetChildren()) do
-		if child:IsA("ScreenGui") and (child.Name:find("Astral") or child.Name:find("Notification")) then
-			child:Destroy()
+	for _, Child in pairs(TargetParent:GetChildren()) do
+		if Child:IsA("ScreenGui") and (Child.Name:find("Astral") or Child.Name:find("Notification")) then
+			Child:Destroy()
 		end
 	end
 end
@@ -309,8 +283,8 @@ end
 local function MakeDraggable(DragBar, WindowObject)
 	local Dragging, DragInput, DragStart, StartPosition
 
-	local function Update(input)
-		local Delta = input.Position - DragStart
+	local function Update(Input)
+		local Delta = Input.Position - DragStart
 		WindowObject.Position = UDim2.new(
 			StartPosition.X.Scale,
 			StartPosition.X.Offset + Delta.X,
@@ -319,29 +293,29 @@ local function MakeDraggable(DragBar, WindowObject)
 		)
 	end
 
-	DragBar.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+	DragBar.InputBegan:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 			Dragging = true
-			DragStart = input.Position
+			DragStart = Input.Position
 			StartPosition = WindowObject.Position
 
-			input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then
+			Input.Changed:Connect(function()
+				if Input.UserInputState == Enum.UserInputState.End then
 					Dragging = false
 				end
 			end)
 		end
 	end)
 
-	DragBar.InputChanged:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-			DragInput = input
+	DragBar.InputChanged:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch then
+			DragInput = Input
 		end
 	end)
 
-	UserInputService.InputChanged:Connect(function(input)
-		if input == DragInput and Dragging then
-			Update(input)
+	UserInputService.InputChanged:Connect(function(Input)
+		if Input == DragInput and Dragging then
+			Update(Input)
 		end
 	end)
 end
@@ -533,8 +507,8 @@ function Astral:Window(Options)
 	local Name = Options.Name or "Astral"
 	local Scale = Options.Scale or 1
 
-	local function ApplyScale(value)
-		return value * Scale
+	local function ApplyScale(Value)
+		return Value * Scale
 	end
 
 	local ScreenGui = Instance.new("ScreenGui")
@@ -669,13 +643,12 @@ function Astral:Window(Options)
 		MainFrame.Visible = not MainFrame.Visible
 	end)
 
-	-- Bubble: NOT SCALED - uses fixed size
 	local Bubble = Instance.new("TextButton")
 	Bubble.Name = "AstralBubble"
 	Bubble.Parent = ScreenGui
 	Bubble.BackgroundColor3 = Astral.Theme.Main
-	Bubble.Position = UDim2.new(1, -70, 0.5, -25) -- Fixed position, not scaled
-	Bubble.Size = UDim2.new(0, Astral.Config.Bubble.Size, 0, Astral.Config.Bubble.Size) -- Fixed size, not scaled
+	Bubble.Position = UDim2.new(1, -70, 0.5, -25)
+	Bubble.Size = UDim2.new(0, Astral.Config.Bubble.Size, 0, Astral.Config.Bubble.Size)
 	Bubble.ZIndex = 500
 	Bubble.Text = ""
 	Bubble.AutoButtonColor = false
@@ -689,12 +662,12 @@ function Astral:Window(Options)
 	BubbleIcon.BackgroundTransparency = 1
 	BubbleIcon.Size = UDim2.new(1, 0, 1, 0)
 	BubbleIcon.Position = UDim2.new(0, 0, 0, 0)
-	BubbleIcon.Image = Options.Icon or Astral.Config.Bubble.IconSize
+	BubbleIcon.Image = Options.Icon or Astral.Config.Bubble.Icon
 	BubbleIcon.ImageColor3 = Astral.Theme.Accent
 	BubbleIcon.ScaleType = Enum.ScaleType.Fit
 
 	local BubbleStroke = Instance.new("UIStroke")
-	BubbleStroke.Thickness = Astral.Config.Bubble.StrokeThickness -- Not scaled
+	BubbleStroke.Thickness = Astral.Config.Bubble.StrokeThickness
 	BubbleStroke.Color = Astral.Theme.Stroke
 	BubbleStroke.Transparency = Astral.Config.Bubble.StrokeTransparency
 	BubbleStroke.Parent = Bubble
@@ -708,32 +681,25 @@ function Astral:Window(Options)
 		local BubbleSize = Bubble.AbsoluteSize
 		local CenterX = ScreenSize.X / 2
 		
-		-- Check which side we're closer to (using bubble center)
 		local BubbleCenterX = CurrentPos.X + (BubbleSize.X / 2)
 		
-		-- Very small snap margin from config
 		local SnapMargin = Astral.Config.Bubble.SnapMargin
 		local EdgeMargin = Astral.Config.Bubble.EdgeMargin
 		local TopBottomMargin = Astral.Config.Bubble.TopBottomMargin
 		
-		-- Determine target side (left or right)
 		local TargetX
 		if BubbleCenterX < CenterX then
-			-- Snap to left side
 			TargetX = EdgeMargin
 		else
-			-- Snap to right side
 			TargetX = ScreenSize.X - BubbleSize.X - EdgeMargin
 		end
 		
-		-- Keep Y position within bounds with minimal margin
 		local TargetY = math.clamp(
 			CurrentPos.Y, 
 			TopBottomMargin, 
 			ScreenSize.Y - BubbleSize.Y - TopBottomMargin
 		)
 		
-		-- Apply snapping with very small margin
 		TweenService:Create(Bubble, TweenInfo.new(
 			Astral.Config.Animation.TweenDuration, 
 			Enum.EasingStyle.Back, 
@@ -743,14 +709,14 @@ function Astral:Window(Options)
 		}):Play()
 	end
 
-	Bubble.InputBegan:Connect(function(input)
-		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+	Bubble.InputBegan:Connect(function(Input)
+		if (Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch) then
 			BubbleDragging = true
-			DragStart = input.Position
+			DragStart = Input.Position
 			StartPos = Bubble.Position
 
-			input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then
+			Input.Changed:Connect(function()
+				if Input.UserInputState == Enum.UserInputState.End then
 					BubbleDragging = false
 					SnapToSide()
 				end
@@ -758,21 +724,20 @@ function Astral:Window(Options)
 		end
 	end)
 
-	Bubble.InputChanged:Connect(function(input)
-		if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-			DragInput = input
+	Bubble.InputChanged:Connect(function(Input)
+		if (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
+			DragInput = Input
 		end
 	end)
 
-	UserInputService.InputChanged:Connect(function(input)
-		if input == DragInput and BubbleDragging then
-			local Delta = input.Position - DragStart
+	UserInputService.InputChanged:Connect(function(Input)
+		if Input == DragInput and BubbleDragging then
+			local Delta = Input.Position - DragStart
 			Bubble.Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + Delta.X, StartPos.Y.Scale, StartPos.Y.Offset + Delta.Y)
 		end
 	end)
 
 	Bubble.MouseButton1Click:Connect(function()
-		-- Very small movement threshold for click detection (not scaled)
 		local MovementThreshold = Astral.Config.Bubble.SnapMargin * 2
 		if math.abs(StartPos.X.Offset - Bubble.Position.X.Offset) < MovementThreshold then
 			MainFrame.Visible = not MainFrame.Visible
@@ -1001,13 +966,13 @@ function Astral:Window(Options)
 		return ScreenGui
 	end
 
-	function WindowFunctions:SetScale(newScale)
-		if newScale <= 0 then return end
+	function WindowFunctions:SetScale(NewScale)
+		if NewScale <= 0 then return end
 
 		CurrentWidth = ApplyScale(BaseWidth)
 		CurrentHeight = ApplyScale(BaseHeight)
 
-		Scale = newScale
+		Scale = NewScale
 
 		TweenService:Create(MainFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {
 			Size = UDim2.new(0, CurrentWidth, 0, CurrentHeight),
@@ -1371,9 +1336,9 @@ function Astral:Window(Options)
 
 			local Dragging = false
 
-			local function Update(input)
+			local function Update(Input)
 				local SizeX = BackgroundFrame.AbsoluteSize.X
-				local OffsetX = math.clamp(input.Position.X - BackgroundFrame.AbsolutePosition.X, 0, SizeX)
+				local OffsetX = math.clamp(Input.Position.X - BackgroundFrame.AbsolutePosition.X, 0, SizeX)
 				local Percentage = OffsetX / SizeX
 
 				Value = math.floor(((Max - Min) * Percentage + Min) / Increment + 0.5) * Increment
@@ -1388,29 +1353,29 @@ function Astral:Window(Options)
 				Callback(Value)
 			end
 
-			BallFrame.InputBegan:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			BallFrame.InputBegan:Connect(function(Input)
+				if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 					Dragging = true
 					CenterElement(PageFrame, SliderFrame)
 				end
 			end)
 
-			BackgroundFrame.InputBegan:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			BackgroundFrame.InputBegan:Connect(function(Input)
+				if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 					Dragging = true
 					CenterElement(PageFrame, SliderFrame)
-					Update(input)
+					Update(Input)
 				end
 			end)
 
-			UserInputService.InputChanged:Connect(function(input)
-				if Dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-					Update(input)
+			UserInputService.InputChanged:Connect(function(Input)
+				if Dragging and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
+					Update(Input)
 				end
 			end)
 
-			UserInputService.InputEnded:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			UserInputService.InputEnded:Connect(function(Input)
+				if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 					Dragging = false
 				end
 			end)
@@ -1613,12 +1578,12 @@ function Astral:Window(Options)
 			DropdownLayout.Parent = DropdownList
 			DropdownLayout.Padding = UDim.new(0, ApplyScale(BasePaddingValue))
 
-			local function Refresh(filter)
+			local function Refresh(Filter)
 				for _, Child in pairs(DropdownList:GetChildren()) do
 					if Child:IsA("TextButton") then Child:Destroy() end
 				end
 				for _, Option in pairs(DropdownOptions) do
-					if filter and filter ~= "" and not string.find(string.lower(Option), string.lower(filter)) then continue end
+					if Filter and Filter ~= "" and not string.find(string.lower(Option), string.lower(Filter)) then continue end
 
 					local IsSelected = (CurrentSelected == Option)
 					local OptionButton = Instance.new("TextButton")
@@ -1835,12 +1800,12 @@ function Astral:Window(Options)
 			DropdownLayout.Parent = DropdownList
 			DropdownLayout.Padding = UDim.new(0, ApplyScale(BasePaddingValue))
 
-			local function Refresh(filter)
+			local function Refresh(Filter)
 				for _, Child in pairs(DropdownList:GetChildren()) do
 					if Child:IsA("TextButton") then Child:Destroy() end
 				end
 				for _, Option in pairs(DropdownOptions) do
-					if filter and filter ~= "" and not string.find(string.lower(Option), string.lower(filter)) then continue end
+					if Filter and Filter ~= "" and not string.find(string.lower(Option), string.lower(Filter)) then continue end
 
 					local IsSelected = Selected[Option]
 					local OptionButton = Instance.new("TextButton")
@@ -1990,14 +1955,14 @@ function Astral:Window(Options)
 				KeybindText.TextColor3 = Astral.Theme.Warning
 			end)
 
-			UserInputService.InputBegan:Connect(function(input, GameProcessed)
-				if not GameProcessed and Binding and input.UserInputType == Enum.UserInputType.Keyboard then
-					Current = input.KeyCode
+			UserInputService.InputBegan:Connect(function(Input, GameProcessed)
+				if not GameProcessed and Binding and Input.UserInputType == Enum.UserInputType.Keyboard then
+					Current = Input.KeyCode
 					KeybindText.Text = Current.Name
 					KeybindText.TextColor3 = Astral.Theme.Accent
 					Binding = false
 					Callback(Current)
-				elseif not GameProcessed and input.KeyCode == Current then
+				elseif not GameProcessed and Input.KeyCode == Current then
 					Callback(Current)
 				end
 			end)
