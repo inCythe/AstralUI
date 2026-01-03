@@ -1211,8 +1211,10 @@ function Astral:Window(Options)
 			local Dropped = false
 
 			local BaseElementHeight = ApplyScale(ElementHeight)
-			local ListMaxHeight = ApplyScale(120)
-			local HeaderHeight = ApplyScale(32) -- Matches text box height roughly
+			local ItemHeight = ApplyScale(22) -- Smaller base size for items
+			local ItemPadding = ApplyScale(3) -- Tighter padding
+			local HeaderHeight = ApplyScale(28) -- Compact header
+			local ListMaxHeight = ApplyScale(110) -- Restrict total height
 			
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
@@ -1261,7 +1263,7 @@ function Astral:Window(Options)
 
 			local SearchBox = Instance.new("TextBox")
 			SearchBox.Parent = Header
-			SearchBox.Size = UDim2.new(1, -ApplyScale(50), 1, -ApplyScale(8))
+			SearchBox.Size = UDim2.new(1, -ApplyScale(50), 1, -ApplyScale(6))
 			SearchBox.Position = UDim2.new(0, 0, 0, 0)
 			SearchBox.BackgroundColor3 = Astral.Theme.Tertiary
 			SearchBox.BackgroundTransparency = 0.25
@@ -1289,7 +1291,7 @@ function Astral:Window(Options)
 			local ClearBtn = Instance.new("TextButton")
 			ClearBtn.Parent = Header
 			ClearBtn.Position = UDim2.new(1, -ApplyScale(45), 0, 0)
-			ClearBtn.Size = UDim2.new(0, ApplyScale(45), 1, -ApplyScale(8))
+			ClearBtn.Size = UDim2.new(0, ApplyScale(45), 1, -ApplyScale(6))
 			ClearBtn.BackgroundColor3 = Astral.Theme.Error
 			ClearBtn.BackgroundTransparency = 0.25
 			ClearBtn.Text = "CLEAR"
@@ -1305,7 +1307,7 @@ function Astral:Window(Options)
 			DropdownList.Parent = DropdownFrame
 			DropdownList.BackgroundTransparency = 1
 			DropdownList.Position = UDim2.new(0, ApplyScale(BasePadding), 0, BaseElementHeight + HeaderHeight)
-			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, 0) -- Height determined dynamically
+			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, 0)
 			DropdownList.ScrollBarThickness = 2
 			DropdownList.ScrollBarImageTransparency = 0.5
 			DropdownList.BorderSizePixel = 0
@@ -1318,21 +1320,22 @@ function Astral:Window(Options)
 			
 			local DropdownLayout = Instance.new("UIListLayout")
 			DropdownLayout.Parent = DropdownList
-			DropdownLayout.Padding = UDim.new(0, ApplyScale(4))
+			DropdownLayout.Padding = UDim.new(0, ItemPadding)
 
-			local function UpdateHeight()
+			local function UpdateHeight(Count)
 				if not Dropped then 
 					TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, BaseElementHeight)}):Play()
 					return 
 				end
 
-				local ContentHeight = DropdownLayout.AbsoluteContentSize.Y
-				local ViewableHeight = math.min(ContentHeight, ListMaxHeight)
+				-- Calculate exact height based on count to avoid layout lag
+				local CalculatedContentHeight = (Count * ItemHeight) + (math.max(0, Count - 1) * ItemPadding)
+				local ViewableHeight = math.min(CalculatedContentHeight, ListMaxHeight)
 				local TotalHeight = BaseElementHeight + HeaderHeight + ViewableHeight + ApplyScale(BasePadding)
 				
 				DropdownList.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, ViewableHeight)
-				DropdownList.CanvasSize = UDim2.new(0, 0, 0, ContentHeight)
-				DropdownList.ScrollingEnabled = ContentHeight > ListMaxHeight
+				DropdownList.CanvasSize = UDim2.new(0, 0, 0, CalculatedContentHeight)
+				DropdownList.ScrollingEnabled = CalculatedContentHeight > ListMaxHeight
 
 				TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, TotalHeight)}):Play()
 				CenterElement(PageFrame, DropdownFrame, TotalHeight)
@@ -1353,7 +1356,7 @@ function Astral:Window(Options)
 					OptionButton.Parent = DropdownList
 					OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
 					OptionButton.BackgroundTransparency = IsSelected and 0.2 or 0.5
-					OptionButton.Size = UDim2.new(1, 0, 0, ApplyScale(24))
+					OptionButton.Size = UDim2.new(1, 0, 0, ItemHeight)
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
 					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
@@ -1371,7 +1374,7 @@ function Astral:Window(Options)
 					end)
 				end
 				
-				UpdateHeight()
+				UpdateHeight(Count)
 			end
 
 			SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
@@ -1391,7 +1394,7 @@ function Astral:Window(Options)
 					DropdownList.Visible = true
 					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = 180}):Play()
 				else
-					UpdateHeight() -- Retracts
+					UpdateHeight(0) -- Force retract
 					Header.Visible = false
 					DropdownList.Visible = false
 					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = 0}):Play()
@@ -1420,8 +1423,10 @@ function Astral:Window(Options)
 			end
 
 			local BaseElementHeight = ApplyScale(ElementHeight)
-			local ListMaxHeight = ApplyScale(120)
-			local HeaderHeight = ApplyScale(32)
+			local ItemHeight = ApplyScale(22) -- Smaller base size for items
+			local ItemPadding = ApplyScale(3)
+			local HeaderHeight = ApplyScale(28)
+			local ListMaxHeight = ApplyScale(110)
 			
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
@@ -1479,7 +1484,7 @@ function Astral:Window(Options)
 
 			local SearchBox = Instance.new("TextBox")
 			SearchBox.Parent = Header
-			SearchBox.Size = UDim2.new(1, -ApplyScale(100), 1, -ApplyScale(8))
+			SearchBox.Size = UDim2.new(1, -ApplyScale(100), 1, -ApplyScale(6))
 			SearchBox.BackgroundColor3 = Astral.Theme.Tertiary
 			SearchBox.BackgroundTransparency = 0.25
 			SearchBox.PlaceholderText = "Search..."
@@ -1506,7 +1511,7 @@ function Astral:Window(Options)
 			local SelectAllBtn = Instance.new("TextButton")
 			SelectAllBtn.Parent = Header
 			SelectAllBtn.Position = UDim2.new(1, -ApplyScale(95), 0, 0)
-			SelectAllBtn.Size = UDim2.new(0, ApplyScale(45), 1, -ApplyScale(8))
+			SelectAllBtn.Size = UDim2.new(0, ApplyScale(45), 1, -ApplyScale(6))
 			SelectAllBtn.BackgroundColor3 = Astral.Theme.Success
 			SelectAllBtn.BackgroundTransparency = 0.25
 			SelectAllBtn.Text = "ALL"
@@ -1521,7 +1526,7 @@ function Astral:Window(Options)
 			local ClearAllBtn = Instance.new("TextButton")
 			ClearAllBtn.Parent = Header
 			ClearAllBtn.Position = UDim2.new(1, -ApplyScale(45), 0, 0)
-			ClearAllBtn.Size = UDim2.new(0, ApplyScale(45), 1, -ApplyScale(8))
+			ClearAllBtn.Size = UDim2.new(0, ApplyScale(45), 1, -ApplyScale(6))
 			ClearAllBtn.BackgroundColor3 = Astral.Theme.Error
 			ClearAllBtn.BackgroundTransparency = 0.25
 			ClearAllBtn.Text = "CLEAR"
@@ -1549,21 +1554,22 @@ function Astral:Window(Options)
 
 			local DropdownLayout = Instance.new("UIListLayout")
 			DropdownLayout.Parent = DropdownList
-			DropdownLayout.Padding = UDim.new(0, ApplyScale(4))
+			DropdownLayout.Padding = UDim.new(0, ItemPadding)
 
-			local function UpdateHeight()
+			local function UpdateHeight(Count)
 				if not Dropped then 
 					TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, BaseElementHeight)}):Play()
 					return 
 				end
 
-				local ContentHeight = DropdownLayout.AbsoluteContentSize.Y
-				local ViewableHeight = math.min(ContentHeight, ListMaxHeight)
+				-- Calculate exact height based on count
+				local CalculatedContentHeight = (Count * ItemHeight) + (math.max(0, Count - 1) * ItemPadding)
+				local ViewableHeight = math.min(CalculatedContentHeight, ListMaxHeight)
 				local TotalHeight = BaseElementHeight + HeaderHeight + ViewableHeight + ApplyScale(BasePadding)
 				
 				DropdownList.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, ViewableHeight)
-				DropdownList.CanvasSize = UDim2.new(0, 0, 0, ContentHeight)
-				DropdownList.ScrollingEnabled = ContentHeight > ListMaxHeight
+				DropdownList.CanvasSize = UDim2.new(0, 0, 0, CalculatedContentHeight)
+				DropdownList.ScrollingEnabled = CalculatedContentHeight > ListMaxHeight
 
 				TweenService:Create(DropdownFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, TotalHeight)}):Play()
 				CenterElement(PageFrame, DropdownFrame, TotalHeight)
@@ -1574,15 +1580,17 @@ function Astral:Window(Options)
 					if Child:IsA("TextButton") then Child:Destroy() end
 				end
 				
+				local Count = 0
 				for _, Option in pairs(DropdownOptions) do
 					if filter and filter ~= "" and not string.find(string.lower(Option), string.lower(filter)) then continue end
+					Count = Count + 1
 
 					local IsSelected = Selected[Option]
 					local OptionButton = Instance.new("TextButton")
 					OptionButton.Parent = DropdownList
 					OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
 					OptionButton.BackgroundTransparency = IsSelected and 0.2 or 0.5
-					OptionButton.Size = UDim2.new(1, 0, 0, ApplyScale(24))
+					OptionButton.Size = UDim2.new(1, 0, 0, ItemHeight)
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
 					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
@@ -1608,7 +1616,7 @@ function Astral:Window(Options)
 					end)
 				end
 				
-				UpdateHeight()
+				UpdateHeight(Count)
 			end
 
 			SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
@@ -1644,7 +1652,7 @@ function Astral:Window(Options)
 					DropdownList.Visible = true
 					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = 180}):Play()
 				else
-					UpdateHeight()
+					UpdateHeight(0)
 					Header.Visible = false
 					DropdownList.Visible = false
 					TweenService:Create(ArrowImage, TweenInfo.new(0.2), {Rotation = 0}):Play()
