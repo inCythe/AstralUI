@@ -44,7 +44,11 @@ Astral.Config = {
 		Size = 50,
 		IconSize = "rbxassetid://7733954760",
 		StrokeThickness = 2,
-		StrokeTransparency = 0.3
+		StrokeTransparency = 0.3,
+		SnapMargin = 5, -- Very small snap margin
+		EdgeMargin = 15, -- Margin from screen edges
+		TopBottomMargin = 15, -- Margin from top/bottom
+		MinDistanceFromCenter = 25 -- Minimum distance from center for snapping
 	},
 
 	-- Sidebar Configuration
@@ -665,12 +669,13 @@ function Astral:Window(Options)
 		MainFrame.Visible = not MainFrame.Visible
 	end)
 
+	-- Bubble: NOT SCALED - uses fixed size
 	local Bubble = Instance.new("TextButton")
 	Bubble.Name = "AstralBubble"
 	Bubble.Parent = ScreenGui
 	Bubble.BackgroundColor3 = Astral.Theme.Main
-	Bubble.Position = UDim2.new(1, -ApplyScale(70), 0.5, -ApplyScale(25))
-	Bubble.Size = UDim2.new(0, ApplyScale(Astral.Config.Bubble.Size), 0, ApplyScale(Astral.Config.Bubble.Size))
+	Bubble.Position = UDim2.new(1, -70, 0.5, -25) -- Fixed position, not scaled
+	Bubble.Size = UDim2.new(0, Astral.Config.Bubble.Size, 0, Astral.Config.Bubble.Size) -- Fixed size, not scaled
 	Bubble.ZIndex = 500
 	Bubble.Text = ""
 	Bubble.AutoButtonColor = false
@@ -689,7 +694,7 @@ function Astral:Window(Options)
 	BubbleIcon.ScaleType = Enum.ScaleType.Fit
 
 	local BubbleStroke = Instance.new("UIStroke")
-	BubbleStroke.Thickness = ApplyScale(Astral.Config.Bubble.StrokeThickness)
+	BubbleStroke.Thickness = Astral.Config.Bubble.StrokeThickness -- Not scaled
 	BubbleStroke.Color = Astral.Theme.Stroke
 	BubbleStroke.Transparency = Astral.Config.Bubble.StrokeTransparency
 	BubbleStroke.Parent = Bubble
@@ -700,14 +705,35 @@ function Astral:Window(Options)
 	local function SnapToSide()
 		local ScreenSize = ScreenGui.AbsoluteSize
 		local CurrentPos = Bubble.AbsolutePosition
+		local BubbleSize = Bubble.AbsoluteSize
 		local CenterX = ScreenSize.X / 2
-
-		local TargetX = (CurrentPos.X + ApplyScale(25) < CenterX) and ApplyScale(15) or (ScreenSize.X - ApplyScale(65))
-		local TargetY = math.clamp(CurrentPos.Y, ApplyScale(15), ScreenSize.Y - ApplyScale(65))
-
-		if TargetY < ApplyScale(100) then TargetY = ApplyScale(15) end
-		if TargetY > ScreenSize.Y - ApplyScale(165) then TargetY = ScreenSize.Y - ApplyScale(65) end
-
+		
+		-- Check which side we're closer to (using bubble center)
+		local BubbleCenterX = CurrentPos.X + (BubbleSize.X / 2)
+		
+		-- Very small snap margin from config
+		local SnapMargin = Astral.Config.Bubble.SnapMargin
+		local EdgeMargin = Astral.Config.Bubble.EdgeMargin
+		local TopBottomMargin = Astral.Config.Bubble.TopBottomMargin
+		
+		-- Determine target side (left or right)
+		local TargetX
+		if BubbleCenterX < CenterX then
+			-- Snap to left side
+			TargetX = EdgeMargin
+		else
+			-- Snap to right side
+			TargetX = ScreenSize.X - BubbleSize.X - EdgeMargin
+		end
+		
+		-- Keep Y position within bounds with minimal margin
+		local TargetY = math.clamp(
+			CurrentPos.Y, 
+			TopBottomMargin, 
+			ScreenSize.Y - BubbleSize.Y - TopBottomMargin
+		)
+		
+		-- Apply snapping with very small margin
 		TweenService:Create(Bubble, TweenInfo.new(
 			Astral.Config.Animation.TweenDuration, 
 			Enum.EasingStyle.Back, 
@@ -746,7 +772,9 @@ function Astral:Window(Options)
 	end)
 
 	Bubble.MouseButton1Click:Connect(function()
-		if (StartPos.X.Offset - Bubble.Position.X.Offset) < ApplyScale(5) then
+		-- Very small movement threshold for click detection (not scaled)
+		local MovementThreshold = Astral.Config.Bubble.SnapMargin * 2
+		if math.abs(StartPos.X.Offset - Bubble.Position.X.Offset) < MovementThreshold then
 			MainFrame.Visible = not MainFrame.Visible
 		end
 	end)
