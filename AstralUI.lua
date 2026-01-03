@@ -1,3 +1,5 @@
+[file name]: AstralUI.lua
+[file content begin]
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
@@ -22,22 +24,21 @@ Astral.Theme = {
     Error = Color3.fromRGB(255, 100, 100),
 }
 
--- Design System with Compact Layout
 Astral.Design = {
     BaseScale = 1,
     Spacing = {
-        XS = 2,
-        SM = 4,
-        MD = 6,
-        LG = 8,
-        XL = 10
+        ExtraSmall = 2,
+        Small = 4,
+        Medium = 6,
+        Large = 8,
+        ExtraLarge = 10
     },
     BorderRadius = {
-        XS = 3,
-        SM = 4,
-        MD = 6,
-        LG = 8,
-        XL = 10
+        ExtraSmall = 3,
+        Small = 4,
+        Medium = 6,
+        Large = 8,
+        ExtraLarge = 10
     },
     ElementHeight = 28,
     TopbarHeight = 32,
@@ -46,11 +47,11 @@ Astral.Design = {
     BaseWidth = 560,
     BaseHeight = 380,
     FontSizes = {
-        XS = 9,
-        SM = 10,
-        MD = 11,
-        LG = 12,
-        XL = 13
+        ExtraSmall = 9,
+        Small = 10,
+        Medium = 11,
+        Large = 12,
+        ExtraLarge = 13
     },
     Transparencies = {
         Background = 0.12,
@@ -64,7 +65,6 @@ Astral.Design = {
 local IsStudio = game:GetService("RunService"):IsStudio()
 local TargetParent = IsStudio and Player.PlayerGui or CoreGui
 
--- Cleanup existing UI
 if TargetParent:FindFirstChild("AstralUI") then
     for _, child in pairs(TargetParent:GetChildren()) do
         if child.Name == "AstralLib" or child.Name == "AstralBubble" then
@@ -78,26 +78,24 @@ if TargetParent:FindFirstChild("AstralUI") then
     end
 end
 
--- Utility Functions
 local function ApplyScale(value, scale)
     return math.floor(value * scale + 0.5)
 end
 
 local function GetDesignValue(designTable, key, scale)
-    local value = designTable[key] or designTable.MD
+    local value = designTable[key] or designTable.Medium
     return ApplyScale(value, scale)
 end
 
--- Compact Padding System
 local function ApplyCompactPadding(parent, paddingValues, scale)
     local padding = Instance.new("UIPadding")
     padding.Parent = parent
     
     if type(paddingValues) == "table" then
-        padding.PaddingTop = UDim.new(0, ApplyScale(paddingValues.T or paddingValues.Top or 0, scale))
-        padding.PaddingRight = UDim.new(0, ApplyScale(paddingValues.R or paddingValues.Right or 0, scale))
-        padding.PaddingBottom = UDim.new(0, ApplyScale(paddingValues.B or paddingValues.Bottom or 0, scale))
-        padding.PaddingLeft = UDim.new(0, ApplyScale(paddingValues.L or paddingValues.Left or 0, scale))
+        padding.PaddingTop = UDim.new(0, ApplyScale(paddingValues.Top or 0, scale))
+        padding.PaddingRight = UDim.new(0, ApplyScale(paddingValues.Right or 0, scale))
+        padding.PaddingBottom = UDim.new(0, ApplyScale(paddingValues.Bottom or 0, scale))
+        padding.PaddingLeft = UDim.new(0, ApplyScale(paddingValues.Left or 0, scale))
     else
         local padded = ApplyScale(paddingValues, scale)
         padding.PaddingTop = UDim.new(0, padded)
@@ -109,15 +107,14 @@ local function ApplyCompactPadding(parent, paddingValues, scale)
     return padding
 end
 
--- Unified UI Element Creation
 local function CreateElement(elementType, parent, properties)
     local element = Instance.new(elementType)
     
-    for prop, value in pairs(properties) do
-        if prop == "Parent" then
+    for property, value in pairs(properties) do
+        if property == "Parent" then
             element.Parent = value
         else
-            element[prop] = value
+            element[property] = value
         end
     end
     
@@ -159,14 +156,13 @@ local function CreateStroke(parent, color, thickness, transparency)
     return stroke
 end
 
--- Button Utility Functions
 local function CreateButton(parent, text, callback, options)
     options = options or {}
     local scale = options.Scale or Astral.Design.BaseScale
     local size = options.Size or UDim2.new(1, 0, 0, GetDesignValue(Astral.Design, "ElementHeight", scale))
     local position = options.Position or UDim2.new(0, 0, 0, 0)
-    local textSize = GetDesignValue(Astral.Design.FontSizes, options.FontSize or "MD", scale)
-    local borderRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, options.BorderRadius or "SM", scale))
+    local textSize = GetDesignValue(Astral.Design.FontSizes, options.FontSize or "Medium", scale)
+    local borderRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, options.BorderRadius or "Small", scale))
     
     local button = CreateElement("TextButton", parent, {
         Parent = parent,
@@ -193,7 +189,6 @@ local function CreateButton(parent, text, callback, options)
         CreateStroke(button, Astral.Theme.Stroke, 1, 0.5)
     end
     
-    -- Hover Effect
     local originalColor = button.BackgroundColor3
     local originalTransparency = button.BackgroundTransparency
     
@@ -211,7 +206,6 @@ local function CreateButton(parent, text, callback, options)
         }):Play()
     end)
     
-    -- Click Effect
     local originalSize = button.Size
     button.MouseButton1Down:Connect(function()
         TweenService:Create(button, TweenInfo.new(0.08), {
@@ -237,7 +231,7 @@ end
 local function CreateLabel(parent, text, options)
     options = options or {}
     local scale = options.Scale or Astral.Design.BaseScale
-    local textSize = GetDesignValue(Astral.Design.FontSizes, options.FontSize or "MD", scale)
+    local textSize = GetDesignValue(Astral.Design.FontSizes, options.FontSize or "Medium", scale)
     
     local label = CreateElement("TextLabel", parent, {
         Parent = parent,
@@ -258,11 +252,10 @@ local function CreateLabel(parent, text, options)
     return label
 end
 
--- Compact Layout Functions
 local function CreateCompactListLayout(parent, padding, scale)
     local layout = Instance.new("UIListLayout")
     layout.Parent = parent
-    layout.Padding = UDim.new(0, GetDesignValue(Astral.Design.Spacing, padding or "MD", scale))
+    layout.Padding = UDim.new(0, GetDesignValue(Astral.Design.Spacing, padding or "Medium", scale))
     return layout
 end
 
@@ -289,7 +282,6 @@ local function CreateScrollingFrame(parent, options)
     return scrollingFrame
 end
 
--- Draggable Function (Compact)
 local function MakeDraggable(DragBar, WindowObject)
     local Dragging, DragInput, DragStart, StartPosition
 
@@ -328,7 +320,6 @@ local function MakeDraggable(DragBar, WindowObject)
     end)
 end
 
--- ScrollBar Function
 local function CreateScrollBar(ScrollingFrame)
     ScrollingFrame.ScrollBarThickness = 0
     ScrollingFrame.ScrollBarImageTransparency = 1
@@ -422,7 +413,6 @@ local function CreateScrollBar(ScrollingFrame)
     end)
 end
 
--- Centering Function
 local function CenterElement(ScrollingFrame, Element, ElementFutureHeight)
     if not ScrollingFrame or not Element then return end
 
@@ -469,13 +459,11 @@ local function CenterElement(ScrollingFrame, Element, ElementFutureHeight)
     end
 end
 
--- Main Window Creation (More Compact)
 function Astral:Window(Options)
-    local Name = Options.Name or "Astral"
+    local WindowName = Options.Name or "Astral"
     local Scale = Options.Scale or 1
     Astral.Design.BaseScale = Scale
 
-    -- Create ScreenGui
     local ScreenGui = CreateElement("ScreenGui", TargetParent, {
         Name = "AstralUI",
         DisplayOrder = 999,
@@ -483,15 +471,13 @@ function Astral:Window(Options)
         ResetOnSpawn = false
     })
 
-    -- Calculate Compact Dimensions
     local CurrentWidth = ApplyScale(Astral.Design.BaseWidth, Scale)
     local CurrentHeight = ApplyScale(Astral.Design.BaseHeight, Scale)
-    local CurrentSpacing = GetDesignValue(Astral.Design.Spacing, "MD", Scale)
+    local CurrentSpacing = GetDesignValue(Astral.Design.Spacing, "Medium", Scale)
     local CurrentElementHeight = GetDesignValue(Astral.Design, "ElementHeight", Scale)
     local CurrentTopbarHeight = GetDesignValue(Astral.Design, "TopbarHeight", Scale)
-    local CurrentBorderRadius = GetDesignValue(Astral.Design.BorderRadius, "MD", Scale)
+    local CurrentBorderRadius = GetDesignValue(Astral.Design.BorderRadius, "Medium", Scale)
 
-    -- Main Window Frame (More Compact)
     local MainFrame, MainCorner = CreateRoundedElement("Frame", ScreenGui, {
         BackgroundColor3 = Astral.Theme.Main,
         BackgroundTransparency = Astral.Design.Transparencies.Background,
@@ -503,7 +489,6 @@ function Astral:Window(Options)
 
     CreateStroke(MainFrame, Astral.Theme.Stroke, 1, Astral.Design.Transparencies.Stroke)
 
-    -- Compact Topbar
     local TopbarFrame, TopbarCorner = CreateRoundedElement("Frame", MainFrame, {
         Name = "Topbar",
         BackgroundColor3 = Astral.Theme.Tertiary,
@@ -511,18 +496,16 @@ function Astral:Window(Options)
         Position = UDim2.new(0, CurrentSpacing, 0, CurrentSpacing),
         Size = UDim2.new(1, -ApplyScale(74, Scale), 0, CurrentTopbarHeight),
         ZIndex = 5
-    }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+    }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
 
-    -- Title (Compact)
-    CreateLabel(TopbarFrame, Name, {
+    CreateLabel(TopbarFrame, WindowName, {
         Font = Enum.Font.GothamBold,
-        FontSize = "LG",
-        Padding = Astral.Design.Spacing.SM
+        FontSize = "Large",
+        Padding = Astral.Design.Spacing.Small
     })
 
     MakeDraggable(TopbarFrame, MainFrame)
 
-    -- Compact Controls
     local ControlsFrame = CreateElement("Frame", MainFrame, {
         BackgroundTransparency = 1,
         Position = UDim2.new(1, -ApplyScale(70, Scale), 0, CurrentSpacing),
@@ -530,7 +513,6 @@ function Astral:Window(Options)
         ZIndex = 10
     })
 
-    -- Control Buttons
     local CloseButton = CreateButton(ControlsFrame, "×", function()
         local Tween = TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
             Size = UDim2.new(0, 0, 0, 0),
@@ -544,8 +526,8 @@ function Astral:Window(Options)
         Position = UDim2.new(1, -GetDesignValue(Astral.Design, "ButtonSize", Scale) - CurrentSpacing, 0, 0),
         BackgroundColor = Astral.Theme.Tertiary,
         TextColor = Astral.Theme.Error,
-        FontSize = "XL",
-        BorderRadius = "SM"
+        FontSize = "ExtraLarge",
+        BorderRadius = "Small"
     })
 
     local MinimizeButton = CreateButton(ControlsFrame, "−", function()
@@ -555,11 +537,10 @@ function Astral:Window(Options)
         Position = UDim2.new(0, 0, 0, 0),
         BackgroundColor = Astral.Theme.Tertiary,
         TextColor = Astral.Theme.TextDark,
-        FontSize = "XL",
-        BorderRadius = "SM"
+        FontSize = "ExtraLarge",
+        BorderRadius = "Small"
     })
 
-    -- Compact Bubble
     local Bubble = CreateElement("TextButton", ScreenGui, {
         Name = "AstralBubble",
         BackgroundColor3 = Astral.Theme.Main,
@@ -583,17 +564,16 @@ function Astral:Window(Options)
 
     CreateStroke(Bubble, Astral.Theme.Stroke, 1, 0.3)
 
-    -- Bubble Dragging
     local BubbleDragging = false
-    local DragInput, DragStart, StartPos
+    local DragInput, DragStart, StartPosition
 
     local function SnapToSide()
         local ScreenSize = ScreenGui.AbsoluteSize
-        local CurrentPos = Bubble.AbsolutePosition
+        local CurrentPosition = Bubble.AbsolutePosition
         local CenterX = ScreenSize.X / 2
 
-        local TargetX = (CurrentPos.X + ApplyScale(20, Scale) < CenterX) and ApplyScale(10, Scale) or (ScreenSize.X - ApplyScale(50, Scale))
-        local TargetY = math.clamp(CurrentPos.Y, ApplyScale(10, Scale), ScreenSize.Y - ApplyScale(50, Scale))
+        local TargetX = (CurrentPosition.X + ApplyScale(20, Scale) < CenterX) and ApplyScale(10, Scale) or (ScreenSize.X - ApplyScale(50, Scale))
+        local TargetY = math.clamp(CurrentPosition.Y, ApplyScale(10, Scale), ScreenSize.Y - ApplyScale(50, Scale))
 
         TweenService:Create(Bubble, TweenInfo.new(0.2, Enum.EasingStyle.Back), {
             Position = UDim2.new(0, TargetX, 0, TargetY)
@@ -604,7 +584,7 @@ function Astral:Window(Options)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             BubbleDragging = true
             DragStart = input.Position
-            StartPos = Bubble.Position
+            StartPosition = Bubble.Position
 
             input.Changed:Connect(function()
                 if input.UserInputState == Enum.UserInputState.End then
@@ -625,8 +605,8 @@ function Astral:Window(Options)
         if input == DragInput and BubbleDragging then
             local Delta = input.Position - DragStart
             Bubble.Position = UDim2.new(
-                StartPos.X.Scale, StartPos.X.Offset + Delta.X,
-                StartPos.Y.Scale, StartPos.Y.Offset + Delta.Y
+                StartPosition.X.Scale, StartPosition.X.Offset + Delta.X,
+                StartPosition.Y.Scale, StartPosition.Y.Offset + Delta.Y
             )
         end
     end)
@@ -635,7 +615,6 @@ function Astral:Window(Options)
         MainFrame.Visible = not MainFrame.Visible
     end)
 
-    -- Content Area (More Compact)
     local ContentFrame = CreateElement("Frame", MainFrame, {
         BackgroundTransparency = 1,
         Position = UDim2.new(0, 0, 0, CurrentTopbarHeight + CurrentSpacing),
@@ -643,17 +622,15 @@ function Astral:Window(Options)
         ClipsDescendants = true
     })
 
-    -- Compact Sidebar
     local SidebarFrame, SidebarCorner = CreateRoundedElement("Frame", ContentFrame, {
         BackgroundColor3 = Astral.Theme.Tertiary,
         BackgroundTransparency = 0.15,
         Position = UDim2.new(0, CurrentSpacing, 0, 0),
         Size = UDim2.new(0, ApplyScale(110, Scale), 1, -CurrentSpacing)
-    }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+    }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
 
     CreateStroke(SidebarFrame, Astral.Theme.StrokeDark, 0.5, 0.3)
 
-    -- Tab Container
     local TabContainer = CreateScrollingFrame(SidebarFrame, {
         Position = UDim2.new(0, CurrentSpacing, 0, CurrentSpacing),
         Size = UDim2.new(1, -CurrentSpacing * 2, 1, -CurrentSpacing * 2),
@@ -661,32 +638,29 @@ function Astral:Window(Options)
     })
     CreateScrollBar(TabContainer)
 
-    local TabLayout = CreateCompactListLayout(TabContainer, "SM", Scale)
+    local TabLayout = CreateCompactListLayout(TabContainer, "Small", Scale)
     TabLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
         TabContainer.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y + CurrentSpacing)
     end)
 
-    -- Compact Pages Area
     local PagesFrame, PagesCorner = CreateRoundedElement("Frame", ContentFrame, {
         BackgroundColor3 = Astral.Theme.Secondary,
         BackgroundTransparency = 0.15,
         Position = UDim2.new(0, ApplyScale(110 + CurrentSpacing * 2, Scale), 0, 0),
         Size = UDim2.new(1, -ApplyScale(110 + CurrentSpacing * 3, Scale), 1, -CurrentSpacing)
-    }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+    }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
 
     local PagesContainer = CreateElement("Frame", PagesFrame, {
         BackgroundTransparency = 1,
         Size = UDim2.new(1, 0, 1, 0),
         ClipsDescendants = true
     })
-    ApplyCompactPadding(PagesContainer, Astral.Design.Spacing.SM, Scale)
+    ApplyCompactPadding(PagesContainer, Astral.Design.Spacing.Small, Scale)
 
-    -- Window Functions
     local WindowFunctions = {}
     local FirstTab = true
     local AllTabs = {}
 
-    -- Notification System
     local NotificationQueue = {}
     local ActiveNotifications = {}
     local MaxNotifications = 5
@@ -725,28 +699,26 @@ function Astral:Window(Options)
             AnchorPoint = Vector2.new(1, 1),
             Position = UDim2.new(1.5, 0, 1, -ApplyScale(20, Scale)),
             ZIndex = 100
-        }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))[1]
+        }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))[1]
 
         CreateStroke(NotificationFrame, TypeColors[Type], 1, 0.4)
 
-        -- Notification Title
         CreateLabel(NotificationFrame, Title, {
             Size = UDim2.new(1, 0, 0, ApplyScale(16, Scale)),
             Font = Enum.Font.GothamBold,
-            FontSize = "SM",
-            Padding = Astral.Design.Spacing.SM
+            FontSize = "Small",
+            Padding = Astral.Design.Spacing.Small
         })
 
-        -- Notification Content
         local ContentLabel = CreateLabel(NotificationFrame, Content, {
             Position = UDim2.new(0, 0, 0, ApplyScale(20, Scale)),
             Size = UDim2.new(1, 0, 1, -ApplyScale(26, Scale)),
             Font = Enum.Font.Gotham,
-            FontSize = "XS",
+            FontSize = "ExtraSmall",
             TextColor = Astral.Theme.TextDark,
             TextYAlignment = Enum.TextYAlignment.Top,
             TextWrapped = true,
-            Padding = Astral.Design.Spacing.SM
+            Padding = Astral.Design.Spacing.Small
         })
 
         table.insert(ActiveNotifications, NotificationFrame)
@@ -779,19 +751,16 @@ function Astral:Window(Options)
         end)
     end
 
-    -- Tab Creation
     function WindowFunctions:Tab(Options)
         local TabName = Options.Name or "Tab"
         local TabIcon = Options.Icon or "rbxassetid://7733954760"
 
-        -- Compact Tab Button
         local TabButton = CreateButton(TabContainer, "", nil, {
             Size = UDim2.new(1, 0, 0, CurrentElementHeight),
             BackgroundTransparency = 0.2,
-            BorderRadius = "SM"
+            BorderRadius = "Small"
         })
 
-        -- Tab Icon
         local IconImage = CreateElement("ImageLabel", TabButton, {
             BackgroundTransparency = 1,
             Position = UDim2.new(0, CurrentSpacing, 0.5, -ApplyScale(7, Scale)),
@@ -800,16 +769,14 @@ function Astral:Window(Options)
             ImageColor3 = Astral.Theme.TextDark
         })
 
-        -- Tab Label
         local LabelText = CreateLabel(TabButton, TabName, {
             Position = UDim2.new(0, ApplyScale(24, Scale), 0, 0),
             Size = UDim2.new(1, -ApplyScale(30, Scale), 1, 0),
             Font = Enum.Font.GothamMedium,
-            FontSize = "SM",
+            FontSize = "Small",
             TextColor = Astral.Theme.TextDark
         })
 
-        -- Active Indicator
         local IndicatorFrame = CreateElement("Frame", TabButton, {
             Name = "Indicator",
             BackgroundColor3 = Astral.Theme.Accent,
@@ -819,7 +786,6 @@ function Astral:Window(Options)
             Visible = false
         })
 
-        -- Page Frame
         local PageFrame = CreateScrollingFrame(PagesContainer, {
             Name = TabName,
             BackgroundTransparency = 1,
@@ -827,15 +793,14 @@ function Astral:Window(Options)
             Visible = false,
             Scale = Scale
         })
-        ApplyCompactPadding(PageFrame, Astral.Design.Spacing.SM, Scale)
+        ApplyCompactPadding(PageFrame, Astral.Design.Spacing.Small, Scale)
         CreateScrollBar(PageFrame)
 
-        local PageLayout = CreateCompactListLayout(PageFrame, "SM", Scale)
+        local PageLayout = CreateCompactListLayout(PageFrame, "Small", Scale)
         PageLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
             PageFrame.CanvasSize = UDim2.new(0, 0, 0, PageLayout.AbsoluteContentSize.Y + CurrentSpacing * 2)
         end)
 
-        -- Tab Activation
         local function Activate()
             for _, Page in pairs(PagesContainer:GetChildren()) do
                 if Page:IsA("ScrollingFrame") then
@@ -843,7 +808,7 @@ function Astral:Window(Options)
                 end
             end
             for _, TabData in pairs(AllTabs) do
-                TabData.Button.Indicator.Visible = false
+                TabData.Indicator.Visible = false
                 TweenService:Create(TabData.Button, TweenInfo.new(0.15), {
                     BackgroundColor3 = Astral.Theme.Main,
                     BackgroundTransparency = 0.2
@@ -862,7 +827,7 @@ function Astral:Window(Options)
         end
 
         TabButton.MouseButton1Click:Connect(Activate)
-        table.insert(AllTabs, {Button = TabButton, Label = LabelText, Icon = IconImage})
+        table.insert(AllTabs, {Button = TabButton, Label = LabelText, Icon = IconImage, Indicator = IndicatorFrame})
 
         if FirstTab then
             FirstTab = false
@@ -871,7 +836,6 @@ function Astral:Window(Options)
 
         local TabFunctions = {}
 
-        -- Section Creation (Compact)
         function TabFunctions:Section(Options)
             local SectionName = Options.Name or "Section"
 
@@ -880,43 +844,40 @@ function Astral:Window(Options)
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
                 Size = UDim2.new(1, 0, 0, 0),
                 AutomaticSize = Enum.AutomaticSize.Y
-            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
 
-            -- Compact Header
             local HeaderFrame = CreateRoundedFrame(SectionFrame, {
                 BackgroundColor3 = Astral.Theme.Main,
                 BackgroundTransparency = 0.15,
                 Size = UDim2.new(1, 0, 0, CurrentElementHeight)
-            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
 
             CreateLabel(HeaderFrame, SectionName, {
                 Font = Enum.Font.GothamBold,
-                FontSize = "MD",
-                Padding = Astral.Design.Spacing.SM
+                FontSize = "Medium",
+                Padding = Astral.Design.Spacing.Small
             })
 
-            -- Content Area
             local SectionContent = CreateElement("Frame", SectionFrame, {
                 BackgroundTransparency = 1,
                 Position = UDim2.new(0, 0, 0, CurrentElementHeight),
                 Size = UDim2.new(1, 0, 0, 0),
                 AutomaticSize = Enum.AutomaticSize.Y
             })
-            ApplyCompactPadding(SectionContent, Astral.Design.Spacing.SM, Scale)
+            ApplyCompactPadding(SectionContent, Astral.Design.Spacing.Small, Scale)
 
-            CreateCompactListLayout(SectionContent, "SM", Scale)
+            CreateCompactListLayout(SectionContent, "Small", Scale)
 
             local SectionFunctions = {}
-            for _, funcName in pairs({"Button", "Toggle", "Slider", "TextBox", "Dropdown", "MultiDropdown", "Keybind", "Label"}) do
-                SectionFunctions[funcName] = function(Options)
-                    return TabFunctions[funcName](Options, SectionContent)
+            for _, functionName in pairs({"Button", "Toggle", "Slider", "TextBox", "Dropdown", "MultiDropdown", "Keybind", "Label"}) do
+                SectionFunctions[functionName] = function(Options)
+                    return TabFunctions[functionName](Options, SectionContent)
                 end
             end
 
             return SectionFunctions
         end
 
-        -- Button Element (Compact)
         function TabFunctions:Button(Options, Parent)
             Parent = Parent or PageFrame
             local ButtonName = Options.Name or "Button"
@@ -925,13 +886,12 @@ function Astral:Window(Options)
             return CreateButton(Parent, ButtonName, Callback, {
                 Size = UDim2.new(1, 0, 0, CurrentElementHeight),
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
-                BorderRadius = "SM",
-                FontSize = "SM",
-                Padding = Astral.Design.Spacing.SM
+                BorderRadius = "Small",
+                FontSize = "Small",
+                Padding = Astral.Design.Spacing.Small
             })
         end
 
-        -- Toggle Element (Compact)
         function TabFunctions:Toggle(Options, Parent)
             Parent = Parent or PageFrame
             local ToggleName = Options.Name or "Toggle"
@@ -944,14 +904,13 @@ function Astral:Window(Options)
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
                 Size = UDim2.new(1, 0, 0, CurrentElementHeight),
                 ClipsDescendants = true
-            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
 
             CreateLabel(ToggleFrame, ToggleName, {
-                FontSize = "SM",
-                Padding = Astral.Design.Spacing.SM
+                FontSize = "Small",
+                Padding = Astral.Design.Spacing.Small
             })
 
-            -- Compact Toggle Switch
             local CheckButton = CreateElement("TextButton", ToggleFrame, {
                 BackgroundColor3 = State and Astral.Theme.Accent or Astral.Theme.Tertiary,
                 Position = UDim2.new(1, -ApplyScale(40, Scale), 0.5, -ApplyScale(8, Scale)),
@@ -987,13 +946,12 @@ function Astral:Window(Options)
             Update()
         end
 
-        -- Slider Element (Compact)
         function TabFunctions:Slider(Options, Parent)
             Parent = Parent or PageFrame
             local SliderName = Options.Name or "Slider"
-            local Min = Options.Min or 0
-            local Max = Options.Max or 100
-            local Default = Options.Default or Min
+            local Minimum = Options.Min or 0
+            local Maximum = Options.Max or 100
+            local Default = Options.Default or Minimum
             local Increment = Options.Increment or 1
             local Callback = Options.Callback or function() end
             local Value = Default
@@ -1003,15 +961,14 @@ function Astral:Window(Options)
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
                 Size = UDim2.new(1, 0, 0, ApplyScale(44, Scale)),
                 ClipsDescendants = true
-            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
 
             CreateLabel(SliderFrame, SliderName, {
                 Size = UDim2.new(1, 0, 0, ApplyScale(16, Scale)),
-                FontSize = "SM",
-                Padding = Astral.Design.Spacing.SM
+                FontSize = "Small",
+                Padding = Astral.Design.Spacing.Small
             })
 
-            -- Compact Value Display
             local ValueInput = CreateElement("TextBox", SliderFrame, {
                 BackgroundColor3 = Astral.Theme.Tertiary,
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
@@ -1020,14 +977,13 @@ function Astral:Window(Options)
                 Font = Enum.Font.GothamBold,
                 Text = tostring(Value),
                 TextColor3 = Astral.Theme.Accent,
-                TextSize = GetDesignValue(Astral.Design.FontSizes, "XS", Scale),
+                TextSize = GetDesignValue(Astral.Design.FontSizes, "ExtraSmall", Scale),
                 ClearTextOnFocus = false
             })
 
-            CreateElement("UICorner", ValueInput, {CornerRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "XS", Scale))})
+            CreateElement("UICorner", ValueInput, {CornerRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "ExtraSmall", Scale))})
             CreateStroke(ValueInput, Astral.Theme.Stroke, 0.5, 0.5)
 
-            -- Compact Slider Track
             local BackgroundFrame = CreateRoundedFrame(SliderFrame, {
                 BackgroundColor3 = Astral.Theme.Tertiary,
                 Position = UDim2.new(0, CurrentSpacing, 1, -ApplyScale(16, Scale)),
@@ -1036,17 +992,16 @@ function Astral:Window(Options)
 
             local FillFrame = CreateRoundedFrame(BackgroundFrame, {
                 BackgroundColor3 = Astral.Theme.Accent,
-                Size = UDim2.new((Value - Min) / (Max - Min), 0, 1, 0)
+                Size = UDim2.new((Value - Minimum) / (Maximum - Minimum), 0, 1, 0)
             }, UDim.new(1, 0))
 
             local BallFrame = CreateRoundedFrame(BackgroundFrame, {
                 BackgroundColor3 = Astral.Theme.Text,
                 Size = UDim2.new(0, ApplyScale(12, Scale), 0, ApplyScale(12, Scale)),
-                Position = UDim2.new((Value - Min) / (Max - Min), -ApplyScale(6, Scale), 0.5, -ApplyScale(6, Scale)),
+                Position = UDim2.new((Value - Minimum) / (Maximum - Minimum), -ApplyScale(6, Scale), 0.5, -ApplyScale(6, Scale)),
                 ZIndex = 2
             }, UDim.new(1, 0))
 
-            -- Slider Logic
             local Dragging = false
 
             local function Update(input)
@@ -1054,10 +1009,10 @@ function Astral:Window(Options)
                 local OffsetX = math.clamp(input.Position.X - BackgroundFrame.AbsolutePosition.X, 0, SizeX)
                 local Percentage = OffsetX / SizeX
 
-                Value = math.floor(((Max - Min) * Percentage + Min) / Increment + 0.5) * Increment
-                Value = math.clamp(Value, Min, Max)
+                Value = math.floor(((Maximum - Minimum) * Percentage + Minimum) / Increment + 0.5) * Increment
+                Value = math.clamp(Value, Minimum, Maximum)
 
-                local VisualPercentage = (Value - Min) / (Max - Min)
+                local VisualPercentage = (Value - Minimum) / (Maximum - Minimum)
 
                 TweenService:Create(FillFrame, TweenInfo.new(0.05), {Size = UDim2.new(VisualPercentage, 0, 1, 0)}):Play()
                 TweenService:Create(BallFrame, TweenInfo.new(0.05), {Position = UDim2.new(VisualPercentage, -ApplyScale(6, Scale), 0.5, -ApplyScale(6, Scale))}):Play()
@@ -1092,8 +1047,8 @@ function Astral:Window(Options)
             ValueInput.FocusLost:Connect(function()
                 local InputValue = tonumber(ValueInput.Text)
                 if InputValue then
-                    Value = math.clamp(math.floor(InputValue / Increment + 0.5) * Increment, Min, Max)
-                    local VisualPercentage = (Value - Min) / (Max - Min)
+                    Value = math.clamp(math.floor(InputValue / Increment + 0.5) * Increment, Minimum, Maximum)
+                    local VisualPercentage = (Value - Minimum) / (Maximum - Minimum)
                     TweenService:Create(FillFrame, TweenInfo.new(0.15), {Size = UDim2.new(VisualPercentage, 0, 1, 0)}):Play()
                     TweenService:Create(BallFrame, TweenInfo.new(0.15), {Position = UDim2.new(VisualPercentage, -ApplyScale(6, Scale), 0.5, -ApplyScale(6, Scale))}):Play()
                     ValueInput.Text = tostring(Value)
@@ -1104,7 +1059,6 @@ function Astral:Window(Options)
             end)
         end
 
-        -- TextBox Element (Compact)
         function TabFunctions:TextBox(Options, Parent)
             Parent = Parent or PageFrame
             local TextBoxName = Options.Name or "TextBox"
@@ -1117,12 +1071,12 @@ function Astral:Window(Options)
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
                 Size = UDim2.new(1, 0, 0, ApplyScale(40, Scale)),
                 ClipsDescendants = true
-            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
 
             CreateLabel(TextBoxFrame, TextBoxName, {
                 Size = UDim2.new(1, 0, 0, ApplyScale(16, Scale)),
-                FontSize = "SM",
-                Padding = Astral.Design.Spacing.SM
+                FontSize = "Small",
+                Padding = Astral.Design.Spacing.Small
             })
 
             local InputBox = CreateElement("TextBox", TextBoxFrame, {
@@ -1135,11 +1089,11 @@ function Astral:Window(Options)
                 PlaceholderColor3 = Astral.Theme.TextDarker,
                 Text = Default,
                 TextColor3 = Astral.Theme.Text,
-                TextSize = GetDesignValue(Astral.Design.FontSizes, "SM", Scale),
+                TextSize = GetDesignValue(Astral.Design.FontSizes, "Small", Scale),
                 ClearTextOnFocus = false
             })
 
-            CreateElement("UICorner", InputBox, {CornerRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "XS", Scale))})
+            CreateElement("UICorner", InputBox, {CornerRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "ExtraSmall", Scale))})
             CreateStroke(InputBox, Astral.Theme.Stroke, 0.5, 0.5)
 
             InputBox.Focused:Connect(function()
@@ -1153,7 +1107,6 @@ function Astral:Window(Options)
             end)
         end
 
-        -- Dropdown Element
         function TabFunctions:Dropdown(Options, Parent)
             Parent = Parent or PageFrame
             local DropdownName = Options.Name or "Dropdown"
@@ -1173,9 +1126,9 @@ function Astral:Window(Options)
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
                 Size = UDim2.new(1, 0, 0, BaseElementHeight),
                 ClipsDescendants = true
-            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
             
-            ApplyCompactPadding(DropdownFrame, Astral.Design.Spacing.SM, Scale)
+            ApplyCompactPadding(DropdownFrame, Astral.Design.Spacing.Small, Scale)
 
             local DropdownButton = CreateButton(DropdownFrame, "", nil, {
                 Size = UDim2.new(1, 0, 0, BaseElementHeight - CurrentSpacing * 2),
@@ -1183,8 +1136,8 @@ function Astral:Window(Options)
             })
 
             local DropdownLabel = CreateLabel(DropdownButton, DropdownName .. (CurrentSelected and (": " .. tostring(CurrentSelected)) or ""), {
-                FontSize = "SM",
-                Padding = Astral.Design.Spacing.SM
+                FontSize = "Small",
+                Padding = Astral.Design.Spacing.Small
             })
 
             local ArrowImage = CreateElement("ImageLabel", DropdownButton, {
@@ -1195,7 +1148,6 @@ function Astral:Window(Options)
                 ImageColor3 = Astral.Theme.Accent
             })
 
-            -- Header with Search
             local Header = CreateElement("Frame", DropdownFrame, {
                 Position = UDim2.new(0, 0, 0, BaseElementHeight - CurrentSpacing),
                 Size = UDim2.new(1, 0, 0, HeaderHeight),
@@ -1211,13 +1163,13 @@ function Astral:Window(Options)
                 Text = "",
                 TextColor3 = Astral.Theme.Text,
                 Font = Enum.Font.Gotham,
-                TextSize = GetDesignValue(Astral.Design.FontSizes, "XS", Scale)
+                TextSize = GetDesignValue(Astral.Design.FontSizes, "ExtraSmall", Scale)
             })
 
-            CreateElement("UICorner", SearchBox, {CornerRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "XS", Scale))})
+            CreateElement("UICorner", SearchBox, {CornerRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "ExtraSmall", Scale))})
             CreateStroke(SearchBox, Astral.Theme.Stroke, 0.5, 0.5)
 
-            local ClearBtn = CreateButton(Header, "CLEAR", function()
+            local ClearButton = CreateButton(Header, "CLEAR", function()
                 CurrentSelected = nil
                 DropdownLabel.Text = DropdownName
                 Callback(nil)
@@ -1226,11 +1178,10 @@ function Astral:Window(Options)
                 Size = UDim2.new(0, ApplyScale(45, Scale), 1, 0),
                 Position = UDim2.new(1, -ApplyScale(45, Scale), 0, 0),
                 BackgroundColor = Astral.Theme.Error,
-                FontSize = "XS",
-                BorderRadius = "XS"
+                FontSize = "ExtraSmall",
+                BorderRadius = "ExtraSmall"
             })
 
-            -- Dropdown List
             local DropdownList = CreateScrollingFrame(DropdownFrame, {
                 Position = UDim2.new(0, 0, 0, BaseElementHeight + HeaderHeight - CurrentSpacing * 2),
                 Size = UDim2.new(1, 0, 0, ListMaxHeight),
@@ -1239,9 +1190,9 @@ function Astral:Window(Options)
             })
             CreateScrollBar(DropdownList)
 
-            ApplyCompactPadding(DropdownList, {Top = Astral.Design.Spacing.SM, Bottom = Astral.Design.Spacing.SM}, Scale)
+            ApplyCompactPadding(DropdownList, {Top = Astral.Design.Spacing.Small, Bottom = Astral.Design.Spacing.Small}, Scale)
 
-            local DropdownLayout = CreateCompactListLayout(DropdownList, "SM", Scale)
+            local DropdownLayout = CreateCompactListLayout(DropdownList, "Small", Scale)
 
             local function Refresh(filter)
                 for _, Child in pairs(DropdownList:GetChildren()) do
@@ -1262,8 +1213,8 @@ function Astral:Window(Options)
                         BackgroundTransparency = IsSelected and 0.15 or Astral.Design.Transparencies.Element,
                         TextColor = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark,
                         Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham,
-                        FontSize = "XS",
-                        BorderRadius = "XS"
+                        FontSize = "ExtraSmall",
+                        BorderRadius = "ExtraSmall"
                     })
                 end
 
@@ -1324,24 +1275,23 @@ function Astral:Window(Options)
             return DropdownFunctions
         end
 
-        -- MultiDropdown Element
         function TabFunctions:MultiDropdown(Options, Parent)
             Parent = Parent or PageFrame
             local DropdownName = Options.Name or "Multi-Dropdown"
             local DropdownOptions = Options.Options or {}
             local Default = Options.Default or {}
             local Callback = Options.Callback or function() end
-            local Max = Options.Max or #DropdownOptions
-            local Min = Options.Min or 0
+            local Maximum = Options.Max or #DropdownOptions
+            local Minimum = Options.Min or 0
 
             local Selected = {}
             local SelectionOrder = {}
             local Dropped = false
 
-            for _, v in pairs(Default) do
-                if #SelectionOrder < Max then
-                    Selected[v] = true
-                    table.insert(SelectionOrder, v)
+            for _, value in pairs(Default) do
+                if #SelectionOrder < Maximum then
+                    Selected[value] = true
+                    table.insert(SelectionOrder, value)
                 end
             end
 
@@ -1356,9 +1306,9 @@ function Astral:Window(Options)
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
                 Size = UDim2.new(1, 0, 0, BaseElementHeight),
                 ClipsDescendants = true
-            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
             
-            ApplyCompactPadding(DropdownFrame, Astral.Design.Spacing.SM, Scale)
+            ApplyCompactPadding(DropdownFrame, Astral.Design.Spacing.Small, Scale)
 
             local DropdownButton = CreateButton(DropdownFrame, "", nil, {
                 Size = UDim2.new(1, 0, 0, BaseElementHeight - CurrentSpacing * 2),
@@ -1366,9 +1316,9 @@ function Astral:Window(Options)
             })
 
             local DropdownLabel = CreateLabel(DropdownButton, "", {
-                FontSize = "SM",
+                FontSize = "Small",
                 TextColor = Astral.Theme.Text,
-                Padding = Astral.Design.Spacing.SM
+                Padding = Astral.Design.Spacing.Small
             })
 
             local function UpdateLabel()
@@ -1389,7 +1339,6 @@ function Astral:Window(Options)
                 ImageColor3 = Astral.Theme.Accent
             })
 
-            -- Header
             local Header = CreateElement("Frame", DropdownFrame, {
                 Position = UDim2.new(0, 0, 0, BaseElementHeight - CurrentSpacing),
                 Size = UDim2.new(1, 0, 0, HeaderHeight),
@@ -1405,15 +1354,15 @@ function Astral:Window(Options)
                 Text = "",
                 TextColor3 = Astral.Theme.Text,
                 Font = Enum.Font.Gotham,
-                TextSize = GetDesignValue(Astral.Design.FontSizes, "XS", Scale)
+                TextSize = GetDesignValue(Astral.Design.FontSizes, "ExtraSmall", Scale)
             })
 
-            CreateElement("UICorner", SearchBox, {CornerRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "XS", Scale))})
+            CreateElement("UICorner", SearchBox, {CornerRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "ExtraSmall", Scale))})
             CreateStroke(SearchBox, Astral.Theme.Stroke, 0.5, 0.5)
 
-            local SelectAllBtn = CreateButton(Header, "ALL", function()
+            local SelectAllButton = CreateButton(Header, "ALL", function()
                 for _, Option in ipairs(DropdownOptions) do
-                    if #SelectionOrder >= Max then break end
+                    if #SelectionOrder >= Maximum then break end
                     if not Selected[Option] then
                         Selected[Option] = true
                         table.insert(SelectionOrder, Option)
@@ -1426,12 +1375,12 @@ function Astral:Window(Options)
                 Size = UDim2.new(0, ApplyScale(45, Scale), 1, 0),
                 Position = UDim2.new(1, -ApplyScale(95, Scale), 0, 0),
                 BackgroundColor = Astral.Theme.Success,
-                FontSize = "XS",
-                BorderRadius = "XS"
+                FontSize = "ExtraSmall",
+                BorderRadius = "ExtraSmall"
             })
 
-            local ClearAllBtn = CreateButton(Header, "CLEAR", function()
-                while #SelectionOrder > Min do
+            local ClearAllButton = CreateButton(Header, "CLEAR", function()
+                while #SelectionOrder > Minimum do
                     local removed = table.remove(SelectionOrder, 1)
                     Selected[removed] = false
                 end
@@ -1442,11 +1391,10 @@ function Astral:Window(Options)
                 Size = UDim2.new(0, ApplyScale(45, Scale), 1, 0),
                 Position = UDim2.new(1, -ApplyScale(45, Scale), 0, 0),
                 BackgroundColor = Astral.Theme.Error,
-                FontSize = "XS",
-                BorderRadius = "XS"
+                FontSize = "ExtraSmall",
+                BorderRadius = "ExtraSmall"
             })
 
-            -- Dropdown List
             local DropdownList = CreateScrollingFrame(DropdownFrame, {
                 Position = UDim2.new(0, 0, 0, BaseElementHeight + HeaderHeight - CurrentSpacing * 2),
                 Size = UDim2.new(1, 0, 0, ListMaxHeight),
@@ -1455,9 +1403,9 @@ function Astral:Window(Options)
             })
             CreateScrollBar(DropdownList)
 
-            ApplyCompactPadding(DropdownList, {Top = Astral.Design.Spacing.SM, Bottom = Astral.Design.Spacing.SM}, Scale)
+            ApplyCompactPadding(DropdownList, {Top = Astral.Design.Spacing.Small, Bottom = Astral.Design.Spacing.Small}, Scale)
 
-            local DropdownLayout = CreateCompactListLayout(DropdownList, "SM", Scale)
+            local DropdownLayout = CreateCompactListLayout(DropdownList, "Small", Scale)
 
             local function Refresh(filter)
                 for _, Child in pairs(DropdownList:GetChildren()) do
@@ -1469,16 +1417,16 @@ function Astral:Window(Options)
                     local IsSelected = Selected[Option]
                     local OptionButton = CreateButton(DropdownList, Option, function()
                         if Selected[Option] then
-                            if #SelectionOrder > Min then
+                            if #SelectionOrder > Minimum then
                                 Selected[Option] = false
-                                for i, v in ipairs(SelectionOrder) do 
-                                    if v == Option then 
+                                for i, value in ipairs(SelectionOrder) do 
+                                    if value == Option then 
                                         table.remove(SelectionOrder, i) 
                                         break 
                                     end 
                                 end
                             end
-                        elseif #SelectionOrder < Max then
+                        elseif #SelectionOrder < Maximum then
                             Selected[Option] = true
                             table.insert(SelectionOrder, Option)
                         end
@@ -1491,8 +1439,8 @@ function Astral:Window(Options)
                         BackgroundTransparency = IsSelected and 0.15 or Astral.Design.Transparencies.Element,
                         TextColor = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark,
                         Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham,
-                        FontSize = "XS",
-                        BorderRadius = "XS"
+                        FontSize = "ExtraSmall",
+                        BorderRadius = "ExtraSmall"
                     })
                 end
 
@@ -1538,10 +1486,10 @@ function Astral:Window(Options)
                 DropdownOptions = Options
                 Selected = {}
                 SelectionOrder = {}
-                for _, v in pairs(Default) do
-                    if #SelectionOrder < Max then
-                        Selected[v] = true
-                        table.insert(SelectionOrder, v)
+                for _, value in pairs(Default) do
+                    if #SelectionOrder < Maximum then
+                        Selected[value] = true
+                        table.insert(SelectionOrder, value)
                     end
                 end
                 UpdateLabel()
@@ -1551,10 +1499,10 @@ function Astral:Window(Options)
             function MultiDropdownFunctions:SetValues(Values)
                 Selected = {}
                 SelectionOrder = {}
-                for _, v in pairs(Values) do
-                    if #SelectionOrder < Max then
-                        Selected[v] = true
-                        table.insert(SelectionOrder, v)
+                for _, value in pairs(Values) do
+                    if #SelectionOrder < Maximum then
+                        Selected[value] = true
+                        table.insert(SelectionOrder, value)
                     end
                 end
                 UpdateLabel()
@@ -1569,7 +1517,6 @@ function Astral:Window(Options)
             return MultiDropdownFunctions
         end
 
-        -- Keybind Element
         function TabFunctions:Keybind(Options, Parent)
             Parent = Parent or PageFrame
             local KeybindName = Options.Name or "Keybind"
@@ -1582,11 +1529,11 @@ function Astral:Window(Options)
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
                 Size = UDim2.new(1, 0, 0, CurrentElementHeight),
                 ClipsDescendants = true
-            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
 
             CreateLabel(KeybindFrame, KeybindName, {
-                FontSize = "SM",
-                Padding = Astral.Design.Spacing.SM
+                FontSize = "Small",
+                Padding = Astral.Design.Spacing.Small
             })
 
             local KeybindButton = CreateRoundedFrame(KeybindFrame, {
@@ -1594,7 +1541,7 @@ function Astral:Window(Options)
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
                 Position = UDim2.new(1, -ApplyScale(65, Scale), 0.5, -ApplyScale(10, Scale)),
                 Size = UDim2.new(0, ApplyScale(55, Scale), 0, ApplyScale(20, Scale))
-            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "XS", Scale)))
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "ExtraSmall", Scale)))
 
             CreateStroke(KeybindButton, Astral.Theme.Stroke, 0.5, 0.5)
 
@@ -1604,7 +1551,7 @@ function Astral:Window(Options)
                 Font = Enum.Font.GothamBold,
                 Text = Current.Name,
                 TextColor3 = Astral.Theme.Accent,
-                TextSize = GetDesignValue(Astral.Design.FontSizes, "XS", Scale),
+                TextSize = GetDesignValue(Astral.Design.FontSizes, "ExtraSmall", Scale),
                 AutoButtonColor = false
             })
 
@@ -1643,7 +1590,6 @@ function Astral:Window(Options)
             return KeybindFunctions
         end
 
-        -- Label Element (Compact)
         function TabFunctions:Label(Options, Parent)
             Parent = Parent or PageFrame
             local LabelText = Options.Text or "Label"
@@ -1652,12 +1598,12 @@ function Astral:Window(Options)
                 BackgroundColor3 = Astral.Theme.Main,
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
                 Size = UDim2.new(1, 0, 0, ApplyScale(24, Scale))
-            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "Small", Scale)))
 
             local Label = CreateLabel(LabelFrame, LabelText, {
-                FontSize = "SM",
+                FontSize = "Small",
                 TextColor = Astral.Theme.TextDark,
-                Padding = Astral.Design.Spacing.SM
+                Padding = Astral.Design.Spacing.Small
             })
 
             local LabelObject = {}
@@ -1675,7 +1621,6 @@ function Astral:Window(Options)
         return TabFunctions
     end
 
-    -- Window Control Functions
     function WindowFunctions:Hide() MainFrame.Visible = false end
     function WindowFunctions:Show() MainFrame.Visible = true end
     function WindowFunctions:Toggle() MainFrame.Visible = not MainFrame.Visible return MainFrame.Visible end
@@ -1703,3 +1648,4 @@ function Astral:Window(Options)
 end
 
 return Astral
+[file content end]
