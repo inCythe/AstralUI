@@ -1,5 +1,3 @@
-[file name]: AstralUI.lua
-[file content begin]
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
@@ -1648,4 +1646,3 @@ function Astral:Window(Options)
 end
 
 return Astral
-[file content end]
