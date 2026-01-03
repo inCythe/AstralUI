@@ -39,12 +39,12 @@ Astral.Design = {
         LG = 8,
         XL = 10
     },
-    ElementHeight = 28, -- Reduced from 34 for more compact layout
-    TopbarHeight = 32, -- Reduced from 36
-    ButtonSize = 24, -- Reduced from 26
-    IconSize = 14, -- Reduced from 16
-    BaseWidth = 560, -- Slightly narrower
-    BaseHeight = 380, -- More compact
+    ElementHeight = 28,
+    TopbarHeight = 32,
+    ButtonSize = 24,
+    IconSize = 14,
+    BaseWidth = 560,
+    BaseHeight = 380,
     FontSizes = {
         XS = 9,
         SM = 10,
@@ -278,7 +278,8 @@ local function CreateScrollingFrame(parent, options)
         ScrollBarThickness = 0,
         ScrollBarImageTransparency = 1,
         BorderSizePixel = 0,
-        ScrollingEnabled = true
+        ScrollingEnabled = true,
+        CanvasSize = UDim2.new(0, 0, 0, 0)
     })
     
     if options.Padding then
@@ -325,6 +326,147 @@ local function MakeDraggable(DragBar, WindowObject)
             Update(input)
         end
     end)
+end
+
+-- ScrollBar Function
+local function CreateScrollBar(ScrollingFrame)
+    ScrollingFrame.ScrollBarThickness = 0
+    ScrollingFrame.ScrollBarImageTransparency = 1
+
+    local ScrollBarVisible = false
+    local LastScrollTime = tick()
+    local IsDragging = false
+    local IsHovering = false
+
+    local function ShowScrollBar()
+        if not ScrollBarVisible then
+            ScrollBarVisible = true
+            TweenService:Create(ScrollingFrame, TweenInfo.new(0.2), {
+                ScrollBarThickness = 3,
+                ScrollBarImageTransparency = Astral.Design.Transparencies.ScrollBar
+            }):Play()
+        end
+        LastScrollTime = tick()
+    end
+
+    local function HideScrollBar()
+        if ScrollBarVisible and not IsDragging and not IsHovering and tick() - LastScrollTime > 0.5 then
+            ScrollBarVisible = false
+            TweenService:Create(ScrollingFrame, TweenInfo.new(0.5), {
+                ScrollBarThickness = 0,
+                ScrollBarImageTransparency = 1
+            }):Play()
+        end
+    end
+
+    ScrollingFrame:GetPropertyChangedSignal("CanvasPosition"):Connect(ShowScrollBar)
+
+    game:GetService("RunService").Heartbeat:Connect(function()
+        if ScrollBarVisible and not IsDragging and not IsHovering and tick() - LastScrollTime > 0.5 then
+            HideScrollBar()
+        end
+    end)
+
+    ScrollingFrame.MouseEnter:Connect(function()
+        IsHovering = true
+        ShowScrollBar()
+    end)
+
+    ScrollingFrame.MouseLeave:Connect(function()
+        IsHovering = false
+        if not IsDragging and tick() - LastScrollTime > 0.5 then
+            HideScrollBar()
+        end
+    end)
+
+    local DragStart = nil
+    local StartCanvasPosition = nil
+
+    UserInputService.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            local MousePosition = UserInputService:GetMouseLocation()
+            local ScrollBarPosition = ScrollingFrame.AbsolutePosition + Vector2.new(ScrollingFrame.AbsoluteSize.X - 8, 0)
+            local ScrollBarSize = Vector2.new(8, ScrollingFrame.AbsoluteSize.Y)
+
+            if MousePosition.X >= ScrollBarPosition.X and MousePosition.X <= ScrollBarPosition.X + ScrollBarSize.X and
+               MousePosition.Y >= ScrollBarPosition.Y and MousePosition.Y <= ScrollBarPosition.Y + ScrollBarSize.Y then
+                IsDragging = true
+                DragStart = MousePosition
+                StartCanvasPosition = ScrollingFrame.CanvasPosition
+                ShowScrollBar()
+            end
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(Input)
+        if IsDragging and Input.UserInputType == Enum.UserInputType.MouseMovement then
+            local MousePosition = UserInputService:GetMouseLocation()
+            local Delta = MousePosition - DragStart
+
+            local MaxScroll = math.max(0, ScrollingFrame.CanvasSize.Y.Offset - ScrollingFrame.AbsoluteSize.Y)
+            local ScrollRatio = Delta.Y / ScrollingFrame.AbsoluteSize.Y
+            local NewPosition = StartCanvasPosition.Y + (ScrollRatio * ScrollingFrame.CanvasSize.Y.Offset)
+            NewPosition = math.clamp(NewPosition, 0, MaxScroll)
+
+            ScrollingFrame.CanvasPosition = Vector2.new(0, NewPosition)
+        end
+    end)
+
+    UserInputService.InputEnded:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            IsDragging = false
+            if not IsHovering then
+                LastScrollTime = tick()
+            end
+        end
+    end)
+end
+
+-- Centering Function
+local function CenterElement(ScrollingFrame, Element, ElementFutureHeight)
+    if not ScrollingFrame or not Element then return end
+
+    local function PerformCentering()
+        local ScrollingFrameCanvasSize = ScrollingFrame.CanvasSize.Y.Offset
+        local ScrollingFrameHeight = ScrollingFrame.AbsoluteSize.Y
+        local ElementPosition = Element.AbsolutePosition.Y - ScrollingFrame.AbsolutePosition.Y + ScrollingFrame.CanvasPosition.Y
+        local ElementHeight = ElementFutureHeight or Element.AbsoluteSize.Y
+
+        local ElementTop = ElementPosition
+        local ElementBottom = ElementPosition + ElementHeight
+
+        local TargetPosition
+
+        if ElementHeight <= ScrollingFrameHeight then
+            TargetPosition = ElementPosition - (ScrollingFrameHeight / 2) + (ElementHeight / 2)
+        else
+            TargetPosition = ElementTop
+        end
+
+        local MaxScroll = math.max(0, ScrollingFrameCanvasSize - ScrollingFrameHeight)
+        TargetPosition = math.clamp(TargetPosition, 0, MaxScroll)
+
+        TweenService:Create(ScrollingFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+            CanvasPosition = Vector2.new(0, TargetPosition)
+        }):Play()
+    end
+
+    if ElementFutureHeight then
+        task.spawn(function()
+            local InitialCanvasSize = ScrollingFrame.CanvasSize.Y.Offset
+            local MaxWaitTime = 0.5
+            local StartTime = tick()
+            
+            while ScrollingFrame.CanvasSize.Y.Offset == InitialCanvasSize and (tick() - StartTime) < MaxWaitTime do
+                task.wait()
+            end
+            
+            task.wait()
+            PerformCentering()
+        end)
+    else
+        PerformCentering()
+    end
 end
 
 -- Main Window Creation (More Compact)
@@ -517,6 +659,7 @@ function Astral:Window(Options)
         Size = UDim2.new(1, -CurrentSpacing * 2, 1, -CurrentSpacing * 2),
         Scale = Scale
     })
+    CreateScrollBar(TabContainer)
 
     local TabLayout = CreateCompactListLayout(TabContainer, "SM", Scale)
     TabLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
@@ -542,6 +685,99 @@ function Astral:Window(Options)
     local WindowFunctions = {}
     local FirstTab = true
     local AllTabs = {}
+
+    -- Notification System
+    local NotificationQueue = {}
+    local ActiveNotifications = {}
+    local MaxNotifications = 5
+
+    local function UpdateNotificationPositions()
+        for Index, Notification in ipairs(ActiveNotifications) do
+            local TargetYOffset = -ApplyScale(20, Scale) - ((Index - 1) * ApplyScale(70, Scale))
+            TweenService:Create(Notification, TweenInfo.new(0.2), {
+                Position = UDim2.new(1, -ApplyScale(20, Scale), 1, TargetYOffset)
+            }):Play()
+        end
+    end
+
+    function WindowFunctions:Notify(Options)
+        local Title = Options.Title or "Notification"
+        local Content = Options.Content or "Message"
+        local Duration = Options.Duration or 3
+        local Type = Options.Type or "Info"
+
+        local TypeColors = {
+            Info = Astral.Theme.Accent,
+            Success = Astral.Theme.Success,
+            Warning = Astral.Theme.Warning,
+            Error = Astral.Theme.Error
+        }
+
+        if #ActiveNotifications >= MaxNotifications then
+            table.insert(NotificationQueue, Options)
+            return
+        end
+
+        local NotificationFrame = CreateRoundedElement("Frame", ScreenGui, {
+            BackgroundColor3 = Astral.Theme.Main,
+            BackgroundTransparency = Astral.Design.Transparencies.Background,
+            Size = UDim2.new(0, ApplyScale(280, Scale), 0, ApplyScale(60, Scale)),
+            AnchorPoint = Vector2.new(1, 1),
+            Position = UDim2.new(1.5, 0, 1, -ApplyScale(20, Scale)),
+            ZIndex = 100
+        }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))[1]
+
+        CreateStroke(NotificationFrame, TypeColors[Type], 1, 0.4)
+
+        -- Notification Title
+        CreateLabel(NotificationFrame, Title, {
+            Size = UDim2.new(1, 0, 0, ApplyScale(16, Scale)),
+            Font = Enum.Font.GothamBold,
+            FontSize = "SM",
+            Padding = Astral.Design.Spacing.SM
+        })
+
+        -- Notification Content
+        local ContentLabel = CreateLabel(NotificationFrame, Content, {
+            Position = UDim2.new(0, 0, 0, ApplyScale(20, Scale)),
+            Size = UDim2.new(1, 0, 1, -ApplyScale(26, Scale)),
+            Font = Enum.Font.Gotham,
+            FontSize = "XS",
+            TextColor = Astral.Theme.TextDark,
+            TextYAlignment = Enum.TextYAlignment.Top,
+            TextWrapped = true,
+            Padding = Astral.Design.Spacing.SM
+        })
+
+        table.insert(ActiveNotifications, NotificationFrame)
+        UpdateNotificationPositions()
+
+        TweenService:Create(NotificationFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {
+            Position = UDim2.new(1, -ApplyScale(20, Scale), 1, NotificationFrame.Position.Y.Offset)
+        }):Play()
+
+        task.delay(Duration, function()
+            TweenService:Create(NotificationFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+                Position = UDim2.new(1.5, 0, 1, NotificationFrame.Position.Y.Offset),
+                BackgroundTransparency = 1
+            }):Play()
+
+            task.wait(0.3)
+            NotificationFrame:Destroy()
+            for i, v in ipairs(ActiveNotifications) do
+                if v == NotificationFrame then
+                    table.remove(ActiveNotifications, i)
+                    break
+                end
+            end
+            UpdateNotificationPositions()
+
+            if #NotificationQueue > 0 then
+                local Next = table.remove(NotificationQueue, 1)
+                WindowFunctions:Notify(Next)
+            end
+        end)
+    end
 
     -- Tab Creation
     function WindowFunctions:Tab(Options)
@@ -592,6 +828,7 @@ function Astral:Window(Options)
             Scale = Scale
         })
         ApplyCompactPadding(PageFrame, Astral.Design.Spacing.SM, Scale)
+        CreateScrollBar(PageFrame)
 
         local PageLayout = CreateCompactListLayout(PageFrame, "SM", Scale)
         PageLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
@@ -831,6 +1068,7 @@ function Astral:Window(Options)
             BackgroundFrame.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     Dragging = true
+                    CenterElement(PageFrame, SliderFrame)
                     Update(input)
                 end
             end)
@@ -845,6 +1083,10 @@ function Astral:Window(Options)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     Dragging = false
                 end
+            end)
+
+            ValueInput.Focused:Connect(function()
+                CenterElement(PageFrame, SliderFrame)
             end)
 
             ValueInput.FocusLost:Connect(function()
@@ -900,6 +1142,10 @@ function Astral:Window(Options)
             CreateElement("UICorner", InputBox, {CornerRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "XS", Scale))})
             CreateStroke(InputBox, Astral.Theme.Stroke, 0.5, 0.5)
 
+            InputBox.Focused:Connect(function()
+                CenterElement(PageFrame, TextBoxFrame)
+            end)
+
             InputBox.FocusLost:Connect(function(EnterPressed)
                 if EnterPressed then
                     Callback(InputBox.Text)
@@ -907,7 +1153,7 @@ function Astral:Window(Options)
             end)
         end
 
-        -- Dropdown (Compact - keep original logic but with new styling)
+        -- Dropdown Element
         function TabFunctions:Dropdown(Options, Parent)
             Parent = Parent or PageFrame
             local DropdownName = Options.Name or "Dropdown"
@@ -931,29 +1177,12 @@ function Astral:Window(Options)
             
             ApplyCompactPadding(DropdownFrame, Astral.Design.Spacing.SM, Scale)
 
-            local DropdownButton = CreateButton(DropdownFrame, "", function()
-                Dropped = not Dropped
-                if Dropped then 
-                    Header.Visible = true
-                    DropdownList.Visible = true
-                    TweenService:Create(DropdownFrame, TweenInfo.new(0.15), {
-                        Size = UDim2.new(1, 0, 0, TotalHeightWhenDropped)
-                    }):Play()
-                    TweenService:Create(ArrowImage, TweenInfo.new(0.15), {Rotation = 180}):Play()
-                else
-                    Header.Visible = false
-                    DropdownList.Visible = false
-                    TweenService:Create(DropdownFrame, TweenInfo.new(0.15), {
-                        Size = UDim2.new(1, 0, 0, BaseElementHeight)
-                    }):Play()
-                    TweenService:Create(ArrowImage, TweenInfo.new(0.15), {Rotation = 0}):Play()
-                end
-            end, {
+            local DropdownButton = CreateButton(DropdownFrame, "", nil, {
                 Size = UDim2.new(1, 0, 0, BaseElementHeight - CurrentSpacing * 2),
                 BackgroundTransparency = 1
             })
 
-            CreateLabel(DropdownButton, DropdownName .. (CurrentSelected and (": " .. tostring(CurrentSelected)) or ""), {
+            local DropdownLabel = CreateLabel(DropdownButton, DropdownName .. (CurrentSelected and (": " .. tostring(CurrentSelected)) or ""), {
                 FontSize = "SM",
                 Padding = Astral.Design.Spacing.SM
             })
@@ -966,7 +1195,7 @@ function Astral:Window(Options)
                 ImageColor3 = Astral.Theme.Accent
             })
 
-            -- Dropdown content (simplified)
+            -- Header with Search
             local Header = CreateElement("Frame", DropdownFrame, {
                 Position = UDim2.new(0, 0, 0, BaseElementHeight - CurrentSpacing),
                 Size = UDim2.new(1, 0, 0, HeaderHeight),
@@ -974,18 +1203,445 @@ function Astral:Window(Options)
                 Visible = false
             })
 
-            -- Add dropdown list logic here (similar to original but more compact)
-            -- ... (rest of dropdown logic)
+            local SearchBox = CreateElement("TextBox", Header, {
+                Size = UDim2.new(1, -ApplyScale(50, Scale), 1, 0),
+                BackgroundColor3 = Astral.Theme.Tertiary,
+                BackgroundTransparency = Astral.Design.Transparencies.Element,
+                PlaceholderText = "Search...",
+                Text = "",
+                TextColor3 = Astral.Theme.Text,
+                Font = Enum.Font.Gotham,
+                TextSize = GetDesignValue(Astral.Design.FontSizes, "XS", Scale)
+            })
 
-            -- Return a placeholder for now
+            CreateElement("UICorner", SearchBox, {CornerRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "XS", Scale))})
+            CreateStroke(SearchBox, Astral.Theme.Stroke, 0.5, 0.5)
+
+            local ClearBtn = CreateButton(Header, "CLEAR", function()
+                CurrentSelected = nil
+                DropdownLabel.Text = DropdownName
+                Callback(nil)
+                Refresh(SearchBox.Text)
+            end, {
+                Size = UDim2.new(0, ApplyScale(45, Scale), 1, 0),
+                Position = UDim2.new(1, -ApplyScale(45, Scale), 0, 0),
+                BackgroundColor = Astral.Theme.Error,
+                FontSize = "XS",
+                BorderRadius = "XS"
+            })
+
+            -- Dropdown List
+            local DropdownList = CreateScrollingFrame(DropdownFrame, {
+                Position = UDim2.new(0, 0, 0, BaseElementHeight + HeaderHeight - CurrentSpacing * 2),
+                Size = UDim2.new(1, 0, 0, ListMaxHeight),
+                Visible = false,
+                Scale = Scale
+            })
+            CreateScrollBar(DropdownList)
+
+            ApplyCompactPadding(DropdownList, {Top = Astral.Design.Spacing.SM, Bottom = Astral.Design.Spacing.SM}, Scale)
+
+            local DropdownLayout = CreateCompactListLayout(DropdownList, "SM", Scale)
+
+            local function Refresh(filter)
+                for _, Child in pairs(DropdownList:GetChildren()) do
+                    if Child:IsA("TextButton") then Child:Destroy() end
+                end
+                for _, Option in pairs(DropdownOptions) do
+                    if filter and filter ~= "" and not string.find(string.lower(Option), string.lower(filter)) then continue end
+
+                    local IsSelected = (CurrentSelected == Option)
+                    local OptionButton = CreateButton(DropdownList, Option, function()
+                        CurrentSelected = Option
+                        DropdownLabel.Text = DropdownName .. ": " .. Option
+                        Callback(Option)
+                        Refresh(SearchBox.Text)
+                    end, {
+                        Size = UDim2.new(1, 0, 0, ApplyScale(24, Scale)),
+                        BackgroundColor = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary,
+                        BackgroundTransparency = IsSelected and 0.15 or Astral.Design.Transparencies.Element,
+                        TextColor = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark,
+                        Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham,
+                        FontSize = "XS",
+                        BorderRadius = "XS"
+                    })
+                end
+
+                local ContentHeight = DropdownLayout.AbsoluteContentSize.Y
+                DropdownList.CanvasSize = UDim2.new(0, 0, 0, ContentHeight + CurrentSpacing)
+                DropdownList.ScrollingEnabled = ContentHeight > ListMaxHeight
+            end
+
+            SearchBox:GetPropertyChangedSignal("Text"):Connect(function() 
+                Refresh(SearchBox.Text) 
+            end)
+
+            DropdownButton.MouseButton1Click:Connect(function()
+                Dropped = not Dropped
+                if Dropped then 
+                    Refresh()
+                    Header.Visible = true
+                    DropdownList.Visible = true
+                    
+                    CenterElement(PageFrame, DropdownFrame, TotalHeightWhenDropped)
+                    
+                    TweenService:Create(DropdownFrame, TweenInfo.new(0.15), {
+                        Size = UDim2.new(1, 0, 0, TotalHeightWhenDropped)
+                    }):Play()
+                    TweenService:Create(ArrowImage, TweenInfo.new(0.15), {
+                        Rotation = 180
+                    }):Play()
+                else
+                    Header.Visible = false
+                    DropdownList.Visible = false
+                    
+                    TweenService:Create(DropdownFrame, TweenInfo.new(0.15), {
+                        Size = UDim2.new(1, 0, 0, BaseElementHeight)
+                    }):Play()
+                    TweenService:Create(ArrowImage, TweenInfo.new(0.15), {
+                        Rotation = 0
+                    }):Play()
+                end
+            end)
+
             local DropdownFunctions = {}
             function DropdownFunctions:SetOptions(Options)
-                -- Implementation
+                DropdownOptions = Options
+                Refresh(SearchBox.Text)
             end
+            
+            function DropdownFunctions:SetValue(Value)
+                CurrentSelected = Value
+                DropdownLabel.Text = DropdownName .. (CurrentSelected and (": " .. tostring(CurrentSelected)) or "")
+                Callback(CurrentSelected)
+                Refresh(SearchBox.Text)
+            end
+            
+            function DropdownFunctions:GetValue()
+                return CurrentSelected
+            end
+            
             return DropdownFunctions
         end
 
-        -- Add other elements (Keybind, Label, etc.) with similar compact styling...
+        -- MultiDropdown Element
+        function TabFunctions:MultiDropdown(Options, Parent)
+            Parent = Parent or PageFrame
+            local DropdownName = Options.Name or "Multi-Dropdown"
+            local DropdownOptions = Options.Options or {}
+            local Default = Options.Default or {}
+            local Callback = Options.Callback or function() end
+            local Max = Options.Max or #DropdownOptions
+            local Min = Options.Min or 0
+
+            local Selected = {}
+            local SelectionOrder = {}
+            local Dropped = false
+
+            for _, v in pairs(Default) do
+                if #SelectionOrder < Max then
+                    Selected[v] = true
+                    table.insert(SelectionOrder, v)
+                end
+            end
+
+            local BaseElementHeight = CurrentElementHeight
+            local ListMaxHeight = ApplyScale(120, Scale)
+            local HeaderHeight = ApplyScale(26, Scale)
+            
+            local TotalHeightWhenDropped = BaseElementHeight + HeaderHeight + ListMaxHeight + CurrentSpacing * 2
+
+            local DropdownFrame = CreateRoundedFrame(Parent, {
+                BackgroundColor3 = Astral.Theme.Main,
+                BackgroundTransparency = Astral.Design.Transparencies.Element,
+                Size = UDim2.new(1, 0, 0, BaseElementHeight),
+                ClipsDescendants = true
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+            
+            ApplyCompactPadding(DropdownFrame, Astral.Design.Spacing.SM, Scale)
+
+            local DropdownButton = CreateButton(DropdownFrame, "", nil, {
+                Size = UDim2.new(1, 0, 0, BaseElementHeight - CurrentSpacing * 2),
+                BackgroundTransparency = 1
+            })
+
+            local DropdownLabel = CreateLabel(DropdownButton, "", {
+                FontSize = "SM",
+                TextColor = Astral.Theme.Text,
+                Padding = Astral.Design.Spacing.SM
+            })
+
+            local function UpdateLabel()
+                if #SelectionOrder == 0 then
+                    DropdownLabel.Text = DropdownName
+                else
+                    local combinedText = DropdownName .. ": " .. table.concat(SelectionOrder, ", ")
+                    DropdownLabel.Text = string.sub(combinedText, 1, 50) .. (#combinedText > 50 and "..." or "")
+                end
+            end
+            UpdateLabel()
+
+            local ArrowImage = CreateElement("ImageLabel", DropdownButton, {
+                BackgroundTransparency = 1,
+                Position = UDim2.new(1, -ApplyScale(20, Scale), 0.5, -ApplyScale(5, Scale)),
+                Size = UDim2.new(0, ApplyScale(10, Scale), 0, ApplyScale(10, Scale)),
+                Image = "rbxassetid://6031091004",
+                ImageColor3 = Astral.Theme.Accent
+            })
+
+            -- Header
+            local Header = CreateElement("Frame", DropdownFrame, {
+                Position = UDim2.new(0, 0, 0, BaseElementHeight - CurrentSpacing),
+                Size = UDim2.new(1, 0, 0, HeaderHeight),
+                BackgroundTransparency = 1,
+                Visible = false
+            })
+
+            local SearchBox = CreateElement("TextBox", Header, {
+                Size = UDim2.new(1, -ApplyScale(100, Scale), 1, 0),
+                BackgroundColor3 = Astral.Theme.Tertiary,
+                BackgroundTransparency = Astral.Design.Transparencies.Element,
+                PlaceholderText = "Search...",
+                Text = "",
+                TextColor3 = Astral.Theme.Text,
+                Font = Enum.Font.Gotham,
+                TextSize = GetDesignValue(Astral.Design.FontSizes, "XS", Scale)
+            })
+
+            CreateElement("UICorner", SearchBox, {CornerRadius = UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "XS", Scale))})
+            CreateStroke(SearchBox, Astral.Theme.Stroke, 0.5, 0.5)
+
+            local SelectAllBtn = CreateButton(Header, "ALL", function()
+                for _, Option in ipairs(DropdownOptions) do
+                    if #SelectionOrder >= Max then break end
+                    if not Selected[Option] then
+                        Selected[Option] = true
+                        table.insert(SelectionOrder, Option)
+                    end
+                end
+                UpdateLabel()
+                Refresh(SearchBox.Text)
+                Callback(SelectionOrder)
+            end, {
+                Size = UDim2.new(0, ApplyScale(45, Scale), 1, 0),
+                Position = UDim2.new(1, -ApplyScale(95, Scale), 0, 0),
+                BackgroundColor = Astral.Theme.Success,
+                FontSize = "XS",
+                BorderRadius = "XS"
+            })
+
+            local ClearAllBtn = CreateButton(Header, "CLEAR", function()
+                while #SelectionOrder > Min do
+                    local removed = table.remove(SelectionOrder, 1)
+                    Selected[removed] = false
+                end
+                UpdateLabel()
+                Refresh(SearchBox.Text)
+                Callback(SelectionOrder)
+            end, {
+                Size = UDim2.new(0, ApplyScale(45, Scale), 1, 0),
+                Position = UDim2.new(1, -ApplyScale(45, Scale), 0, 0),
+                BackgroundColor = Astral.Theme.Error,
+                FontSize = "XS",
+                BorderRadius = "XS"
+            })
+
+            -- Dropdown List
+            local DropdownList = CreateScrollingFrame(DropdownFrame, {
+                Position = UDim2.new(0, 0, 0, BaseElementHeight + HeaderHeight - CurrentSpacing * 2),
+                Size = UDim2.new(1, 0, 0, ListMaxHeight),
+                Visible = false,
+                Scale = Scale
+            })
+            CreateScrollBar(DropdownList)
+
+            ApplyCompactPadding(DropdownList, {Top = Astral.Design.Spacing.SM, Bottom = Astral.Design.Spacing.SM}, Scale)
+
+            local DropdownLayout = CreateCompactListLayout(DropdownList, "SM", Scale)
+
+            local function Refresh(filter)
+                for _, Child in pairs(DropdownList:GetChildren()) do
+                    if Child:IsA("TextButton") then Child:Destroy() end
+                end
+                for _, Option in pairs(DropdownOptions) do
+                    if filter and filter ~= "" and not string.find(string.lower(Option), string.lower(filter)) then continue end
+
+                    local IsSelected = Selected[Option]
+                    local OptionButton = CreateButton(DropdownList, Option, function()
+                        if Selected[Option] then
+                            if #SelectionOrder > Min then
+                                Selected[Option] = false
+                                for i, v in ipairs(SelectionOrder) do 
+                                    if v == Option then 
+                                        table.remove(SelectionOrder, i) 
+                                        break 
+                                    end 
+                                end
+                            end
+                        elseif #SelectionOrder < Max then
+                            Selected[Option] = true
+                            table.insert(SelectionOrder, Option)
+                        end
+                        UpdateLabel()
+                        Refresh(SearchBox.Text)
+                        Callback(SelectionOrder)
+                    end, {
+                        Size = UDim2.new(1, 0, 0, ApplyScale(24, Scale)),
+                        BackgroundColor = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary,
+                        BackgroundTransparency = IsSelected and 0.15 or Astral.Design.Transparencies.Element,
+                        TextColor = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark,
+                        Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham,
+                        FontSize = "XS",
+                        BorderRadius = "XS"
+                    })
+                end
+
+                local ContentHeight = DropdownLayout.AbsoluteContentSize.Y
+                DropdownList.CanvasSize = UDim2.new(0, 0, 0, ContentHeight + CurrentSpacing)
+                DropdownList.ScrollingEnabled = ContentHeight > ListMaxHeight
+            end
+
+            SearchBox:GetPropertyChangedSignal("Text"):Connect(function() 
+                Refresh(SearchBox.Text) 
+            end)
+
+            DropdownButton.MouseButton1Click:Connect(function()
+                Dropped = not Dropped
+                if Dropped then 
+                    Refresh()
+                    Header.Visible = true
+                    DropdownList.Visible = true
+                    
+                    CenterElement(PageFrame, DropdownFrame, TotalHeightWhenDropped)
+                    
+                    TweenService:Create(DropdownFrame, TweenInfo.new(0.15), {
+                        Size = UDim2.new(1, 0, 0, TotalHeightWhenDropped)
+                    }):Play()
+                    TweenService:Create(ArrowImage, TweenInfo.new(0.15), {
+                        Rotation = 180
+                    }):Play()
+                else
+                    Header.Visible = false
+                    DropdownList.Visible = false
+                    
+                    TweenService:Create(DropdownFrame, TweenInfo.new(0.15), {
+                        Size = UDim2.new(1, 0, 0, BaseElementHeight)
+                    }):Play()
+                    TweenService:Create(ArrowImage, TweenInfo.new(0.15), {
+                        Rotation = 0
+                    }):Play()
+                end
+            end)
+
+            local MultiDropdownFunctions = {}
+            function MultiDropdownFunctions:SetOptions(Options)
+                DropdownOptions = Options
+                Selected = {}
+                SelectionOrder = {}
+                for _, v in pairs(Default) do
+                    if #SelectionOrder < Max then
+                        Selected[v] = true
+                        table.insert(SelectionOrder, v)
+                    end
+                end
+                UpdateLabel()
+                Refresh(SearchBox.Text)
+            end
+            
+            function MultiDropdownFunctions:SetValues(Values)
+                Selected = {}
+                SelectionOrder = {}
+                for _, v in pairs(Values) do
+                    if #SelectionOrder < Max then
+                        Selected[v] = true
+                        table.insert(SelectionOrder, v)
+                    end
+                end
+                UpdateLabel()
+                Refresh(SearchBox.Text)
+                Callback(SelectionOrder)
+            end
+            
+            function MultiDropdownFunctions:GetValues()
+                return SelectionOrder
+            end
+            
+            return MultiDropdownFunctions
+        end
+
+        -- Keybind Element
+        function TabFunctions:Keybind(Options, Parent)
+            Parent = Parent or PageFrame
+            local KeybindName = Options.Name or "Keybind"
+            local Default = Options.Default or Enum.KeyCode.E
+            local Callback = Options.Callback or function() end
+            local Current = Default
+
+            local KeybindFrame = CreateRoundedFrame(Parent, {
+                BackgroundColor3 = Astral.Theme.Main,
+                BackgroundTransparency = Astral.Design.Transparencies.Element,
+                Size = UDim2.new(1, 0, 0, CurrentElementHeight),
+                ClipsDescendants = true
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
+
+            CreateLabel(KeybindFrame, KeybindName, {
+                FontSize = "SM",
+                Padding = Astral.Design.Spacing.SM
+            })
+
+            local KeybindButton = CreateRoundedFrame(KeybindFrame, {
+                BackgroundColor3 = Astral.Theme.Tertiary,
+                BackgroundTransparency = Astral.Design.Transparencies.Element,
+                Position = UDim2.new(1, -ApplyScale(65, Scale), 0.5, -ApplyScale(10, Scale)),
+                Size = UDim2.new(0, ApplyScale(55, Scale), 0, ApplyScale(20, Scale))
+            }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "XS", Scale)))
+
+            CreateStroke(KeybindButton, Astral.Theme.Stroke, 0.5, 0.5)
+
+            local KeybindText = CreateElement("TextButton", KeybindButton, {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 1, 0),
+                Font = Enum.Font.GothamBold,
+                Text = Current.Name,
+                TextColor3 = Astral.Theme.Accent,
+                TextSize = GetDesignValue(Astral.Design.FontSizes, "XS", Scale),
+                AutoButtonColor = false
+            })
+
+            local Binding = false
+            KeybindText.MouseButton1Click:Connect(function()
+                Binding = true
+                KeybindText.Text = "..."
+                KeybindText.TextColor3 = Astral.Theme.Warning
+            end)
+
+            local function SetKeybind(key)
+                Current = key
+                KeybindText.Text = Current.Name
+                KeybindText.TextColor3 = Astral.Theme.Accent
+                Callback(Current)
+            end
+
+            UserInputService.InputBegan:Connect(function(input, GameProcessed)
+                if not GameProcessed and Binding and input.UserInputType == Enum.UserInputType.Keyboard then
+                    Binding = false
+                    SetKeybind(input.KeyCode)
+                elseif not GameProcessed and input.KeyCode == Current then
+                    Callback(Current)
+                end
+            end)
+
+            local KeybindFunctions = {}
+            function KeybindFunctions:SetKeybind(key)
+                SetKeybind(key)
+            end
+            
+            function KeybindFunctions:GetKeybind()
+                return Current
+            end
+            
+            return KeybindFunctions
+        end
 
         -- Label Element (Compact)
         function TabFunctions:Label(Options, Parent)
@@ -995,7 +1651,7 @@ function Astral:Window(Options)
             local LabelFrame = CreateRoundedFrame(Parent, {
                 BackgroundColor3 = Astral.Theme.Main,
                 BackgroundTransparency = Astral.Design.Transparencies.Element,
-                Size = UDim2.new(1, 0, 0, ApplyScale(26, Scale))
+                Size = UDim2.new(1, 0, 0, ApplyScale(24, Scale))
             }, UDim.new(0, GetDesignValue(Astral.Design.BorderRadius, "SM", Scale)))
 
             local Label = CreateLabel(LabelFrame, LabelText, {
@@ -1008,6 +1664,11 @@ function Astral:Window(Options)
             function LabelObject:SetText(Text)
                 Label.Text = Text
             end
+            
+            function LabelObject:GetText()
+                return Label.Text
+            end
+            
             return LabelObject
         end
 
@@ -1019,6 +1680,7 @@ function Astral:Window(Options)
     function WindowFunctions:Show() MainFrame.Visible = true end
     function WindowFunctions:Toggle() MainFrame.Visible = not MainFrame.Visible return MainFrame.Visible end
     function WindowFunctions:Destroy() ScreenGui:Destroy() end
+    function WindowFunctions:Minimize() MainFrame.Visible = false end
     function WindowFunctions:GetMainFrame() return MainFrame end
     function WindowFunctions:GetScreenGui() return ScreenGui end
 
