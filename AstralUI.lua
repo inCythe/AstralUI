@@ -79,18 +79,18 @@ Astral.Config = {
 		LabelFont = Enum.Font.GothamMedium, -- Element label font
 		LabelSize = 12,                 -- Element label text size
 		LabelAlignment = Enum.TextXAlignment.Left, -- Element label alignment
-		
+
 		Button = {
 			HoverTransparency = 0.15,   -- Button hover transparency
 			NormalTransparency = 0.25   -- Button normal transparency
 		},
-		
+
 		Toggle = {
 			Width = 38,                  -- Toggle switch width
 			Height = 18,                 -- Toggle switch height
 			CircleSize = 14              -- Toggle circle size
 		},
-		
+
 		Slider = {
 			Height = 50,                 -- Slider height
 			LabelHeight = 16,            -- Slider label height
@@ -101,7 +101,7 @@ Astral.Config = {
 			BallSize = 14,               -- Slider ball size
 			ValueInputFont = Enum.Font.GothamBold -- Value input font
 		},
-		
+
 		TextBox = {
 			Height = 44,                 -- TextBox height
 			LabelHeight = 16,            -- TextBox label height
@@ -112,7 +112,7 @@ Astral.Config = {
 			StrokeThickness = 1,         -- TextBox border thickness
 			StrokeTransparency = 0.5     -- TextBox border transparency
 		},
-		
+
 		Dropdown = {
 			Height = 34,                 -- Dropdown height
 			LabelTextSize = 12,          -- Dropdown label text size
@@ -129,7 +129,7 @@ Astral.Config = {
 			StrokeThickness = 1,         -- Input border thickness
 			StrokeTransparency = 0.5     -- Input border transparency
 		},
-		
+
 		MultiDropdown = {
 			Height = 34,                 -- Multi-dropdown height
 			ListAreaHeight = 120,        -- Multi-dropdown list area height
@@ -141,7 +141,7 @@ Astral.Config = {
 			ClearButtonText = "CLEAR",   -- Clear button text
 			SelectAllButtonText = "ALL"  -- Select all button text
 		},
-		
+
 		Keybind = {
 			ButtonWidth = 58,            -- Keybind button width
 			ButtonHeight = 24,           -- Keybind button height
@@ -150,13 +150,13 @@ Astral.Config = {
 			StrokeThickness = 1,         -- Keybind border thickness
 			StrokeTransparency = 0.5     -- Keybind border transparency
 		},
-		
+
 		Label = {
 			Height = 30,                 -- Label height
 			TextSize = 11,               -- Label text size
 			Font = Enum.Font.Gotham      -- Label font
 		},
-		
+
 		Section = {
 			CornerRadius = 8,            -- Section corner rounding
 			HeaderHeight = 34,           -- Section header height
@@ -214,8 +214,8 @@ Astral.Theme = {
 	HoverBright = Color3.fromRGB(35, 35, 42),-- Hover state color
 	Success = Color3.fromRGB(80, 200, 120),  -- Success color
 	Warning = Color3.fromRGB(255, 180, 80),  -- Warning color
-	Error = Color3.fromRGB(255, 100, 100),   -- Error color
-	
+	Error = Color3.fromRGB(255, 100, 100),   -- Error color,
+
 	TypeColors = {
 		Info = Color3.fromRGB(88, 139, 255),    -- Info notification color
 		Success = Color3.fromRGB(80, 200, 120), -- Success notification color
@@ -230,7 +230,7 @@ function Astral:SetTheme(NewTheme)
 			Astral.Theme[Key] = Value
 		end
 	end
-	
+
 	if not NewTheme.TypeColors then
 		Astral.Theme.TypeColors.Info = Astral.Theme.Accent
 		Astral.Theme.TypeColors.Success = Astral.Theme.Success
@@ -249,7 +249,7 @@ function Astral:SetConfig(NewConfig)
 			end
 		end
 	end
-	
+
 	UpdateConfigTable(Astral.Config, NewConfig)
 end
 
@@ -360,53 +360,68 @@ local function AddClickEffect(Object)
 	Object.MouseLeave:Connect(Restore)
 end
 
-local function CenterElement(ScrollingFrame, Element, ElementFutureHeight)
+local function ScrollToElement(ScrollingFrame, Element, ElementFutureHeight)
 	if not ScrollingFrame or not Element then return end
 
-	local function PerformCentering()
-		local ScrollingFrameCanvasSize = ScrollingFrame.CanvasSize.Y.Offset
-		local ScrollingFrameHeight = ScrollingFrame.AbsoluteSize.Y
-		local ElementPosition = Element.AbsolutePosition.Y - ScrollingFrame.AbsolutePosition.Y + ScrollingFrame.CanvasPosition.Y
-		local ElementHeight = ElementFutureHeight or Element.AbsoluteSize.Y
+	local function PerformScrolling(UseFutureHeight)
+		local CanvasSize = ScrollingFrame.CanvasSize.Y.Offset
+		local ViewportHeight = ScrollingFrame.AbsoluteSize.Y
 
-		local ElementTop = ElementPosition
-		local ElementBottom = ElementPosition + ElementHeight
+		local ElementAbsY = Element.AbsolutePosition.Y
+		local FrameAbsY = ScrollingFrame.AbsolutePosition.Y
+		local CanvasPosY = ScrollingFrame.CanvasPosition.Y
+
+		local ElementPosY = ElementAbsY - FrameAbsY + CanvasPosY
+
+		local ElementHeight
+		if UseFutureHeight and ElementFutureHeight then
+			ElementHeight = ElementFutureHeight
+		else
+			ElementHeight = Element.AbsoluteSize.Y
+		end
+
+		local ElementTop = ElementPosY
+		local ElementBottom = ElementPosY + ElementHeight
+		local ViewportTop = ScrollingFrame.CanvasPosition.Y
+		local ViewportBottom = ViewportTop + ViewportHeight
 
 		local TargetPosition
 
-		if ElementHeight <= ScrollingFrameHeight then
-			TargetPosition = ElementPosition - (ScrollingFrameHeight / 2) + (ElementHeight / 2)
-		else
+		if ElementHeight > ViewportHeight then
 			TargetPosition = ElementTop
+		else
+			if ElementTop >= ViewportTop and ElementBottom <= ViewportBottom then
+				return
+			end
+
+			if ElementTop < ViewportTop then
+				TargetPosition = ElementTop
+			elseif ElementBottom > ViewportBottom then
+				TargetPosition = ElementBottom - ViewportHeight
+			else
+				TargetPosition = ElementTop
+			end
 		end
 
-		local MaxScroll = math.max(0, ScrollingFrameCanvasSize - ScrollingFrameHeight)
+		local MaxScroll = math.max(0, CanvasSize - ViewportHeight)
 		TargetPosition = math.clamp(TargetPosition, 0, MaxScroll)
 
 		TweenService:Create(ScrollingFrame, TweenInfo.new(
 			Astral.Config.Animation.CenterElementDuration,
 			Astral.Config.Animation.EasingStyle,
 			Astral.Config.Animation.EasingDirection
-		), {
-			CanvasPosition = Vector2.new(0, TargetPosition)
-		}):Play()
+			), {
+				CanvasPosition = Vector2.new(0, TargetPosition)
+			}):Play()
 	end
 
 	if ElementFutureHeight then
 		task.spawn(function()
-			local InitialCanvasSize = ScrollingFrame.CanvasSize.Y.Offset
-			local MaxWaitTime = 0.5
-			local StartTime = tick()
-
-			while ScrollingFrame.CanvasSize.Y.Offset == InitialCanvasSize and (tick() - StartTime) < MaxWaitTime do
-				task.wait()
-			end
-
-			task.wait()
-			PerformCentering()
+			task.wait(0.05)
+			PerformScrolling(true)
 		end)
 	else
-		PerformCentering()
+		PerformScrolling(false)
 	end
 end
 
@@ -554,7 +569,7 @@ function Astral:Window(Options)
 	local TopbarFrame = Instance.new("Frame")
 	TopbarFrame.Name = "Topbar"
 	TopbarFrame.Parent = MainFrame
-	TopbarFrame.BackgroundColor3 = Astral.Theme.Tertiary
+	TopbarFrame.BackgroundColor3 = Astral.Theme.Main
 	TopbarFrame.BackgroundTransparency = Astral.Config.Topbar.BackgroundTransparency
 	TopbarFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 0, ApplyScale(BasePadding))
 	TopbarFrame.Size = UDim2.new(1, -ApplyScale(88), 0, ApplyScale(TopbarHeight))
@@ -624,10 +639,10 @@ function Astral:Window(Options)
 			Astral.Config.Animation.WindowCloseDuration, 
 			Enum.EasingStyle.Back, 
 			Enum.EasingDirection.In
-		), {
-			Size = UDim2.new(0, 0, 0, 0),
-			Position = UDim2.new(0.5, 0, 0.5, 0)
-		})
+			), {
+				Size = UDim2.new(0, 0, 0, 0),
+				Position = UDim2.new(0.5, 0, 0.5, 0)
+			})
 		Tween:Play()
 		task.wait(Astral.Config.Animation.WindowCloseDuration)
 		ScreenGui:Destroy()
@@ -680,33 +695,33 @@ function Astral:Window(Options)
 		local CurrentPos = Bubble.AbsolutePosition
 		local BubbleSize = Bubble.AbsoluteSize
 		local CenterX = ScreenSize.X / 2
-		
+
 		local BubbleCenterX = CurrentPos.X + (BubbleSize.X / 2)
-		
+
 		local SnapMargin = Astral.Config.Bubble.SnapMargin
 		local EdgeMargin = Astral.Config.Bubble.EdgeMargin
 		local TopBottomMargin = Astral.Config.Bubble.TopBottomMargin
-		
+
 		local TargetX
 		if BubbleCenterX < CenterX then
 			TargetX = EdgeMargin
 		else
 			TargetX = ScreenSize.X - BubbleSize.X - EdgeMargin
 		end
-		
+
 		local TargetY = math.clamp(
 			CurrentPos.Y, 
 			TopBottomMargin, 
 			ScreenSize.Y - BubbleSize.Y - TopBottomMargin
 		)
-		
+
 		TweenService:Create(Bubble, TweenInfo.new(
 			Astral.Config.Animation.TweenDuration, 
 			Enum.EasingStyle.Back, 
 			Enum.EasingDirection.Out
-		), {
-			Position = UDim2.new(0, TargetX, 0, TargetY)
-		}):Play()
+			), {
+				Position = UDim2.new(0, TargetX, 0, TargetY)
+			}):Play()
 	end
 
 	Bubble.InputBegan:Connect(function(Input)
@@ -796,7 +811,6 @@ function Astral:Window(Options)
 	PagesFrame.BackgroundTransparency = Astral.Config.Pages.BackgroundTransparency
 	PagesFrame.Position = UDim2.new(0, ApplyScale(Astral.Config.Sidebar.Width + BasePadding * 2), 0, 0)
 	PagesFrame.Size = UDim2.new(1, -ApplyScale(Astral.Config.Sidebar.Width + BasePadding * 3), 1, -ApplyScale(BasePadding))
-
 	local PagesCorner = Instance.new("UICorner")
 	PagesCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Pages.CornerRadius))
 	PagesCorner.Parent = PagesFrame
@@ -811,6 +825,7 @@ function Astral:Window(Options)
 	local WindowFunctions = {}
 	local FirstTab = true
 	local AllTabs = {}
+	local ActiveTab = nil
 
 	local function UpdateNotificationPositions()
 		for Index, Notification in ipairs(ActiveNotifications) do
@@ -819,9 +834,9 @@ function Astral:Window(Options)
 				Astral.Config.Animation.NotificationDuration,
 				Astral.Config.Animation.EasingStyle,
 				Astral.Config.Animation.EasingDirection
-			), {
-				Position = UDim2.new(1, -ApplyScale(20), 1, TargetYOffset)
-			}):Play()
+				), {
+					Position = UDim2.new(1, -ApplyScale(20), 1, TargetYOffset)
+				}):Play()
 		end
 	end
 
@@ -913,10 +928,10 @@ function Astral:Window(Options)
 				Astral.Config.Animation.NotificationDuration,
 				Enum.EasingStyle.Quart,
 				Enum.EasingDirection.In
-			), {
-				Position = UDim2.new(1.5, 0, 1, NotificationFrame.Position.Y.Offset),
-				BackgroundTransparency = 1
-			})
+				), {
+					Position = UDim2.new(1.5, 0, 1, NotificationFrame.Position.Y.Offset),
+					BackgroundTransparency = 1
+				})
 
 			ExitTween:Play()
 			ExitTween.Completed:Connect(function()
@@ -967,16 +982,17 @@ function Astral:Window(Options)
 	end
 
 	function WindowFunctions:SetScale(NewScale)
-		if NewScale <= 0 then return end
-
-		CurrentWidth = ApplyScale(BaseWidth)
-		CurrentHeight = ApplyScale(BaseHeight)
-
 		Scale = NewScale
 
+		local NewWidth = ApplyScale(BaseWidth)
+		local NewHeight = ApplyScale(BaseHeight)
+
+		CurrentWidth = NewWidth
+		CurrentHeight = NewHeight
+
 		TweenService:Create(MainFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {
-			Size = UDim2.new(0, CurrentWidth, 0, CurrentHeight),
-			Position = UDim2.new(0.5, -CurrentWidth/2, 0.5, -CurrentHeight/2)
+			Size = UDim2.new(0, NewWidth, 0, NewHeight),
+			Position = UDim2.new(0.5, -NewWidth/2, 0.5, -NewHeight/2)
 		}):Play()
 	end
 
@@ -1028,7 +1044,26 @@ function Astral:Window(Options)
 		IndicatorFrame.Size = UDim2.new(0, ApplyScale(Astral.Config.Tab.IndicatorWidth), 0, ApplyScale(Astral.Config.Tab.IndicatorHeight))
 		IndicatorFrame.Visible = false
 
-		AddHoverEffect(TabButton, Astral.Theme.HoverBright, Astral.Theme.Main, 0.2, 0.3)
+		local function ApplyTabHover()
+			if ActiveTab ~= TabButton then
+				TweenService:Create(TabButton, TweenInfo.new(Astral.Config.Animation.HoverDuration), {
+					BackgroundColor3 = Astral.Theme.Tertiary,
+					BackgroundTransparency = 0.25
+				}):Play()
+			end
+		end
+
+		local function RemoveTabHover()
+			if ActiveTab ~= TabButton then
+				TweenService:Create(TabButton, TweenInfo.new(Astral.Config.Animation.HoverDuration), {
+					BackgroundColor3 = Astral.Theme.Main,
+					BackgroundTransparency = Astral.Config.Tab.BackgroundTransparency
+				}):Play()
+			end
+		end
+
+		TabButton.MouseEnter:Connect(ApplyTabHover)
+		TabButton.MouseLeave:Connect(RemoveTabHover)
 		AddClickEffect(TabButton)
 
 		local PageFrame = Instance.new("ScrollingFrame")
@@ -1071,14 +1106,17 @@ function Astral:Window(Options)
 				TweenService:Create(TabData.Label, TweenInfo.new(Astral.Config.Animation.TweenDuration), {TextColor3 = Astral.Theme.TextDark}):Play()
 				TweenService:Create(TabData.Icon, TweenInfo.new(Astral.Config.Animation.TweenDuration), {ImageColor3 = Astral.Theme.TextDark}):Play()
 			end
+
 			PageFrame.Visible = true
 			IndicatorFrame.Visible = true
 			TweenService:Create(TabButton, TweenInfo.new(Astral.Config.Animation.TweenDuration), {
-				BackgroundColor3 = Color3.fromRGB(5, 5, 8),
-				BackgroundTransparency = 0.1
+				BackgroundColor3 = Astral.Theme.Main,
+				BackgroundTransparency = 0
 			}):Play()
 			TweenService:Create(LabelText, TweenInfo.new(Astral.Config.Animation.TweenDuration), {TextColor3 = Astral.Theme.Text}):Play()
 			TweenService:Create(IconImage, TweenInfo.new(Astral.Config.Animation.TweenDuration), {ImageColor3 = Astral.Theme.Accent}):Play()
+
+			ActiveTab = TabButton
 		end
 
 		TabButton.MouseButton1Click:Connect(Activate)
@@ -1353,17 +1391,31 @@ function Astral:Window(Options)
 				Callback(Value)
 			end
 
+			local function UpdateFromText()
+				local InputValue = tonumber(ValueInput.Text)
+				if InputValue then
+					Value = math.clamp(math.floor(InputValue / Increment + 0.5) * Increment, Min, Max)
+					local VisualPercentage = (Value - Min) / (Max - Min)
+					TweenService:Create(FillFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {Size = UDim2.new(VisualPercentage, 0, 1, 0)}):Play()
+					TweenService:Create(BallFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {Position = UDim2.new(VisualPercentage, -ApplyScale(Astral.Config.Elements.Slider.BallSize / 2), 0.5, -ApplyScale(Astral.Config.Elements.Slider.BallSize / 2))}):Play()
+					ValueInput.Text = tostring(Value)
+					Callback(Value)
+				else
+					ValueInput.Text = tostring(Value)
+				end
+			end
+
 			BallFrame.InputBegan:Connect(function(Input)
 				if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 					Dragging = true
-					CenterElement(PageFrame, SliderFrame)
+					ScrollToElement(PageFrame, SliderFrame)
 				end
 			end)
 
 			BackgroundFrame.InputBegan:Connect(function(Input)
 				if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 					Dragging = true
-					CenterElement(PageFrame, SliderFrame)
+					ScrollToElement(PageFrame, SliderFrame)
 					Update(Input)
 				end
 			end)
@@ -1381,21 +1433,11 @@ function Astral:Window(Options)
 			end)
 
 			ValueInput.Focused:Connect(function()
-				CenterElement(PageFrame, SliderFrame)
+				ScrollToElement(PageFrame, SliderFrame)
 			end)
 
-			ValueInput.FocusLost:Connect(function()
-				local InputValue = tonumber(ValueInput.Text)
-				if InputValue then
-					Value = math.clamp(math.floor(InputValue / Increment + 0.5) * Increment, Min, Max)
-					local VisualPercentage = (Value - Min) / (Max - Min)
-					TweenService:Create(FillFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {Size = UDim2.new(VisualPercentage, 0, 1, 0)}):Play()
-					TweenService:Create(BallFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {Position = UDim2.new(VisualPercentage, -ApplyScale(Astral.Config.Elements.Slider.BallSize / 2), 0.5, -ApplyScale(Astral.Config.Elements.Slider.BallSize / 2))}):Play()
-					ValueInput.Text = tostring(Value)
-					Callback(Value)
-				else
-					ValueInput.Text = tostring(Value)
-				end
+			ValueInput.FocusLost:Connect(function(EnterPressed)
+				UpdateFromText()
 			end)
 		end
 
@@ -1453,7 +1495,7 @@ function Astral:Window(Options)
 			InputStroke.Transparency = Astral.Config.Elements.TextBox.StrokeTransparency
 
 			InputBox.Focused:Connect(function()
-				CenterElement(PageFrame, TextBoxFrame)
+				ScrollToElement(PageFrame, TextBoxFrame)
 			end)
 
 			InputBox.FocusLost:Connect(function(EnterPressed)
@@ -1470,18 +1512,33 @@ function Astral:Window(Options)
 			local CurrentSelected = Options.Default or nil
 			local Callback = Options.Callback or function() end
 			local Dropped = false
+			local VisibleOptions = Options.VisibleOptions or 4
 
 			local BaseElementHeight = Astral.Config.Elements.Dropdown.Height
-			local ListAreaHeight = Astral.Config.Elements.Dropdown.ListAreaHeight
+			local BaseOptionHeight = Astral.Config.Elements.Dropdown.OptionHeight
 			local BasePaddingValue = BasePadding
 
-			local ExpandedHeight = BaseElementHeight + BaseElementHeight + BasePaddingValue + ListAreaHeight + BasePaddingValue * 2
+			local OptionHeight = ApplyScale(BaseOptionHeight)
+			local OptionPadding = ApplyScale(BasePaddingValue)
+
+			local CalculatedListHeight = (OptionHeight + OptionPadding) * VisibleOptions - OptionPadding
+			if CalculatedListHeight < OptionHeight then
+				CalculatedListHeight = OptionHeight
+			end
+
+			local ExpandedHeight = ApplyScale(BaseElementHeight) + 
+				ApplyScale(BaseElementHeight) + 
+				ApplyScale(BasePaddingValue) + 
+				CalculatedListHeight + 
+				ApplyScale(BasePaddingValue * 2)
+
+			local BaseTotalHeight = ApplyScale(BaseElementHeight)
 
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
 			DropdownFrame.BackgroundColor3 = Astral.Theme.Main
 			DropdownFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			DropdownFrame.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
+			DropdownFrame.Size = UDim2.new(1, 0, 0, BaseTotalHeight)
 			DropdownFrame.ClipsDescendants = true
 			local DropdownCorner = Instance.new("UICorner")
 			DropdownCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
@@ -1504,7 +1561,7 @@ function Astral:Window(Options)
 			DropdownLabel.Font = Astral.Config.Elements.LabelFont
 			DropdownLabel.Text = DropdownName .. (CurrentSelected and (": " .. tostring(CurrentSelected)) or "")
 			DropdownLabel.TextColor3 = Astral.Theme.Text
-			DropdownLabel.TextSize = Astral.Config.Elements.Dropdown.LabelTextSize
+			DropdownLabel.TextSize = ApplyScale(Astral.Config.Elements.LabelSize)
 			DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
 			DropdownLabel.BackgroundTransparency = 1
 
@@ -1561,7 +1618,7 @@ function Astral:Window(Options)
 			DropdownList.Parent = DropdownFrame
 			DropdownList.BackgroundTransparency = 1
 			DropdownList.Position = UDim2.new(0, ApplyScale(BasePaddingValue), 0, ApplyScale(BaseElementHeight * 2 + BasePaddingValue * 2))
-			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(ListAreaHeight))
+			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, CalculatedListHeight)
 			DropdownList.ScrollBarThickness = 0
 			DropdownList.ScrollBarImageTransparency = 1
 			DropdownList.BorderSizePixel = 0
@@ -1609,7 +1666,7 @@ function Astral:Window(Options)
 
 				local ContentHeight = DropdownLayout.AbsoluteContentSize.Y
 				DropdownList.CanvasSize = UDim2.new(0, 0, 0, ContentHeight)
-				DropdownList.ScrollingEnabled = ContentHeight > ApplyScale(ListAreaHeight)
+				DropdownList.ScrollingEnabled = ContentHeight > CalculatedListHeight
 			end
 
 			SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
@@ -1628,10 +1685,10 @@ function Astral:Window(Options)
 					Header.Visible = true
 					DropdownList.Visible = true
 
-					CenterElement(PageFrame, DropdownFrame, ApplyScale(ExpandedHeight))
+					ScrollToElement(PageFrame, DropdownFrame, ExpandedHeight)
 
 					TweenService:Create(DropdownFrame, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
-						Size = UDim2.new(1, 0, 0, ApplyScale(ExpandedHeight))
+						Size = UDim2.new(1, 0, 0, ExpandedHeight)
 					}):Play()
 					TweenService:Create(ArrowImage, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Rotation = 180
@@ -1641,7 +1698,7 @@ function Astral:Window(Options)
 					DropdownList.Visible = false
 
 					TweenService:Create(DropdownFrame, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
-						Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
+						Size = UDim2.new(1, 0, 0, BaseTotalHeight)
 					}):Play()
 					TweenService:Create(ArrowImage, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Rotation = 0
@@ -1658,6 +1715,7 @@ function Astral:Window(Options)
 			local Callback = Options.Callback or function() end
 			local Max = Options.Max or #DropdownOptions
 			local Min = Options.Min or 0
+			local VisibleOptions = Options.VisibleOptions or 4
 
 			local Selected = {}
 			local SelectionOrder = {}
@@ -1671,16 +1729,30 @@ function Astral:Window(Options)
 			end
 
 			local BaseElementHeight = Astral.Config.Elements.MultiDropdown.Height
-			local ListAreaHeight = Astral.Config.Elements.MultiDropdown.ListAreaHeight
+			local BaseOptionHeight = Astral.Config.Elements.MultiDropdown.OptionHeight
 			local BasePaddingValue = BasePadding
 
-			local ExpandedHeight = BaseElementHeight + BaseElementHeight + BasePaddingValue + ListAreaHeight + BasePaddingValue * 2
+			local OptionHeight = ApplyScale(BaseOptionHeight)
+			local OptionPadding = ApplyScale(BasePaddingValue)
+
+			local CalculatedListHeight = (OptionHeight + OptionPadding) * VisibleOptions - OptionPadding
+			if CalculatedListHeight < OptionHeight then
+				CalculatedListHeight = OptionHeight
+			end
+
+			local ExpandedHeight = ApplyScale(BaseElementHeight) + 
+				ApplyScale(BaseElementHeight) + 
+				ApplyScale(BasePaddingValue) + 
+				CalculatedListHeight + 
+				ApplyScale(BasePaddingValue * 2)
+
+			local BaseTotalHeight = ApplyScale(BaseElementHeight)
 
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
 			DropdownFrame.BackgroundColor3 = Astral.Theme.Main
 			DropdownFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			DropdownFrame.Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
+			DropdownFrame.Size = UDim2.new(1, 0, 0, BaseTotalHeight)
 			DropdownFrame.ClipsDescendants = true
 			local DropdownCorner = Instance.new("UICorner")
 			DropdownCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
@@ -1702,7 +1774,7 @@ function Astral:Window(Options)
 			ApplyPadding(DropdownLabel, ApplyScale(BasePaddingValue))
 			DropdownLabel.Font = Astral.Config.Elements.LabelFont
 			DropdownLabel.TextColor3 = Astral.Theme.Text
-			DropdownLabel.TextSize = Astral.Config.Elements.MultiDropdown.LabelTextSize
+			DropdownLabel.TextSize = ApplyScale(Astral.Config.Elements.LabelSize)
 			DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
 			DropdownLabel.BackgroundTransparency = 1
 			DropdownLabel.TextTruncate = Enum.TextTruncate.AtEnd
@@ -1784,7 +1856,7 @@ function Astral:Window(Options)
 			DropdownList.Parent = DropdownFrame
 			DropdownList.BackgroundTransparency = 1
 			DropdownList.Position = UDim2.new(0, ApplyScale(BasePaddingValue), 0, ApplyScale(BaseElementHeight * 2 + BasePaddingValue * 2))
-			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, ApplyScale(ListAreaHeight))
+			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, CalculatedListHeight)
 			DropdownList.ScrollBarThickness = 0
 			DropdownList.ScrollBarImageTransparency = 1
 			DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
@@ -1871,10 +1943,10 @@ function Astral:Window(Options)
 					Header.Visible = true
 					DropdownList.Visible = true
 
-					CenterElement(PageFrame, DropdownFrame, ApplyScale(ExpandedHeight))
+					ScrollToElement(PageFrame, DropdownFrame, ExpandedHeight)
 
 					TweenService:Create(DropdownFrame, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
-						Size = UDim2.new(1, 0, 0, ApplyScale(ExpandedHeight))
+						Size = UDim2.new(1, 0, 0, ExpandedHeight)
 					}):Play()
 					TweenService:Create(ArrowImage, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Rotation = 180
@@ -1884,7 +1956,7 @@ function Astral:Window(Options)
 					DropdownList.Visible = false
 
 					TweenService:Create(DropdownFrame, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
-						Size = UDim2.new(1, 0, 0, ApplyScale(BaseElementHeight))
+						Size = UDim2.new(1, 0, 0, BaseTotalHeight)
 					}):Play()
 					TweenService:Create(ArrowImage, TweenInfo.new(Astral.Config.Animation.DropdownDuration), {
 						Rotation = 0
