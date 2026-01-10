@@ -893,10 +893,24 @@ function Astral:Window(Options)
 		local TypeColors = Astral.Theme.TypeColors
 
 		if #ActiveNotifications >= MaxNotifications then
-			table.insert(NotificationQueue, Options)
-			return
+			local OldestNotification = ActiveNotifications[1]
+			if OldestNotification then
+				RemoveNotification(OldestNotification)
+				
+				for i = 2, (#ActiveNotifications - MaxNotifications + 2) do
+					local ExtraNotification = ActiveNotifications[1]
+					if ExtraNotification then
+						task.delay(0.05 * (i-1), function()
+							RemoveNotification(ExtraNotification)
+						end)
+					end
+				end
+			end
+			
+			task.wait(0.1)
 		end
 
+		-- Create new notification
 		local NotificationFrame = Instance.new("Frame")
 		NotificationFrame.Parent = ScreenGui
 		NotificationFrame.BackgroundColor3 = Astral.Theme.Main
@@ -944,18 +958,17 @@ function Astral:Window(Options)
 		table.insert(ActiveNotifications, NotificationFrame)
 		UpdateNotificationPositions()
 
-		task.delay(Duration, function()
-			local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(
-				Astral.Config.Animation.NotificationDuration,
-				Enum.EasingStyle.Quart,
-				Enum.EasingDirection.In
-				), {
-					Position = UDim2.new(1.5, 0, 1, NotificationFrame.Position.Y.Offset),
-					BackgroundTransparency = 1
-				})
+		TweenService:Create(NotificationFrame, TweenInfo.new(
+			Astral.Config.Animation.NotificationDuration,
+			Astral.Config.Animation.EasingStyle,
+			Astral.Config.Animation.EasingDirection
+		), {
+			Position = UDim2.new(1, -ApplyScale(20), 1, -ApplyScale(20) - ((#ActiveNotifications - 1) * ApplyScale(80)))
+		}):Play()
 
-			ExitTween:Play()
-			ExitTween.Completed:Connect(function()
+		local DestroyConnection
+		local function DestroyNotification(Immediate)
+			if Immediate then
 				NotificationFrame:Destroy()
 				for i, v in ipairs(ActiveNotifications) do
 					if v == NotificationFrame then
@@ -964,13 +977,67 @@ function Astral:Window(Options)
 					end
 				end
 				UpdateNotificationPositions()
-
+				
 				if #NotificationQueue > 0 then
 					local Next = table.remove(NotificationQueue, 1)
 					WindowFunctions:Notify(Next)
 				end
-			end)
+			else
+				local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(
+					Astral.Config.Animation.NotificationDuration,
+					Enum.EasingStyle.Quart,
+					Enum.EasingDirection.In
+				), {
+					Position = UDim2.new(1.5, 0, 1, NotificationFrame.Position.Y.Offset),
+					BackgroundTransparency = 1
+				})
+
+				ExitTween:Play()
+				ExitTween.Completed:Connect(function()
+					NotificationFrame:Destroy()
+					for i, v in ipairs(ActiveNotifications) do
+						if v == NotificationFrame then
+							table.remove(ActiveNotifications, i)
+							break
+						end
+					end
+					UpdateNotificationPositions()
+
+					if #NotificationQueue > 0 then
+						local Next = table.remove(NotificationQueue, 1)
+						WindowFunctions:Notify(Next)
+					end
+				end)
+			end
+			
+			if DestroyConnection then
+				DestroyConnection:Disconnect()
+			end
+		end
+
+		DestroyConnection = NotificationFrame.MouseButton1Click:Connect(function()
+			DestroyNotification()
 		end)
+
+		local DestroyTimer = task.delay(Duration, function()
+			DestroyNotification()
+		end)
+
+		NotificationFrame:SetAttribute("DestroyTimer", DestroyTimer)
+		
+		return {
+			Destroy = function(Immediate)
+				task.cancel(DestroyTimer)
+				DestroyNotification(Immediate)
+			end,
+			Extend = function(ExtraTime)
+				task.cancel(DestroyTimer)
+				DestroyTimer = task.delay(Duration + ExtraTime, function()
+					DestroyNotification()
+				end)
+				NotificationFrame:SetAttribute("DestroyTimer", DestroyTimer)
+			end
+		}
 	end
 
 	function WindowFunctions:Hide()
