@@ -1365,6 +1365,49 @@ function Astral:Window(Options)
 			)
 			AddClickEffect(ButtonFrame)
 			ButtonFrame.MouseButton1Click:Connect(Callback)
+
+			-- Button update functions
+			local ButtonObject = {}
+			function ButtonObject:Update(NewOptions)
+				if NewOptions.Name then
+					ButtonLabel.Text = NewOptions.Name
+				end
+				if NewOptions.Callback then
+					-- Disconnect old callback and connect new one
+					ButtonFrame.MouseButton1Click:Disconnect()
+					ButtonFrame.MouseButton1Click:Connect(NewOptions.Callback)
+				end
+				if NewOptions.Font then
+					ButtonLabel.Font = NewOptions.Font
+				end
+				if NewOptions.Size then
+					ButtonLabel.TextSize = ApplyScale(NewOptions.Size)
+				end
+				if NewOptions.Height then
+					local NewHeight = ApplyScale(NewOptions.Height)
+					ButtonFrame.Size = ButtonWidth and 
+						UDim2.new(0, ApplyScale(ButtonWidth), 0, NewHeight) or
+						UDim2.new(1, 0, 0, NewHeight)
+				end
+				if NewOptions.Width then
+					ButtonWidth = NewOptions.Width
+					ButtonFrame.Size = UDim2.new(0, ApplyScale(ButtonWidth), 0, ButtonFrame.Size.Y.Offset)
+				end
+				if NewOptions.Alignment then
+					ButtonLabel.TextXAlignment = NewOptions.Alignment
+				end
+			end
+			
+			function ButtonObject:SetText(Text)
+				ButtonLabel.Text = Text
+			end
+			
+			function ButtonObject:SetCallback(NewCallback)
+				ButtonFrame.MouseButton1Click:Disconnect()
+				ButtonFrame.MouseButton1Click:Connect(NewCallback)
+			end
+
+			return ButtonObject
 		end
 
 		function TabFunctions:Toggle(Options, Parent)
@@ -1444,6 +1487,76 @@ function Astral:Window(Options)
 				Update()
 			end)
 			Update()
+
+			-- Toggle update functions
+			local ToggleObject = {}
+			function ToggleObject:Update(NewOptions)
+				if NewOptions.Name then
+					ToggleLabel.Text = NewOptions.Name
+				end
+				if NewOptions.Callback then
+					Callback = NewOptions.Callback
+					-- Reconnect with new callback
+					CheckButton.MouseButton1Click:Disconnect()
+					CheckButton.MouseButton1Click:Connect(function()
+						State = not State
+						Update()
+					end)
+				end
+				if NewOptions.Default ~= nil and NewOptions.Default ~= State then
+					State = NewOptions.Default
+					Update()
+				end
+				if NewOptions.Font then
+					ToggleLabel.Font = NewOptions.Font
+				end
+				if NewOptions.Size then
+					ToggleLabel.TextSize = ApplyScale(NewOptions.Size)
+				end
+				if NewOptions.Height then
+					local NewHeight = ApplyScale(NewOptions.Height)
+					ToggleFrame.Size = ToggleWidth and 
+						UDim2.new(0, ApplyScale(ToggleWidth), 0, NewHeight) or
+						UDim2.new(1, 0, 0, NewHeight)
+					-- Update switch position
+					CheckButton.Position = UDim2.new(1, -ToggleSwitchWidth - ApplyScale(8), 0.5, -ToggleSwitchHeight / 2)
+				end
+				if NewOptions.Width then
+					ToggleWidth = NewOptions.Width
+					ToggleFrame.Size = UDim2.new(0, ApplyScale(ToggleWidth), 0, ToggleFrame.Size.Y.Offset)
+					CheckButton.Position = UDim2.new(1, -ToggleSwitchWidth - ApplyScale(8), 0.5, -ToggleSwitchHeight / 2)
+				end
+				if NewOptions.Alignment then
+					ToggleLabel.TextXAlignment = NewOptions.Alignment
+				end
+			end
+			
+			function ToggleObject:SetState(NewState)
+				if State ~= NewState then
+					State = NewState
+					Update()
+				end
+			end
+			
+			function ToggleObject:GetState()
+				return State
+			end
+			
+			function ToggleObject:SetText(Text)
+				ToggleLabel.Text = Text
+			end
+			
+			function ToggleObject:SetCallback(NewCallback)
+				Callback = NewCallback
+			end
+			
+			function ToggleObject:Toggle()
+				State = not State
+				Update()
+				return State
+			end
+
+			return ToggleObject
 		end
 
 		function TabFunctions:Slider(Options, Parent)
@@ -1538,6 +1651,14 @@ function Astral:Window(Options)
 
 			local Dragging = false
 
+			local function UpdateVisuals()
+				local VisualPercentage = (Value - Min) / (Max - Min)
+				TweenService:Create(FillFrame, TweenInfo.new(0.05), {Size = UDim2.new(VisualPercentage, 0, 1, 0)}):Play()
+				TweenService:Create(BallFrame, TweenInfo.new(0.05), {Position = UDim2.new(VisualPercentage, -BallSize / 2, 0.5, -BallSize / 2)}):Play()
+				ValueInput.Text = tostring(Value)
+				Callback(Value)
+			end
+
 			local function Update(Input)
 				local SizeX = BackgroundFrame.AbsoluteSize.X
 				local OffsetX = math.clamp(Input.Position.X - BackgroundFrame.AbsolutePosition.X, 0, SizeX)
@@ -1545,25 +1666,14 @@ function Astral:Window(Options)
 
 				Value = math.floor(((Max - Min) * Percentage + Min) / Increment + 0.5) * Increment
 				Value = math.clamp(Value, Min, Max)
-
-				local VisualPercentage = (Value - Min) / (Max - Min)
-
-				TweenService:Create(FillFrame, TweenInfo.new(0.05), {Size = UDim2.new(VisualPercentage, 0, 1, 0)}):Play()
-				TweenService:Create(BallFrame, TweenInfo.new(0.05), {Position = UDim2.new(VisualPercentage, -BallSize / 2, 0.5, -BallSize / 2)}):Play()
-
-				ValueInput.Text = tostring(Value)
-				Callback(Value)
+				UpdateVisuals()
 			end
 
 			local function UpdateFromText()
 				local InputValue = tonumber(ValueInput.Text)
 				if InputValue then
 					Value = math.clamp(math.floor(InputValue / Increment + 0.5) * Increment, Min, Max)
-					local VisualPercentage = (Value - Min) / (Max - Min)
-					TweenService:Create(FillFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {Size = UDim2.new(VisualPercentage, 0, 1, 0)}):Play()
-					TweenService:Create(BallFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {Position = UDim2.new(VisualPercentage, -BallSize / 2, 0.5, -BallSize / 2)}):Play()
-					ValueInput.Text = tostring(Value)
-					Callback(Value)
+					UpdateVisuals()
 				else
 					ValueInput.Text = tostring(Value)
 				end
@@ -1603,6 +1713,82 @@ function Astral:Window(Options)
 			ValueInput.FocusLost:Connect(function(EnterPressed)
 				UpdateFromText()
 			end)
+
+			-- Slider update functions
+			local SliderObject = {}
+			function SliderObject:Update(NewOptions)
+				if NewOptions.Name then
+					SliderLabel.Text = NewOptions.Name
+				end
+				if NewOptions.Callback then
+					Callback = NewOptions.Callback
+					Callback(Value) -- Call with current value
+				end
+				if NewOptions.Min then
+					Min = NewOptions.Min
+					Value = math.clamp(Value, Min, Max)
+					UpdateVisuals()
+				end
+				if NewOptions.Max then
+					Max = NewOptions.Max
+					Value = math.clamp(Value, Min, Max)
+					UpdateVisuals()
+				end
+				if NewOptions.Default ~= nil then
+					Value = math.clamp(NewOptions.Default, Min, Max)
+					UpdateVisuals()
+				end
+				if NewOptions.Increment then
+					Increment = NewOptions.Increment
+					Value = math.floor(Value / Increment + 0.5) * Increment
+					UpdateVisuals()
+				end
+				if NewOptions.Font then
+					SliderLabel.Font = NewOptions.Font
+				end
+				if NewOptions.Size then
+					SliderLabel.TextSize = ApplyScale(NewOptions.Size)
+				end
+				if NewOptions.Height then
+					local NewHeight = ApplyScale(NewOptions.Height)
+					SliderFrame.Size = SliderWidth and 
+						UDim2.new(0, ApplyScale(SliderWidth), 0, NewHeight) or
+						UDim2.new(1, 0, 0, NewHeight)
+				end
+				if NewOptions.Width then
+					SliderWidth = NewOptions.Width
+					SliderFrame.Size = UDim2.new(0, ApplyScale(SliderWidth), 0, SliderFrame.Size.Y.Offset)
+				end
+				if NewOptions.Alignment then
+					SliderLabel.TextXAlignment = NewOptions.Alignment
+				end
+			end
+			
+			function SliderObject:SetValue(NewValue)
+				Value = math.clamp(NewValue, Min, Max)
+				UpdateVisuals()
+			end
+			
+			function SliderObject:GetValue()
+				return Value
+			end
+			
+			function SliderObject:SetRange(NewMin, NewMax)
+				Min = NewMin
+				Max = NewMax
+				Value = math.clamp(Value, Min, Max)
+				UpdateVisuals()
+			end
+			
+			function SliderObject:SetText(Text)
+				SliderLabel.Text = Text
+			end
+			
+			function SliderObject:SetCallback(NewCallback)
+				Callback = NewCallback
+			end
+
+			return SliderObject
 		end
 
 		function TabFunctions:TextBox(Options, Parent)
@@ -1677,6 +1863,67 @@ function Astral:Window(Options)
 					Callback(InputBox.Text)
 				end
 			end)
+
+			-- TextBox update functions
+			local TextBoxObject = {}
+			function TextBoxObject:Update(NewOptions)
+				if NewOptions.Name then
+					TextBoxLabel.Text = NewOptions.Name
+				end
+				if NewOptions.Callback then
+					Callback = NewOptions.Callback
+				end
+				if NewOptions.Default then
+					InputBox.Text = NewOptions.Default
+				end
+				if NewOptions.Placeholder then
+					InputBox.PlaceholderText = NewOptions.Placeholder
+				end
+				if NewOptions.Font then
+					TextBoxLabel.Font = NewOptions.Font
+				end
+				if NewOptions.Size then
+					TextBoxLabel.TextSize = ApplyScale(NewOptions.Size)
+				end
+				if NewOptions.Height then
+					local NewHeight = ApplyScale(NewOptions.Height)
+					TextBoxFrame.Size = TextBoxWidth and 
+						UDim2.new(0, ApplyScale(TextBoxWidth), 0, NewHeight) or
+						UDim2.new(1, 0, 0, NewHeight)
+					-- Update input box position
+					InputBox.Position = UDim2.new(0, ApplyScale(BasePadding), 0, ApplyScale(Astral.Config.Elements.TextBox.LabelHeight + 8))
+				end
+				if NewOptions.Width then
+					TextBoxWidth = NewOptions.Width
+					TextBoxFrame.Size = UDim2.new(0, ApplyScale(TextBoxWidth), 0, TextBoxFrame.Size.Y.Offset)
+					InputBox.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, ApplyScale(Astral.Config.Elements.TextBox.InputHeight))
+				end
+				if NewOptions.Alignment then
+					TextBoxLabel.TextXAlignment = NewOptions.Alignment
+				end
+			end
+			
+			function TextBoxObject:SetText(Text)
+				InputBox.Text = Text
+			end
+			
+			function TextBoxObject:GetText()
+				return InputBox.Text
+			end
+			
+			function TextBoxObject:SetPlaceholder(Text)
+				InputBox.PlaceholderText = Text
+			end
+			
+			function TextBoxObject:SetName(Text)
+				TextBoxLabel.Text = Text
+			end
+			
+			function TextBoxObject:SetCallback(NewCallback)
+				Callback = NewCallback
+			end
+
+			return TextBoxObject
 		end
 
 		function TabFunctions:Dropdown(Options, Parent)
@@ -1889,6 +2136,119 @@ function Astral:Window(Options)
 					}):Play()
 				end
 			end)
+
+			-- Dropdown update functions
+			local DropdownObject = {}
+			function DropdownObject:Update(NewOptions)
+				if NewOptions.Name then
+					DropdownName = NewOptions.Name
+					DropdownLabel.Text = DropdownName .. (CurrentSelected and (": " .. tostring(CurrentSelected)) or "")
+				end
+				if NewOptions.Callback then
+					Callback = NewOptions.Callback
+				end
+				if NewOptions.Options then
+					DropdownOptions = NewOptions.Options
+					Refresh(SearchBox.Text)
+				end
+				if NewOptions.Default ~= nil then
+					if NewOptions.Default == nil then
+						CurrentSelected = nil
+						DropdownLabel.Text = DropdownName
+					elseif table.find(DropdownOptions, NewOptions.Default) then
+						CurrentSelected = NewOptions.Default
+						DropdownLabel.Text = DropdownName .. ": " .. CurrentSelected
+					end
+					Callback(CurrentSelected)
+					Refresh(SearchBox.Text)
+				end
+				if NewOptions.VisibleOptions then
+					VisibleOptions = NewOptions.VisibleOptions
+					-- Recalculate heights
+					CalculatedListHeight = (OptionHeight + OptionPadding) * VisibleOptions - OptionPadding
+					if CalculatedListHeight < OptionHeight then
+						CalculatedListHeight = OptionHeight
+					end
+					ExpandedHeight = ApplyScale(BaseElementHeight) + 
+						ApplyScale(BaseElementHeight) + 
+						ApplyScale(BasePaddingValue) + 
+						CalculatedListHeight + 
+						ApplyScale(BasePaddingValue * 2)
+					
+					DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, CalculatedListHeight)
+				end
+				if NewOptions.Font then
+					DropdownLabel.Font = NewOptions.Font
+				end
+				if NewOptions.Size then
+					DropdownLabel.TextSize = ApplyScale(NewOptions.Size)
+				end
+				if NewOptions.Height then
+					BaseElementHeight = NewOptions.Height
+					BaseTotalHeight = ApplyScale(BaseElementHeight)
+					DropdownButton.Size = UDim2.new(1, 0, 0, BaseTotalHeight)
+					DropdownFrame.Size = DropdownWidth and 
+						UDim2.new(0, ApplyScale(DropdownWidth), 0, BaseTotalHeight) or
+						UDim2.new(1, 0, 0, BaseTotalHeight)
+				end
+				if NewOptions.Width then
+					DropdownWidth = NewOptions.Width
+					DropdownFrame.Size = UDim2.new(0, ApplyScale(DropdownWidth), 0, BaseTotalHeight)
+				end
+			end
+			
+			function DropdownObject:SetOptions(NewOptions)
+				DropdownOptions = NewOptions
+				Refresh(SearchBox.Text)
+			end
+			
+			function DropdownObject:AddOption(Option)
+				table.insert(DropdownOptions, Option)
+				Refresh(SearchBox.Text)
+			end
+			
+			function DropdownObject:RemoveOption(Option)
+				for i, v in ipairs(DropdownOptions) do
+					if v == Option then
+						table.remove(DropdownOptions, i)
+						break
+					end
+				end
+				if CurrentSelected == Option then
+					CurrentSelected = nil
+					DropdownLabel.Text = DropdownName
+					Callback(nil)
+				end
+				Refresh(SearchBox.Text)
+			end
+			
+			function DropdownObject:SetSelected(Option)
+				if Option == nil or table.find(DropdownOptions, Option) then
+					CurrentSelected = Option
+					DropdownLabel.Text = DropdownName .. (Option and (": " .. Option) or "")
+					Callback(Option)
+					Refresh(SearchBox.Text)
+				end
+			end
+			
+			function DropdownObject:GetSelected()
+				return CurrentSelected
+			end
+			
+			function DropdownObject:GetOptions()
+				return DropdownOptions
+			end
+			
+			function DropdownObject:SetName(Text)
+				DropdownName = Text
+				DropdownLabel.Text = DropdownName .. (CurrentSelected and (": " .. CurrentSelected) or "")
+			end
+			
+			function DropdownObject:SetCallback(NewCallback)
+				Callback = NewCallback
+			end
+
+			return DropdownObject
 		end
 
 		function TabFunctions:MultiDropdown(Options, Parent)
@@ -2157,6 +2517,196 @@ function Astral:Window(Options)
 					}):Play()
 				end
 			end)
+
+			-- MultiDropdown update functions
+			local MultiDropdownObject = {}
+			function MultiDropdownObject:Update(NewOptions)
+				if NewOptions.Name then
+					DropdownName = NewOptions.Name
+					UpdateLabel()
+				end
+				if NewOptions.Callback then
+					Callback = NewOptions.Callback
+				end
+				if NewOptions.Options then
+					DropdownOptions = NewOptions.Options
+					-- Filter out selections that are no longer in options
+					for i = #SelectionOrder, 1, -1 do
+						local option = SelectionOrder[i]
+						if not table.find(DropdownOptions, option) then
+							Selected[option] = false
+							table.remove(SelectionOrder, i)
+						end
+					end
+					UpdateLabel()
+					Refresh(SearchBox.Text)
+				end
+				if NewOptions.Default then
+					Selected = {}
+					SelectionOrder = {}
+					for _, v in pairs(NewOptions.Default) do
+						if #SelectionOrder < Max then
+							Selected[v] = true
+							table.insert(SelectionOrder, v)
+						end
+					end
+					UpdateLabel()
+					Refresh(SearchBox.Text)
+					Callback(SelectionOrder)
+				end
+				if NewOptions.Max then
+					Max = NewOptions.Max
+					-- Remove excess selections if needed
+					while #SelectionOrder > Max do
+						local removed = table.remove(SelectionOrder, 1)
+						Selected[removed] = false
+					end
+					UpdateLabel()
+					Refresh(SearchBox.Text)
+				end
+				if NewOptions.Min then
+					Min = NewOptions.Min
+				end
+				if NewOptions.VisibleOptions then
+					VisibleOptions = NewOptions.VisibleOptions
+					-- Recalculate heights
+					CalculatedListHeight = (OptionHeight + OptionPadding) * VisibleOptions - OptionPadding
+					if CalculatedListHeight < OptionHeight then
+						CalculatedListHeight = OptionHeight
+					end
+					ExpandedHeight = ApplyScale(BaseElementHeight) + 
+						ApplyScale(BaseElementHeight) + 
+						ApplyScale(BasePaddingValue) + 
+						CalculatedListHeight + 
+						ApplyScale(BasePaddingValue * 2)
+					
+					DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, CalculatedListHeight)
+				end
+				if NewOptions.Font then
+					DropdownLabel.Font = NewOptions.Font
+				end
+				if NewOptions.Size then
+					DropdownLabel.TextSize = ApplyScale(NewOptions.Size)
+				end
+				if NewOptions.Height then
+					BaseElementHeight = NewOptions.Height
+					BaseTotalHeight = ApplyScale(BaseElementHeight)
+					DropdownButton.Size = UDim2.new(1, 0, 0, BaseTotalHeight)
+					DropdownFrame.Size = MultiDropdownWidth and 
+						UDim2.new(0, ApplyScale(MultiDropdownWidth), 0, BaseTotalHeight) or
+						UDim2.new(1, 0, 0, BaseTotalHeight)
+				end
+				if NewOptions.Width then
+					MultiDropdownWidth = NewOptions.Width
+					DropdownFrame.Size = UDim2.new(0, ApplyScale(MultiDropdownWidth), 0, BaseTotalHeight)
+				end
+			end
+			
+			function MultiDropdownObject:SetOptions(NewOptions)
+				DropdownOptions = NewOptions
+				-- Filter out selections that are no longer in options
+				for i = #SelectionOrder, 1, -1 do
+					local option = SelectionOrder[i]
+					if not table.find(DropdownOptions, option) then
+						Selected[option] = false
+						table.remove(SelectionOrder, i)
+					end
+				end
+				UpdateLabel()
+				Refresh(SearchBox.Text)
+			end
+			
+			function MultiDropdownObject:AddOption(Option)
+				table.insert(DropdownOptions, Option)
+				Refresh(SearchBox.Text)
+			end
+			
+			function MultiDropdownObject:RemoveOption(Option)
+				for i, v in ipairs(DropdownOptions) do
+					if v == Option then
+						table.remove(DropdownOptions, i)
+						break
+					end
+				end
+				if Selected[Option] then
+					Selected[Option] = false
+					for i, v in ipairs(SelectionOrder) do
+						if v == Option then
+							table.remove(SelectionOrder, i)
+							break
+						end
+					end
+					UpdateLabel()
+					Callback(SelectionOrder)
+				end
+				Refresh(SearchBox.Text)
+			end
+			
+			function MultiDropdownObject:SetSelected(Options)
+				Selected = {}
+				SelectionOrder = {}
+				for _, v in pairs(Options) do
+					if #SelectionOrder < Max then
+						Selected[v] = true
+						table.insert(SelectionOrder, v)
+					end
+				end
+				UpdateLabel()
+				Refresh(SearchBox.Text)
+				Callback(SelectionOrder)
+			end
+			
+			function MultiDropdownObject:GetSelected()
+				return SelectionOrder
+			end
+			
+			function MultiDropdownObject:GetOptions()
+				return DropdownOptions
+			end
+			
+			function MultiDropdownObject:AddSelection(Option)
+				if not Selected[Option] and #SelectionOrder < Max then
+					Selected[Option] = true
+					table.insert(SelectionOrder, Option)
+					UpdateLabel()
+					Refresh(SearchBox.Text)
+					Callback(SelectionOrder)
+				end
+			end
+			
+			function MultiDropdownObject:RemoveSelection(Option)
+				if Selected[Option] and #SelectionOrder > Min then
+					Selected[Option] = false
+					for i, v in ipairs(SelectionOrder) do
+						if v == Option then
+							table.remove(SelectionOrder, i)
+							break
+						end
+					end
+					UpdateLabel()
+					Refresh(SearchBox.Text)
+					Callback(SelectionOrder)
+				end
+			end
+			
+			function MultiDropdownObject:ClearSelections()
+				Selected = {}
+				SelectionOrder = {}
+				UpdateLabel()
+				Refresh(SearchBox.Text)
+				Callback(SelectionOrder)
+			end
+			
+			function MultiDropdownObject:SetName(Text)
+				DropdownName = Text
+				UpdateLabel()
+			end
+			
+			function MultiDropdownObject:SetCallback(NewCallback)
+				Callback = NewCallback
+			end
+
+			return MultiDropdownObject
 		end
 
 		function TabFunctions:Keybind(Options, Parent)
@@ -2242,6 +2792,64 @@ function Astral:Window(Options)
 					Callback(Current)
 				end
 			end)
+
+			-- Keybind update functions
+			local KeybindObject = {}
+			function KeybindObject:Update(NewOptions)
+				if NewOptions.Name then
+					KeybindLabel.Text = NewOptions.Name
+				end
+				if NewOptions.Callback then
+					Callback = NewOptions.Callback
+				end
+				if NewOptions.Default then
+					Current = NewOptions.Default
+					KeybindText.Text = Current.Name
+					KeybindText.TextColor3 = Astral.Theme.Accent
+				end
+				if NewOptions.Font then
+					KeybindLabel.Font = NewOptions.Font
+				end
+				if NewOptions.Size then
+					KeybindLabel.TextSize = ApplyScale(NewOptions.Size)
+				end
+				if NewOptions.Height then
+					local NewHeight = ApplyScale(NewOptions.Height)
+					KeybindFrame.Size = KeybindWidth and 
+						UDim2.new(0, ApplyScale(KeybindWidth), 0, NewHeight) or
+						UDim2.new(1, 0, 0, NewHeight)
+					-- Update button position
+					KeybindButton.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Keybind.ButtonWidth + 12), 0.5, -ApplyScale(Astral.Config.Elements.Keybind.ButtonHeight / 2))
+				end
+				if NewOptions.Width then
+					KeybindWidth = NewOptions.Width
+					KeybindFrame.Size = UDim2.new(0, ApplyScale(KeybindWidth), 0, KeybindFrame.Size.Y.Offset)
+					KeybindButton.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Keybind.ButtonWidth + 12), 0.5, -ApplyScale(Astral.Config.Elements.Keybind.ButtonHeight / 2))
+				end
+				if NewOptions.Alignment then
+					KeybindLabel.TextXAlignment = NewOptions.Alignment
+				end
+			end
+			
+			function KeybindObject:SetKey(Key)
+				Current = Key
+				KeybindText.Text = Current.Name
+				KeybindText.TextColor3 = Astral.Theme.Accent
+			end
+			
+			function KeybindObject:GetKey()
+				return Current
+			end
+			
+			function KeybindObject:SetText(Text)
+				KeybindLabel.Text = Text
+			end
+			
+			function KeybindObject:SetCallback(NewCallback)
+				Callback = NewCallback
+			end
+
+			return KeybindObject
 		end
 
 		function TabFunctions:Label(Options, Parent)
@@ -2281,14 +2889,48 @@ function Astral:Window(Options)
 			Label.TextWrapped = true
 
 			local LabelObject = {}
+			function LabelObject:Update(NewOptions)
+				if NewOptions.Text then
+					Label.Text = NewOptions.Text
+				end
+				if NewOptions.Font then
+					Label.Font = NewOptions.Font
+				end
+				if NewOptions.Size then
+					Label.TextSize = ApplyScale(NewOptions.Size)
+				end
+				if NewOptions.Height then
+					local NewHeight = ApplyScale(NewOptions.Height)
+					LabelFrame.Size = LabelWidth and 
+						UDim2.new(0, ApplyScale(LabelWidth), 0, NewHeight) or
+						UDim2.new(1, 0, 0, NewHeight)
+				end
+				if NewOptions.Width then
+					LabelWidth = NewOptions.Width
+					LabelFrame.Size = UDim2.new(0, ApplyScale(LabelWidth), 0, LabelFrame.Size.Y.Offset)
+				end
+				if NewOptions.Alignment then
+					Label.TextXAlignment = NewOptions.Alignment
+				end
+				if NewOptions.Color then
+					Label.TextColor3 = NewOptions.Color
+				end
+			end
+			
 			function LabelObject:SetText(Text)
 				Label.Text = Text
 			end
+			
 			function LabelObject:SetFont(Font, Size, Color)
 				if Font then Label.Font = Font end
 				if Size then Label.TextSize = ApplyScale(Size) end
 				if Color then Label.TextColor3 = Color end
 			end
+			
+			function LabelObject:GetText()
+				return Label.Text
+			end
+
 			return LabelObject
 		end
 
