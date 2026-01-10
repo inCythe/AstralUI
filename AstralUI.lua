@@ -6,221 +6,219 @@ local Player = Players.LocalPlayer
 
 local Astral = {}
 
--- Main configuration system
 Astral.Config = {
 	Window = {
-		BaseWidth = 720,               -- Default window width
-		BaseHeight = 520,              -- Default window height
-		BasePadding = 8,               -- Default padding between elements
-		CornerRadius = 12,             -- Main window corner rounding
-		BackgroundTransparency = 0.15, -- Window background transparency
-		StrokeThickness = 1.5,         -- Window border thickness
-		StrokeTransparency = 0.4       -- Window border transparency
+		BaseWidth = 720,
+		BaseHeight = 520,
+		BasePadding = 8,
+		CornerRadius = 12,
+		BackgroundTransparency = 0.15,
+		StrokeThickness = 1.5,
+		StrokeTransparency = 0.4
 	},
 
 	Topbar = {
-		Height = 36,                    -- Topbar height
-		CornerRadius = 8,               -- Topbar corner rounding
-		BackgroundTransparency = 0.2,   -- Topbar background transparency
-		TitleFont = Enum.Font.GothamBold, -- Title font
-		TitleSize = 14,                 -- Title text size
-		TitleAlignment = Enum.TextXAlignment.Left -- Title alignment
+		Height = 36,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.2,
+		TitleFont = Enum.Font.GothamBold,
+		TitleSize = 14,
+		TitleAlignment = Enum.TextXAlignment.Left
 	},
 
 	Controls = {
-		ButtonSize = 26,                -- Control button size
-		ButtonCornerRadius = 6,         -- Control button corner rounding
-		CloseButtonText = "×",          -- Close button text
-		CloseButtonSize = 18,           -- Close button text size
-		MinimizeButtonText = "−",       -- Minimize button text
-		MinimizeButtonSize = 16         -- Minimize button text size
+		ButtonSize = 26,
+		ButtonCornerRadius = 6,
+		CloseButtonText = "×",
+		CloseButtonSize = 18,
+		MinimizeButtonText = "−",
+		MinimizeButtonSize = 16
 	},
 
 	Bubble = {
-		Size = 50,                      -- Bubble diameter
-		Icon = "rbxassetid://7733954760", -- Bubble icon ID
-		StrokeThickness = 2,            -- Bubble border thickness
-		StrokeTransparency = 0.3,       -- Bubble border transparency
-		SnapMargin = 3,                 -- Very small snap margin
-		EdgeMargin = 1,                 -- Small margin from screen edges
-		TopBottomMargin = 1             -- Small margin from top/bottom
+		Size = 50,
+		Icon = "rbxassetid://7733954760",
+		StrokeThickness = 2,
+		StrokeTransparency = 0.3,
+		SnapMargin = 3,
+		EdgeMargin = 1,
+		TopBottomMargin = 1
 	},
 
 	Sidebar = {
-		Width = 130,                    -- Sidebar width
-		CornerRadius = 8,               -- Sidebar corner rounding
-		BackgroundTransparency = 0.2,   -- Sidebar background transparency
-		StrokeThickness = 1,            -- Sidebar border thickness
-		StrokeTransparency = 0.4        -- Sidebar border transparency
+		Width = 130,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.2,
+		StrokeThickness = 1,
+		StrokeTransparency = 0.4
 	},
 
 	Tab = {
-		Height = 34,                    -- Tab button height
-		CornerRadius = 8,               -- Tab button corner rounding
-		BackgroundTransparency = 0.25,  -- Tab button background transparency
-		IconSize = 16,                  -- Tab icon size
-		LabelFont = Enum.Font.GothamMedium, -- Tab label font
-		LabelSize = 11,                 -- Tab label text size
-		IndicatorWidth = 2,             -- Active tab indicator width
-		IndicatorHeight = 16,           -- Active tab indicator height
-		Padding = 8                     -- Tab spacing
+		Height = 34,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.25,
+		IconSize = 16,
+		LabelFont = Enum.Font.GothamMedium,
+		LabelSize = 11,
+		IndicatorWidth = 2,
+		IndicatorHeight = 16,
+		Padding = 8
 	},
 
 	Pages = {
-		CornerRadius = 8,               -- Page frame corner rounding
-		BackgroundTransparency = 0.2,   -- Page background transparency
-		Padding = 8                     -- Page content padding
+		CornerRadius = 8,
+		BackgroundTransparency = 0.2,
+		Padding = 8
 	},
 
 	Elements = {
-		Height = 34,                    -- Standard element height
-		CornerRadius = 6,               -- Element corner rounding
-		BackgroundTransparency = 0.25,  -- Element background transparency
-		LabelFont = Enum.Font.GothamMedium, -- Element label font
-		LabelSize = 12,                 -- Element label text size
-		LabelAlignment = Enum.TextXAlignment.Left, -- Element label alignment
+		Height = 34,
+		CornerRadius = 6,
+		BackgroundTransparency = 0.25,
+		LabelFont = Enum.Font.GothamMedium,
+		LabelSize = 12,
+		LabelAlignment = Enum.TextXAlignment.Left,
 
 		Button = {
-			HoverTransparency = 0.15,   -- Button hover transparency
-			NormalTransparency = 0.25   -- Button normal transparency
+			HoverTransparency = 0.15,
+			NormalTransparency = 0.25
 		},
 
 		Toggle = {
-			Width = 38,                  -- Toggle switch width
-			Height = 18,                 -- Toggle switch height
-			CircleSize = 14              -- Toggle circle size
+			Width = 38,
+			Height = 18,
+			CircleSize = 14
 		},
 
 		Slider = {
-			Height = 50,                 -- Slider height
-			LabelHeight = 16,            -- Slider label height
-			InputWidth = 48,             -- Value input width
-			InputHeight = 20,            -- Value input height
-			InputTextSize = 11,          -- Value input text size
-			TrackHeight = 6,             -- Slider track height
-			BallSize = 14,               -- Slider ball size
-			ValueInputFont = Enum.Font.GothamBold -- Value input font
+			Height = 50,
+			LabelHeight = 16,
+			InputWidth = 48,
+			InputHeight = 20,
+			InputTextSize = 11,
+			TrackHeight = 6,
+			BallSize = 14,
+			ValueInputFont = Enum.Font.GothamBold
 		},
 
 		TextBox = {
-			Height = 44,                 -- TextBox height
-			LabelHeight = 16,            -- TextBox label height
-			InputHeight = 16,            -- TextBox input height
-			InputTextSize = 11,          -- TextBox input text size
-			PlaceholderColor = Color3.fromRGB(100, 100, 110), -- Placeholder text color
-			InputCornerRadius = 4,       -- TextBox input corner rounding
-			StrokeThickness = 1,         -- TextBox border thickness
-			StrokeTransparency = 0.5     -- TextBox border transparency
+			Height = 44,
+			LabelHeight = 16,
+			InputHeight = 16,
+			InputTextSize = 11,
+			PlaceholderColor = Color3.fromRGB(100, 100, 110),
+			InputCornerRadius = 4,
+			StrokeThickness = 1,
+			StrokeTransparency = 0.5
 		},
 
 		Dropdown = {
-			Height = 34,                 -- Dropdown height
-			LabelTextSize = 12,          -- Dropdown label text size
-			ArrowSize = 12,              -- Dropdown arrow size
-			ListAreaHeight = 100,        -- Dropdown list area height
-			OptionHeight = 26,           -- Dropdown option height
-			OptionTextSize = 11,         -- Dropdown option text size
-			SearchTextSize = 11,         -- Search box text size
-			ButtonTextSize = 9,          -- Action button text size
-			SearchPlaceholder = "Search...", -- Search placeholder text
-			ClearButtonText = "CLEAR",   -- Clear button text
-			SelectAllButtonText = "ALL", -- Select all button text
-			InputCornerRadius = 4,       -- Input corner rounding
-			StrokeThickness = 1,         -- Input border thickness
-			StrokeTransparency = 0.5     -- Input border transparency
+			Height = 34,
+			LabelTextSize = 12,
+			ArrowSize = 12,
+			ListAreaHeight = 100,
+			OptionHeight = 26,
+			OptionTextSize = 11,
+			SearchTextSize = 11,
+			ButtonTextSize = 9,
+			SearchPlaceholder = "Search...",
+			ClearButtonText = "CLEAR",
+			SelectAllButtonText = "ALL",
+			InputCornerRadius = 4,
+			StrokeThickness = 1,
+			StrokeTransparency = 0.5
 		},
 
 		MultiDropdown = {
-			Height = 34,                 -- Multi-dropdown height
-			ListAreaHeight = 120,        -- Multi-dropdown list area height
-			OptionHeight = 26,           -- Multi-dropdown option height
-			OptionTextSize = 11,         -- Multi-dropdown option text size
-			SearchTextSize = 11,         -- Search box text size
-			ButtonTextSize = 9,          -- Action button text size
-			SearchPlaceholder = "Search options...", -- Search placeholder text
-			ClearButtonText = "CLEAR",   -- Clear button text
-			SelectAllButtonText = "ALL"  -- Select all button text
+			Height = 34,
+			ListAreaHeight = 120,
+			OptionHeight = 26,
+			OptionTextSize = 11,
+			SearchTextSize = 11,
+			ButtonTextSize = 9,
+			SearchPlaceholder = "Search options...",
+			ClearButtonText = "CLEAR",
+			SelectAllButtonText = "ALL"
 		},
 
 		Keybind = {
-			ButtonWidth = 58,            -- Keybind button width
-			ButtonHeight = 24,           -- Keybind button height
-			ButtonCornerRadius = 4,      -- Keybind button corner rounding
-			ButtonTextSize = 10,         -- Keybind button text size
-			StrokeThickness = 1,         -- Keybind border thickness
-			StrokeTransparency = 0.5     -- Keybind border transparency
+			ButtonWidth = 58,
+			ButtonHeight = 24,
+			ButtonCornerRadius = 4,
+			ButtonTextSize = 10,
+			StrokeThickness = 1,
+			StrokeTransparency = 0.5
 		},
 
 		Label = {
-			Height = 30,                 -- Label height
-			TextSize = 11,               -- Label text size
-			Font = Enum.Font.Gotham      -- Label font
+			Height = 30,
+			TextSize = 11,
+			Font = Enum.Font.Gotham
 		},
 
 		Section = {
-			CornerRadius = 8,            -- Section corner rounding
-			HeaderHeight = 34,           -- Section header height
-			HeaderBackgroundTransparency = 0.2, -- Section header transparency
-			TitleSize = 13,              -- Section title text size
-			TitleFont = Enum.Font.GothamBold -- Section title font
+			CornerRadius = 8,
+			HeaderHeight = 34,
+			HeaderBackgroundTransparency = 0.2,
+			TitleSize = 13,
+			TitleFont = Enum.Font.GothamBold
 		}
 	},
 
 	Notification = {
-		Width = 300,                     -- Notification width
-		Height = 70,                     -- Notification height
-		CornerRadius = 8,                -- Notification corner rounding
-		BackgroundTransparency = 0.15,   -- Notification background transparency
-		StrokeThickness = 1.5,           -- Notification border thickness
-		TitleSize = 13,                  -- Notification title text size
-		ContentSize = 11,                -- Notification content text size
-		TitleFont = Enum.Font.GothamBold, -- Notification title font
-		ContentFont = Enum.Font.Gotham,  -- Notification content font
-		MaxNotifications = 3,            -- Maximum simultaneous notifications (changed from 5 to 3)
-		DefaultDuration = 3              -- Default notification duration in seconds
+		Width = 300,
+		Height = 70,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.15,
+		StrokeThickness = 1.5,
+		TitleSize = 13,
+		ContentSize = 11,
+		TitleFont = Enum.Font.GothamBold,
+		ContentFont = Enum.Font.Gotham,
+		MaxNotifications = 3,
+		DefaultDuration = 3
 	},
 
 	ScrollBar = {
-		Thickness = 4,                   -- Scrollbar thickness
-		Transparency = 0.3,              -- Scrollbar transparency
-		AutoHideDelay = 0.5              -- Scrollbar auto-hide delay in seconds
+		Thickness = 4,
+		Transparency = 0.3,
+		AutoHideDelay = 0.5
 	},
 
 	Animation = {
-		HoverDuration = 0.15,            -- Hover animation duration
-		ClickDuration = 0.08,            -- Click animation duration
-		RestoreDuration = 0.15,          -- Restore animation duration
-		TweenDuration = 0.2,             -- General tween duration
-		DropdownDuration = 0.2,          -- Dropdown animation duration
-		NotificationDuration = 0.3,      -- Notification animation duration
-		WindowCloseDuration = 0.25,      -- Window close animation duration
-		CenterElementDuration = 0.3,     -- Center element animation duration
-		EasingStyle = Enum.EasingStyle.Quart, -- Default easing style
-		EasingDirection = Enum.EasingDirection.Out -- Default easing direction
+		HoverDuration = 0.15,
+		ClickDuration = 0.08,
+		RestoreDuration = 0.15,
+		TweenDuration = 0.2,
+		DropdownDuration = 0.2,
+		NotificationDuration = 0.3,
+		WindowCloseDuration = 0.25,
+		CenterElementDuration = 0.3,
+		EasingStyle = Enum.EasingStyle.Quart,
+		EasingDirection = Enum.EasingDirection.Out
 	}
 }
 
--- Color theme system
 Astral.Theme = {
-	Main = Color3.fromRGB(15, 15, 20),       -- Primary background color
-	Secondary = Color3.fromRGB(25, 25, 30),  -- Secondary background color
-	Tertiary = Color3.fromRGB(20, 20, 25),   -- Tertiary background color
-	Accent = Color3.fromRGB(88, 139, 255),   -- Primary accent color
-	Text = Color3.fromRGB(245, 245, 250),    -- Primary text color
-	TextDark = Color3.fromRGB(150, 150, 160),-- Secondary text color
-	TextDarker = Color3.fromRGB(100, 100, 110),-- Tertiary text color
-	Stroke = Color3.fromRGB(50, 50, 60),     -- Primary border color
-	StrokeDark = Color3.fromRGB(35, 35, 45), -- Secondary border color
-	HoverBright = Color3.fromRGB(35, 35, 42),-- Hover state color
-	Success = Color3.fromRGB(80, 200, 120),  -- Success color
-	Warning = Color3.fromRGB(255, 180, 80),  -- Warning color
-	Error = Color3.fromRGB(255, 100, 100),   -- Error color,
+	Main = Color3.fromRGB(15, 15, 20),
+	Secondary = Color3.fromRGB(25, 25, 30),
+	Tertiary = Color3.fromRGB(20, 20, 25),
+	Accent = Color3.fromRGB(88, 139, 255),
+	Text = Color3.fromRGB(245, 245, 250),
+	TextDark = Color3.fromRGB(150, 150, 160),
+	TextDarker = Color3.fromRGB(100, 100, 110),
+	Stroke = Color3.fromRGB(50, 50, 60),
+	StrokeDark = Color3.fromRGB(35, 35, 45),
+	HoverBright = Color3.fromRGB(35, 35, 42),
+	Success = Color3.fromRGB(80, 200, 120),
+	Warning = Color3.fromRGB(255, 180, 80),
+	Error = Color3.fromRGB(255, 100, 100),
 
 	TypeColors = {
-		Info = Color3.fromRGB(88, 139, 255),    -- Info notification color
-		Success = Color3.fromRGB(80, 200, 120), -- Success notification color
-		Warning = Color3.fromRGB(255, 180, 80), -- Warning notification color
-		Error = Color3.fromRGB(255, 100, 100)   -- Error notification color
+		Info = Color3.fromRGB(88, 139, 255),
+		Success = Color3.fromRGB(80, 200, 120),
+		Warning = Color3.fromRGB(255, 180, 80),
+		Error = Color3.fromRGB(255, 100, 100)
 	}
 }
 
@@ -534,7 +532,7 @@ function Astral:Window(Options)
 	ScreenGui.ResetOnSpawn = false
 
 	local ActiveNotifications = {}
-	local NotificationsEnabled = true  -- Added toggle for notifications
+	local NotificationsEnabled = true
 
 	local BaseWidth = Astral.Config.Window.BaseWidth
 	local BaseHeight = Astral.Config.Window.BaseHeight
@@ -854,13 +852,17 @@ function Astral:Window(Options)
 				Astral.Config.Animation.NotificationDuration,
 				Astral.Config.Animation.EasingStyle,
 				Astral.Config.Animation.EasingDirection
-				), {
-					Position = UDim2.new(1, -ApplyScale(20), 1, TargetYOffset)
-				}):Play()
+			), {
+				Position = UDim2.new(1, -ApplyScale(20), 1, TargetYOffset)
+			}):Play()
 		end
 	end
 
-	local function ForceRemoveNotification(NotificationFrame, Immediate)
+	local function RemoveNotification(NotificationFrame, FastFade)
+		if not NotificationFrame or not NotificationFrame.Parent then
+			return
+		end
+		
 		for Index, Notification in ipairs(ActiveNotifications) do
 			if Notification == NotificationFrame then
 				table.remove(ActiveNotifications, Index)
@@ -868,32 +870,32 @@ function Astral:Window(Options)
 			end
 		end
 		
-		if Immediate then
-			NotificationFrame:Destroy()
-		else
-			local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(
-				Astral.Config.Animation.NotificationDuration,
-				Enum.EasingStyle.Quart,
-				Enum.EasingDirection.In
-			), {
-				Position = UDim2.new(1, ApplyScale(20), NotificationFrame.Position.Y.Scale, NotificationFrame.Position.Y.Offset),
-				BackgroundTransparency = 1,
-				TextTransparency = 1
-			})
-			ExitTween:Play()
-			
-			ExitTween.Completed:Connect(function()
+		local FadeDuration = FastFade and Astral.Config.Animation.NotificationDuration * 0.5 or Astral.Config.Animation.NotificationDuration
+		
+		local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(
+			FadeDuration,
+			Enum.EasingStyle.Quart,
+			Enum.EasingDirection.In
+		), {
+			Position = UDim2.new(1, ApplyScale(20), NotificationFrame.Position.Y.Scale, NotificationFrame.Position.Y.Offset),
+			BackgroundTransparency = 1,
+			TextTransparency = 1
+		})
+		ExitTween:Play()
+		
+		ExitTween.Completed:Connect(function()
+			if NotificationFrame and NotificationFrame.Parent then
 				NotificationFrame:Destroy()
-			end)
-		end
+			end
+		end)
 		
 		UpdateNotificationPositions()
 	end
 
-	local function RemoveOldestNotification()
-		if #ActiveNotifications > 0 then
+	local function MakeRoomForNewNotification()
+		if #ActiveNotifications >= Astral.Config.Notification.MaxNotifications then
 			local OldestNotification = ActiveNotifications[1]
-			ForceRemoveNotification(OldestNotification, false)
+			RemoveNotification(OldestNotification, true)
 		end
 	end
 
@@ -909,10 +911,7 @@ function Astral:Window(Options)
 		
 		local TypeColors = Astral.Theme.TypeColors
 		
-		-- If we're at max capacity, remove the oldest notification immediately
-		if #ActiveNotifications >= Astral.Config.Notification.MaxNotifications then
-			RemoveOldestNotification()
-		end
+		MakeRoomForNewNotification()
 		
 		local NotificationFrame = Instance.new("Frame")
 		NotificationFrame.Name = "Notification_" .. tostring(tick())
@@ -971,7 +970,7 @@ function Astral:Window(Options)
 		CloseButton.ZIndex = 101
 		
 		CloseButton.MouseButton1Click:Connect(function()
-			ForceRemoveNotification(NotificationFrame, false)
+			RemoveNotification(NotificationFrame, false)
 		end)
 		
 		AddHoverEffect(
@@ -982,17 +981,15 @@ function Astral:Window(Options)
 			1
 		)
 		
-		-- Add click to close functionality
-		NotificationFrame.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
-				ForceRemoveNotification(NotificationFrame, false)
+		NotificationFrame.InputBegan:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+				RemoveNotification(NotificationFrame, false)
 			end
 		end)
 		
 		table.insert(ActiveNotifications, NotificationFrame)
 		UpdateNotificationPositions()
 		
-		-- Enter animation
 		TweenService:Create(NotificationFrame, TweenInfo.new(
 			Astral.Config.Animation.NotificationDuration,
 			Astral.Config.Animation.EasingStyle,
@@ -1001,35 +998,11 @@ function Astral:Window(Options)
 			Position = UDim2.new(1, -ApplyScale(20), 1, NotificationFrame.Position.Y.Offset)
 		}):Play()
 		
-		-- Auto-remove after duration
-		local removeConnection
-		removeConnection = game:GetService("RunService").Heartbeat:Connect(function()
-			if not NotificationFrame or not NotificationFrame.Parent then
-				removeConnection:Disconnect()
-				return
-			end
-			
-			-- Check if we're over capacity and this is the oldest notification
-			if #ActiveNotifications > Astral.Config.Notification.MaxNotifications then
-				for i, notif in ipairs(ActiveNotifications) do
-					if notif == NotificationFrame and i <= (#ActiveNotifications - Astral.Config.Notification.MaxNotifications) then
-						ForceRemoveNotification(NotificationFrame, false)
-						removeConnection:Disconnect()
-						return
-					end
-				end
-			end
+		local RemoveThread = task.delay(Duration, function()
+			RemoveNotification(NotificationFrame, false)
 		end)
 		
-		-- Regular timeout removal
-		task.delay(Duration, function()
-			if NotificationFrame and NotificationFrame.Parent then
-				ForceRemoveNotification(NotificationFrame, false)
-				if removeConnection then
-					removeConnection:Disconnect()
-				end
-			end
-		end)
+		NotificationFrame._RemoveThread = RemoveThread
 		
 		return NotificationFrame
 	end
@@ -1083,10 +1056,21 @@ function Astral:Window(Options)
 	end
 
 	function WindowFunctions:ClearNotifications()
+		local NotificationsToRemove = {}
 		for _, Notification in ipairs(ActiveNotifications) do
-			Notification:Destroy()
+			table.insert(NotificationsToRemove, Notification)
 		end
+		
 		ActiveNotifications = {}
+		
+		for _, Notification in ipairs(NotificationsToRemove) do
+			if Notification and Notification.Parent then
+				if Notification._RemoveThread then
+					task.cancel(Notification._RemoveThread)
+				end
+				RemoveNotification(Notification, false)
+			end
+		end
 	end
 
 	function WindowFunctions:SetNotificationsEnabled(Enabled)
@@ -1103,7 +1087,7 @@ function Astral:Window(Options)
 
 	function WindowFunctions:RemoveNotification(NotificationFrame)
 		if NotificationFrame and NotificationFrame.Parent then
-			ForceRemoveNotification(NotificationFrame, false)
+			RemoveNotification(NotificationFrame, false)
 		end
 	end
 
@@ -1237,8 +1221,6 @@ function Astral:Window(Options)
 			FirstTab = false
 			Activate()
 		end
-
-		local TabFunctions = {}
 
 		local TabFunctions = {}
 
@@ -1456,14 +1438,12 @@ function Astral:Window(Options)
 			AddClickEffect(ButtonFrame)
 			ButtonFrame.MouseButton1Click:Connect(Callback)
 
-			-- Button update functions
 			local ButtonObject = {}
 			function ButtonObject:Update(NewOptions)
 				if NewOptions.Name then
 					ButtonLabel.Text = NewOptions.Name
 				end
 				if NewOptions.Callback then
-					-- Disconnect old callback and connect new one
 					ButtonFrame.MouseButton1Click:Disconnect()
 					ButtonFrame.MouseButton1Click:Connect(NewOptions.Callback)
 				end
@@ -1578,7 +1558,6 @@ function Astral:Window(Options)
 			end)
 			Update()
 
-			-- Toggle update functions
 			local ToggleObject = {}
 			function ToggleObject:Update(NewOptions)
 				if NewOptions.Name then
@@ -1586,7 +1565,6 @@ function Astral:Window(Options)
 				end
 				if NewOptions.Callback then
 					Callback = NewOptions.Callback
-					-- Reconnect with new callback
 					CheckButton.MouseButton1Click:Disconnect()
 					CheckButton.MouseButton1Click:Connect(function()
 						State = not State
@@ -1608,7 +1586,6 @@ function Astral:Window(Options)
 					ToggleFrame.Size = ToggleWidth and 
 						UDim2.new(0, ApplyScale(ToggleWidth), 0, NewHeight) or
 						UDim2.new(1, 0, 0, NewHeight)
-					-- Update switch position
 					CheckButton.Position = UDim2.new(1, -ToggleSwitchWidth - ApplyScale(8), 0.5, -ToggleSwitchHeight / 2)
 				end
 				if NewOptions.Width then
@@ -1804,7 +1781,6 @@ function Astral:Window(Options)
 				UpdateFromText()
 			end)
 
-			-- Slider update functions
 			local SliderObject = {}
 			function SliderObject:Update(NewOptions)
 				if NewOptions.Name then
@@ -1812,7 +1788,7 @@ function Astral:Window(Options)
 				end
 				if NewOptions.Callback then
 					Callback = NewOptions.Callback
-					Callback(Value) -- Call with current value
+					Callback(Value)
 				end
 				if NewOptions.Min then
 					Min = NewOptions.Min
@@ -1954,7 +1930,6 @@ function Astral:Window(Options)
 				end
 			end)
 
-			-- TextBox update functions
 			local TextBoxObject = {}
 			function TextBoxObject:Update(NewOptions)
 				if NewOptions.Name then
@@ -1980,7 +1955,6 @@ function Astral:Window(Options)
 					TextBoxFrame.Size = TextBoxWidth and 
 						UDim2.new(0, ApplyScale(TextBoxWidth), 0, NewHeight) or
 						UDim2.new(1, 0, 0, NewHeight)
-					-- Update input box position
 					InputBox.Position = UDim2.new(0, ApplyScale(BasePadding), 0, ApplyScale(Astral.Config.Elements.TextBox.LabelHeight + 8))
 				end
 				if NewOptions.Width then
@@ -2227,7 +2201,6 @@ function Astral:Window(Options)
 				end
 			end)
 
-			-- Dropdown update functions
 			local DropdownObject = {}
 			function DropdownObject:Update(NewOptions)
 				if NewOptions.Name then
@@ -2254,7 +2227,6 @@ function Astral:Window(Options)
 				end
 				if NewOptions.VisibleOptions then
 					VisibleOptions = NewOptions.VisibleOptions
-					-- Recalculate heights
 					CalculatedListHeight = (OptionHeight + OptionPadding) * VisibleOptions - OptionPadding
 					if CalculatedListHeight < OptionHeight then
 						CalculatedListHeight = OptionHeight
@@ -2608,7 +2580,6 @@ function Astral:Window(Options)
 				end
 			end)
 
-			-- MultiDropdown update functions
 			local MultiDropdownObject = {}
 			function MultiDropdownObject:Update(NewOptions)
 				if NewOptions.Name then
@@ -2620,7 +2591,6 @@ function Astral:Window(Options)
 				end
 				if NewOptions.Options then
 					DropdownOptions = NewOptions.Options
-					-- Filter out selections that are no longer in options
 					for i = #SelectionOrder, 1, -1 do
 						local option = SelectionOrder[i]
 						if not table.find(DropdownOptions, option) then
@@ -2646,7 +2616,6 @@ function Astral:Window(Options)
 				end
 				if NewOptions.Max then
 					Max = NewOptions.Max
-					-- Remove excess selections if needed
 					while #SelectionOrder > Max do
 						local removed = table.remove(SelectionOrder, 1)
 						Selected[removed] = false
@@ -2659,7 +2628,6 @@ function Astral:Window(Options)
 				end
 				if NewOptions.VisibleOptions then
 					VisibleOptions = NewOptions.VisibleOptions
-					-- Recalculate heights
 					CalculatedListHeight = (OptionHeight + OptionPadding) * VisibleOptions - OptionPadding
 					if CalculatedListHeight < OptionHeight then
 						CalculatedListHeight = OptionHeight
@@ -2694,7 +2662,6 @@ function Astral:Window(Options)
 			
 			function MultiDropdownObject:SetOptions(NewOptions)
 				DropdownOptions = NewOptions
-				-- Filter out selections that are no longer in options
 				for i = #SelectionOrder, 1, -1 do
 					local option = SelectionOrder[i]
 					if not table.find(DropdownOptions, option) then
@@ -2883,7 +2850,6 @@ function Astral:Window(Options)
 				end
 			end)
 
-			-- Keybind update functions
 			local KeybindObject = {}
 			function KeybindObject:Update(NewOptions)
 				if NewOptions.Name then
@@ -2908,7 +2874,6 @@ function Astral:Window(Options)
 					KeybindFrame.Size = KeybindWidth and 
 						UDim2.new(0, ApplyScale(KeybindWidth), 0, NewHeight) or
 						UDim2.new(1, 0, 0, NewHeight)
-					-- Update button position
 					KeybindButton.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Keybind.ButtonWidth + 12), 0.5, -ApplyScale(Astral.Config.Elements.Keybind.ButtonHeight / 2))
 				end
 				if NewOptions.Width then
