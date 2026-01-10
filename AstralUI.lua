@@ -176,7 +176,7 @@ Astral.Config = {
 		ContentSize = 11,                -- Notification content text size
 		TitleFont = Enum.Font.GothamBold, -- Notification title font
 		ContentFont = Enum.Font.Gotham,  -- Notification content font
-		MaxNotifications = 5,            -- Maximum simultaneous notifications
+		MaxNotifications = 3,            -- Maximum simultaneous notifications (changed from 5 to 3)
 		DefaultDuration = 3              -- Default notification duration in seconds
 	},
 
@@ -533,9 +533,8 @@ function Astral:Window(Options)
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	ScreenGui.ResetOnSpawn = false
 
-	local NotificationQueue = {}
 	local ActiveNotifications = {}
-	local MaxNotifications = Astral.Config.Notification.MaxNotifications
+	local NotificationsEnabled = true  -- Added toggle for notifications
 
 	local BaseWidth = Astral.Config.Window.BaseWidth
 	local BaseHeight = Astral.Config.Window.BaseHeight
@@ -861,43 +860,62 @@ function Astral:Window(Options)
 		end
 	end
 
-	local function RemoveNotification(NotificationFrame)
+	local function ForceRemoveNotification(NotificationFrame, Immediate)
 		for Index, Notification in ipairs(ActiveNotifications) do
 			if Notification == NotificationFrame then
 				table.remove(ActiveNotifications, Index)
 				break
 			end
 		end
-
-		local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(Astral.Config.Animation.NotificationDuration), {
-			Position = UDim2.new(1, ApplyScale(20), NotificationFrame.Position.Y.Scale, NotificationFrame.Position.Y.Offset)
-		})
-		ExitTween:Play()
-
-		task.wait(Astral.Config.Animation.NotificationDuration)
-		NotificationFrame:Destroy()
+		
+		if Immediate then
+			NotificationFrame:Destroy()
+		else
+			local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(
+				Astral.Config.Animation.NotificationDuration,
+				Enum.EasingStyle.Quart,
+				Enum.EasingDirection.In
+			), {
+				Position = UDim2.new(1, ApplyScale(20), NotificationFrame.Position.Y.Scale, NotificationFrame.Position.Y.Offset),
+				BackgroundTransparency = 1,
+				TextTransparency = 1
+			})
+			ExitTween:Play()
+			
+			ExitTween.Completed:Connect(function()
+				NotificationFrame:Destroy()
+			end)
+		end
+		
 		UpdateNotificationPositions()
+	end
 
-		if #NotificationQueue > 0 then
-			local Next = table.remove(NotificationQueue, 1)
-			WindowFunctions:Notify(Next)
+	local function RemoveOldestNotification()
+		if #ActiveNotifications > 0 then
+			local OldestNotification = ActiveNotifications[1]
+			ForceRemoveNotification(OldestNotification, false)
 		end
 	end
 
 	function WindowFunctions:Notify(Options)
+		if not NotificationsEnabled then
+			return
+		end
+		
 		local Title = Options.Title or "Notification"
 		local Content = Options.Content or "Message"
 		local Duration = Options.Duration or Astral.Config.Notification.DefaultDuration
 		local Type = Options.Type or "Info"
-
+		
 		local TypeColors = Astral.Theme.TypeColors
-
-		if #ActiveNotifications >= MaxNotifications then
-			table.insert(NotificationQueue, Options)
-			return
+		
+		-- If we're at max capacity, remove the oldest notification immediately
+		if #ActiveNotifications >= Astral.Config.Notification.MaxNotifications then
+			RemoveOldestNotification()
 		end
-
+		
 		local NotificationFrame = Instance.new("Frame")
+		NotificationFrame.Name = "Notification_" .. tostring(tick())
 		NotificationFrame.Parent = ScreenGui
 		NotificationFrame.BackgroundColor3 = Astral.Theme.Main
 		NotificationFrame.BackgroundTransparency = Astral.Config.Notification.BackgroundTransparency
@@ -905,17 +923,17 @@ function Astral:Window(Options)
 		NotificationFrame.AnchorPoint = Vector2.new(1, 1)
 		NotificationFrame.Position = UDim2.new(1.5, 0, 1, -ApplyScale(20))
 		NotificationFrame.ZIndex = 100
-
+		
 		local NotificationCorner = Instance.new("UICorner")
 		NotificationCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Notification.CornerRadius))
 		NotificationCorner.Parent = NotificationFrame
-
+		
 		local NotificationStroke = Instance.new("UIStroke")
 		NotificationStroke.Color = TypeColors[Type]
 		NotificationStroke.Thickness = ApplyScale(Astral.Config.Notification.StrokeThickness)
-		NotificationStroke.Transparency = Astral.Config.Notification.StrokeThickness
+		NotificationStroke.Transparency = 0
 		NotificationStroke.Parent = NotificationFrame
-
+		
 		local NotificationTitle = Instance.new("TextLabel")
 		NotificationTitle.Parent = NotificationFrame
 		NotificationTitle.BackgroundTransparency = 1
@@ -926,7 +944,7 @@ function Astral:Window(Options)
 		NotificationTitle.TextColor3 = Astral.Theme.Text
 		NotificationTitle.TextSize = ApplyScale(Astral.Config.Notification.TitleSize)
 		NotificationTitle.TextXAlignment = Enum.TextXAlignment.Left
-
+		
 		local NotificationContent = Instance.new("TextLabel")
 		NotificationContent.Parent = NotificationFrame
 		NotificationContent.BackgroundTransparency = 1
@@ -940,37 +958,80 @@ function Astral:Window(Options)
 		NotificationContent.TextXAlignment = Enum.TextXAlignment.Left
 		NotificationContent.TextYAlignment = Enum.TextYAlignment.Top
 		NotificationContent.TextWrapped = true
-
+		
+		local CloseButton = Instance.new("TextButton")
+		CloseButton.Parent = NotificationFrame
+		CloseButton.BackgroundTransparency = 1
+		CloseButton.Size = UDim2.new(0, ApplyScale(20), 0, ApplyScale(20))
+		CloseButton.Position = UDim2.new(1, -ApplyScale(25), 0, ApplyScale(5))
+		CloseButton.Text = "×"
+		CloseButton.TextColor3 = Astral.Theme.TextDark
+		CloseButton.TextSize = ApplyScale(14)
+		CloseButton.Font = Enum.Font.GothamBold
+		CloseButton.ZIndex = 101
+		
+		CloseButton.MouseButton1Click:Connect(function()
+			ForceRemoveNotification(NotificationFrame, false)
+		end)
+		
+		AddHoverEffect(
+			CloseButton,
+			Color3.fromRGB(255, 255, 255),
+			Color3.fromRGB(255, 255, 255),
+			0.9,
+			1
+		)
+		
+		-- Add click to close functionality
+		NotificationFrame.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+				ForceRemoveNotification(NotificationFrame, false)
+			end
+		end)
+		
 		table.insert(ActiveNotifications, NotificationFrame)
 		UpdateNotificationPositions()
-
-		task.delay(Duration, function()
-			local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(
-				Astral.Config.Animation.NotificationDuration,
-				Enum.EasingStyle.Quart,
-				Enum.EasingDirection.In
-				), {
-					Position = UDim2.new(1.5, 0, 1, NotificationFrame.Position.Y.Offset),
-					BackgroundTransparency = 1
-				})
-
-			ExitTween:Play()
-			ExitTween.Completed:Connect(function()
-				NotificationFrame:Destroy()
-				for i, v in ipairs(ActiveNotifications) do
-					if v == NotificationFrame then
-						table.remove(ActiveNotifications, i)
-						break
+		
+		-- Enter animation
+		TweenService:Create(NotificationFrame, TweenInfo.new(
+			Astral.Config.Animation.NotificationDuration,
+			Astral.Config.Animation.EasingStyle,
+			Astral.Config.Animation.EasingDirection
+		), {
+			Position = UDim2.new(1, -ApplyScale(20), 1, NotificationFrame.Position.Y.Offset)
+		}):Play()
+		
+		-- Auto-remove after duration
+		local removeConnection
+		removeConnection = game:GetService("RunService").Heartbeat:Connect(function()
+			if not NotificationFrame or not NotificationFrame.Parent then
+				removeConnection:Disconnect()
+				return
+			end
+			
+			-- Check if we're over capacity and this is the oldest notification
+			if #ActiveNotifications > Astral.Config.Notification.MaxNotifications then
+				for i, notif in ipairs(ActiveNotifications) do
+					if notif == NotificationFrame and i <= (#ActiveNotifications - Astral.Config.Notification.MaxNotifications) then
+						ForceRemoveNotification(NotificationFrame, false)
+						removeConnection:Disconnect()
+						return
 					end
 				end
-				UpdateNotificationPositions()
-
-				if #NotificationQueue > 0 then
-					local Next = table.remove(NotificationQueue, 1)
-					WindowFunctions:Notify(Next)
-				end
-			end)
+			end
 		end)
+		
+		-- Regular timeout removal
+		task.delay(Duration, function()
+			if NotificationFrame and NotificationFrame.Parent then
+				ForceRemoveNotification(NotificationFrame, false)
+				if removeConnection then
+					removeConnection:Disconnect()
+				end
+			end
+		end)
+		
+		return NotificationFrame
 	end
 
 	function WindowFunctions:Hide()
@@ -1019,6 +1080,35 @@ function Astral:Window(Options)
 
 	function WindowFunctions:GetScale()
 		return Scale
+	end
+
+	function WindowFunctions:ClearNotifications()
+		for _, Notification in ipairs(ActiveNotifications) do
+			Notification:Destroy()
+		end
+		ActiveNotifications = {}
+	end
+
+	function WindowFunctions:SetNotificationsEnabled(Enabled)
+		NotificationsEnabled = Enabled
+		
+		if not Enabled then
+			WindowFunctions:ClearNotifications()
+		end
+	end
+
+	function WindowFunctions:GetNotificationsEnabled()
+		return NotificationsEnabled
+	end
+
+	function WindowFunctions:RemoveNotification(NotificationFrame)
+		if NotificationFrame and NotificationFrame.Parent then
+			ForceRemoveNotification(NotificationFrame, false)
+		end
+	end
+
+	function WindowFunctions:GetActiveNotifications()
+		return ActiveNotifications
 	end
 
 	function WindowFunctions:Tab(Options)
