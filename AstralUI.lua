@@ -1150,6 +1150,113 @@ function Astral:Window(Options)
 
 		local TabFunctions = {}
 
+		local TabFunctions = {}
+
+		function TabFunctions:TwoColumn(Options)
+			Options = Options or {}
+
+			local TwoColumnFrame = Instance.new("Frame")
+			TwoColumnFrame.Parent = PageFrame
+			TwoColumnFrame.BackgroundTransparency = 1
+			TwoColumnFrame.Size = UDim2.new(1, 0, 0, 0)
+			TwoColumnFrame.AutomaticSize = Enum.AutomaticSize.Y
+
+			local LeftColumn = Instance.new("Frame")
+			LeftColumn.Parent = TwoColumnFrame
+			LeftColumn.BackgroundTransparency = 1
+			LeftColumn.Position = UDim2.new(0, 0, 0, 0)
+			LeftColumn.Size = UDim2.new(0.5, -ApplyScale(BasePadding / 2), 0, 0)
+			LeftColumn.AutomaticSize = Enum.AutomaticSize.Y
+
+			local LeftLayout = Instance.new("UIListLayout")
+			LeftLayout.Parent = LeftColumn
+			LeftLayout.Padding = UDim.new(0, ApplyScale(Astral.Config.Pages.Padding))
+
+			local RightColumn = Instance.new("Frame")
+			RightColumn.Parent = TwoColumnFrame
+			RightColumn.BackgroundTransparency = 1
+			RightColumn.Position = UDim2.new(0.5, ApplyScale(BasePadding / 2), 0, 0)
+			RightColumn.Size = UDim2.new(0.5, -ApplyScale(BasePadding / 2), 0, 0)
+			RightColumn.AutomaticSize = Enum.AutomaticSize.Y
+
+			local RightLayout = Instance.new("UIListLayout")
+			RightLayout.Parent = RightColumn
+			RightLayout.Padding = UDim.new(0, ApplyScale(Astral.Config.Pages.Padding))
+
+			local TwoColumnFunctions = {}
+
+			function TwoColumnFunctions:CreateSection(Column, Options)
+				local Parent = Column == "Left" and LeftColumn or RightColumn
+				local SectionName = Options.Name or "Section"
+
+				local SectionFrame = Instance.new("Frame")
+				SectionFrame.Parent = Parent
+				SectionFrame.BackgroundColor3 = Astral.Theme.Tertiary
+				SectionFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+				SectionFrame.Size = UDim2.new(1, 0, 0, 0)
+				SectionFrame.AutomaticSize = Enum.AutomaticSize.Y
+
+				local SectionCorner = Instance.new("UICorner")
+				SectionCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Section.CornerRadius))
+				SectionCorner.Parent = SectionFrame
+
+				local HeaderFrame = Instance.new("Frame")
+				HeaderFrame.Parent = SectionFrame
+				HeaderFrame.BackgroundColor3 = Astral.Theme.Main
+				HeaderFrame.BackgroundTransparency = Astral.Config.Elements.Section.HeaderBackgroundTransparency
+				HeaderFrame.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.Section.HeaderHeight))
+				local HeaderCorner = Instance.new("UICorner")
+				HeaderCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Section.CornerRadius))
+				HeaderCorner.Parent = HeaderFrame
+
+				local SectionLabel = Instance.new("TextLabel")
+				SectionLabel.Parent = HeaderFrame
+				SectionLabel.BackgroundTransparency = 1
+				SectionLabel.Size = UDim2.new(1, 0, 1, 0)
+				ApplyPadding(SectionLabel, ApplyScale(BasePadding))
+				SectionLabel.Font = Astral.Config.Elements.Section.TitleFont
+				SectionLabel.Text = SectionName
+				SectionLabel.TextColor3 = Astral.Theme.Text
+				SectionLabel.TextSize = ApplyScale(Astral.Config.Elements.Section.TitleSize)
+				SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+				local SectionContent = Instance.new("Frame")
+				SectionContent.Parent = SectionFrame
+				SectionContent.BackgroundTransparency = 1
+				SectionContent.Position = UDim2.new(0, 0, 0, ApplyScale(Astral.Config.Elements.Section.HeaderHeight))
+				SectionContent.Size = UDim2.new(1, 0, 0, 0)
+				SectionContent.AutomaticSize = Enum.AutomaticSize.Y
+
+				ApplyPadding(SectionContent, ApplyScale(BasePadding))
+
+				local SectionLayout = Instance.new("UIListLayout")
+				SectionLayout.Parent = SectionContent
+				SectionLayout.Padding = UDim.new(0, ApplyScale(BasePadding))
+
+				local SectionFunctions = {}
+				function SectionFunctions:Button(Options) return TabFunctions:Button(Options, SectionContent) end
+				function SectionFunctions:Toggle(Options) return TabFunctions:Toggle(Options, SectionContent) end
+				function SectionFunctions:Slider(Options) return TabFunctions:Slider(Options, SectionContent) end
+				function SectionFunctions:TextBox(Options) return TabFunctions:TextBox(Options, SectionContent) end
+				function SectionFunctions:Dropdown(Options) return TabFunctions:Dropdown(Options, SectionContent) end
+				function SectionFunctions:MultiDropdown(Options) return TabFunctions:MultiDropdown(Options, SectionContent) end
+				function SectionFunctions:Keybind(Options) return TabFunctions:Keybind(Options, SectionContent) end
+				function SectionFunctions:Label(Options) return TabFunctions:Label(Options, SectionContent) end
+
+				return SectionFunctions
+			end
+
+			function TwoColumnFunctions:Left(Options)
+				return TwoColumnFunctions:CreateSection("Left", Options)
+			end
+
+			function TwoColumnFunctions:Right(Options)
+				return TwoColumnFunctions:CreateSection("Right", Options)
+			end
+
+			return TwoColumnFunctions
+		end
+
 		function TabFunctions:Section(Options)
 			local SectionName = Options.Name or "Section"
 
