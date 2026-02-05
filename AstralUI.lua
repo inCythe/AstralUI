@@ -6,252 +6,217 @@ local Player = Players.LocalPlayer
 
 local Astral = {}
 
--- Main configuration system
 Astral.Config = {
 	Window = {
-		BaseWidth = 720,               -- Default window width
-		BaseHeight = 520,              -- Default window height
-		BasePadding = 8,               -- Default padding between elements
-		CornerRadius = 12,             -- Main window corner rounding
-		BackgroundTransparency = 0.15, -- Window background transparency
-		StrokeThickness = 1.5,         -- Window border thickness
-		StrokeTransparency = 0.4       -- Window border transparency
+		Width = 720,
+		Height = 520,
+		Padding = 8,
+		CornerRadius = 12,
+		BackgroundTransparency = 0.15,
+		StrokeThickness = 1.5,
+		StrokeTransparency = 0.4
 	},
 
 	Topbar = {
-		Height = 36,                    -- Topbar height
-		CornerRadius = 8,               -- Topbar corner rounding
-		BackgroundTransparency = 0.2,   -- Topbar background transparency
-		TitleFont = Enum.Font.GothamBold, -- Title font
-		TitleSize = 14,                 -- Title text size
-		TitleAlignment = Enum.TextXAlignment.Left -- Title alignment
+		Height = 36,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.2,
+		TitleFont = Enum.Font.GothamBold,
+		TitleSize = 14,
+		TitleAlignment = Enum.TextXAlignment.Left
 	},
 
 	Controls = {
-		ButtonSize = 26,                -- Control button size
-		ButtonCornerRadius = 6,         -- Control button corner rounding
-		CloseButtonText = "×",          -- Close button text
-		CloseButtonSize = 18,           -- Close button text size
-		MinimizeButtonText = "−",       -- Minimize button text
-		MinimizeButtonSize = 16         -- Minimize button text size
+		ButtonSize = 26,
+		ButtonCornerRadius = 6,
+		CloseButton = {
+			Text = "×",
+			Size = 18
+		},
+		MinimizeButton = {
+			Text = "−",
+			Size = 16
+		}
 	},
 
 	Bubble = {
-		Size = 50,                      -- Bubble diameter
-		Icon = "rbxassetid://7733954760", -- Bubble icon ID
-		StrokeThickness = 2,            -- Bubble border thickness
-		StrokeTransparency = 0.3,       -- Bubble border transparency
-		SnapMargin = 3,                 -- Very small snap margin
-		EdgeMargin = 1,                 -- Small margin from screen edges
-		TopBottomMargin = 1             -- Small margin from top/bottom
+		Size = 50,
+		Icon = "rbxassetid://7733954760",
+		StrokeThickness = 2,
+		StrokeTransparency = 0.3,
+		SnapMargin = 3,
+		EdgeMargin = 1,
+		TopBottomMargin = 1
 	},
 
 	Sidebar = {
-		Width = 130,                    -- Sidebar width
-		CornerRadius = 8,               -- Sidebar corner rounding
-		BackgroundTransparency = 0.2,   -- Sidebar background transparency
-		StrokeThickness = 1,            -- Sidebar border thickness
-		StrokeTransparency = 0.4        -- Sidebar border transparency
+		Width = 130,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.2
 	},
 
 	Tab = {
-		Height = 34,                    -- Tab button height
-		CornerRadius = 8,               -- Tab button corner rounding
-		BackgroundTransparency = 0.25,  -- Tab button background transparency
-		IconSize = 16,                  -- Tab icon size
-		LabelFont = Enum.Font.GothamMedium, -- Tab label font
-		LabelSize = 11,                 -- Tab label text size
-		IndicatorWidth = 2,             -- Active tab indicator width
-		IndicatorHeight = 16,           -- Active tab indicator height
-		Padding = 8                     -- Tab spacing
+		Height = 34,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.25,
+		IconSize = 16,
+		Font = Enum.Font.GothamMedium,
+		Size = 11,
+		IndicatorWidth = 2,
+		IndicatorHeight = 16,
+		Padding = 8
 	},
 
 	Pages = {
-		CornerRadius = 8,               -- Page frame corner rounding
-		BackgroundTransparency = 0.2,   -- Page background transparency
-		Padding = 8                     -- Page content padding
+		CornerRadius = 8,
+		BackgroundTransparency = 0.5,
+		Padding = 8
 	},
 
 	Elements = {
-		Height = 34,                    -- Standard element height
-		CornerRadius = 6,               -- Element corner rounding
-		BackgroundTransparency = 0.25,  -- Element background transparency
-		LabelFont = Enum.Font.GothamMedium, -- Element label font
-		LabelSize = 12,                 -- Element label text size
-		LabelAlignment = Enum.TextXAlignment.Left, -- Element label alignment
+		Height = 34,
+		CornerRadius = 6,
+		BackgroundTransparency = 0.25,
+		Font = Enum.Font.GothamMedium,
+		Size = 12,
+		Alignment = Enum.TextXAlignment.Left,
 
 		Button = {
-			HoverTransparency = 0.15,   -- Button hover transparency
-			NormalTransparency = 0.25   -- Button normal transparency
+			HoverTransparency = 0.15,
+			NormalTransparency = 0.25
 		},
 
 		Toggle = {
-			Width = 38,                  -- Toggle switch width
-			Height = 18,                 -- Toggle switch height
-			CircleSize = 14              -- Toggle circle size
+			Width = 38,
+			Height = 18,
+			CircleSize = 14
 		},
 
 		Slider = {
-			Height = 50,                 -- Slider height
-			LabelHeight = 16,            -- Slider label height
-			InputWidth = 48,             -- Value input width
-			InputHeight = 20,            -- Value input height
-			InputTextSize = 11,          -- Value input text size
-			TrackHeight = 6,             -- Slider track height
-			BallSize = 14,               -- Slider ball size
-			ValueInputFont = Enum.Font.GothamBold -- Value input font
+			Height = 50,
+			LabelHeight = 16,
+			InputWidth = 58,
+			InputHeight = 24,
+			InputSize = 11,
+			TrackHeight = 6,
+			BallSize = 12,
+			InputFont = Enum.Font.GothamBold
 		},
 
 		TextBox = {
-			Height = 44,                 -- TextBox height
-			LabelHeight = 16,            -- TextBox label height
-			InputHeight = 16,            -- TextBox input height
-			InputTextSize = 11,          -- TextBox input text size
-			PlaceholderColor = Color3.fromRGB(100, 100, 110), -- Placeholder text color
-			InputCornerRadius = 4,       -- TextBox input corner rounding
-			StrokeThickness = 1,         -- TextBox border thickness
-			StrokeTransparency = 0.5     -- TextBox border transparency
+			Height = 50,
+			LabelHeight = 20,
+			InputHeight = 20,
+			InputSize = 11,
+			InputCornerRadius = 4,
+			StrokeThickness = 1,
+			StrokeTransparency = 0.5
 		},
 
 		Dropdown = {
-			Height = 34,                 -- Dropdown height
-			LabelTextSize = 12,          -- Dropdown label text size
-			ArrowSize = 12,              -- Dropdown arrow size
-			ListAreaHeight = 100,        -- Dropdown list area height
-			OptionHeight = 26,           -- Dropdown option height
-			OptionTextSize = 11,         -- Dropdown option text size
-			SearchTextSize = 11,         -- Search box text size
-			ButtonTextSize = 9,          -- Action button text size
-			SearchPlaceholder = "Search...", -- Search placeholder text
-			ClearButtonText = "CLEAR",   -- Clear button text
-			SelectAllButtonText = "ALL", -- Select all button text
-			InputCornerRadius = 4,       -- Input corner rounding
-			StrokeThickness = 1,         -- Input border thickness
-			StrokeTransparency = 0.5     -- Input border transparency
+			Height = 34,
+			Size = 12,
+			ArrowSize = 12,
+			ListAreaHeight = 100,
+			OptionHeight = 26,
+			OptionSize = 11,
+			SearchSize = 11,
+			ButtonSize = 9,
+			InputCornerRadius = 4,
+			StrokeThickness = 1,
+			StrokeTransparency = 0.5
 		},
 
 		MultiDropdown = {
-			Height = 34,                 -- Multi-dropdown height
-			ListAreaHeight = 120,        -- Multi-dropdown list area height
-			OptionHeight = 26,           -- Multi-dropdown option height
-			OptionTextSize = 11,         -- Multi-dropdown option text size
-			SearchTextSize = 11,         -- Search box text size
-			ButtonTextSize = 9,          -- Action button text size
-			SearchPlaceholder = "Search options...", -- Search placeholder text
-			ClearButtonText = "CLEAR",   -- Clear button text
-			SelectAllButtonText = "ALL"  -- Select all button text
+			Height = 34,
+			ListAreaHeight = 120,
+			OptionHeight = 26,
+			OptionSize = 11,
+			SearchSize = 11,
+			ButtonSize = 9
 		},
 
 		Keybind = {
-			ButtonWidth = 58,            -- Keybind button width
-			ButtonHeight = 24,           -- Keybind button height
-			ButtonCornerRadius = 4,      -- Keybind button corner rounding
-			ButtonTextSize = 10,         -- Keybind button text size
-			StrokeThickness = 1,         -- Keybind border thickness
-			StrokeTransparency = 0.5     -- Keybind border transparency
+			ButtonWidth = 58,
+			ButtonHeight = 24,
+			ButtonCornerRadius = 4,
+			ButtonSize = 10,
+			StrokeThickness = 1,
+			StrokeTransparency = 0.5
 		},
 
 		Label = {
-			Height = 30,                 -- Label height
-			TextSize = 11,               -- Label text size
-			Font = Enum.Font.Gotham      -- Label font
+			Height = 30,
+			Size = 11,
+			Font = Enum.Font.Gotham
 		},
 
 		Section = {
-			CornerRadius = 8,            -- Section corner rounding
-			HeaderHeight = 34,           -- Section header height
-			HeaderBackgroundTransparency = 0.2, -- Section header transparency
-			TitleSize = 13,              -- Section title text size
-			TitleFont = Enum.Font.GothamBold -- Section title font
+			CornerRadius = 8,
+			BackgroundTransparency = 0.25,
+			HeaderHeight = 34,
+			HeaderBackgroundTransparency = 0.2,
+			TitleSize = 13,
+			TitleFont = Enum.Font.GothamBold
 		}
 	},
 
 	Notification = {
-		Width = 300,                     -- Notification width
-		Height = 70,                     -- Notification height
-		CornerRadius = 8,                -- Notification corner rounding
-		BackgroundTransparency = 0.15,   -- Notification background transparency
-		StrokeThickness = 1.5,           -- Notification border thickness
-		TitleSize = 13,                  -- Notification title text size
-		ContentSize = 11,                -- Notification content text size
-		TitleFont = Enum.Font.GothamBold, -- Notification title font
-		ContentFont = Enum.Font.Gotham,  -- Notification content font
-		MaxNotifications = 5,            -- Maximum simultaneous notifications
-		DefaultDuration = 3              -- Default notification duration in seconds
+		Width = 300,
+		Height = 70,
+		CornerRadius = 8,
+		BackgroundTransparency = 0.15,
+		StrokeThickness = 1.5,
+		TitleSize = 13,
+		ContentSize = 11,
+		TitleFont = Enum.Font.GothamBold,
+		ContentFont = Enum.Font.Gotham,
+		MaxNotifications = 5,
+		DefaultDuration = 3
 	},
 
 	ScrollBar = {
-		Thickness = 4,                   -- Scrollbar thickness
-		Transparency = 0.3,              -- Scrollbar transparency
-		AutoHideDelay = 0.5              -- Scrollbar auto-hide delay in seconds
+		Thickness = 4,
+		Transparency = 0.3,
+		AutoHideDelay = 0.5
 	},
 
 	Animation = {
-		HoverDuration = 0.15,            -- Hover animation duration
-		ClickDuration = 0.08,            -- Click animation duration
-		RestoreDuration = 0.15,          -- Restore animation duration
-		TweenDuration = 0.2,             -- General tween duration
-		DropdownDuration = 0.2,          -- Dropdown animation duration
-		NotificationDuration = 0.3,      -- Notification animation duration
-		WindowCloseDuration = 0.25,      -- Window close animation duration
-		CenterElementDuration = 0.3,     -- Center element animation duration
-		EasingStyle = Enum.EasingStyle.Quart, -- Default easing style
-		EasingDirection = Enum.EasingDirection.Out -- Default easing direction
+		HoverDuration = 0.15,
+		ClickDuration = 0.08,
+		RestoreDuration = 0.15,
+		TweenDuration = 0.2,
+		DropdownDuration = 0.2,
+		NotificationDuration = 0.3,
+		WindowCloseDuration = 0.25,
+		CenterElementDuration = 0.3,
+		EasingStyle = Enum.EasingStyle.Quart,
+		EasingDirection = Enum.EasingDirection.Out
 	}
 }
 
--- Color theme system
 Astral.Theme = {
-	Main = Color3.fromRGB(15, 15, 20),       -- Primary background color
-	Secondary = Color3.fromRGB(25, 25, 30),  -- Secondary background color
-	Tertiary = Color3.fromRGB(20, 20, 25),   -- Tertiary background color
-	Accent = Color3.fromRGB(88, 139, 255),   -- Primary accent color
-	Text = Color3.fromRGB(245, 245, 250),    -- Primary text color
-	TextDark = Color3.fromRGB(150, 150, 160),-- Secondary text color
-	TextDarker = Color3.fromRGB(100, 100, 110),-- Tertiary text color
-	Stroke = Color3.fromRGB(50, 50, 60),     -- Primary border color
-	StrokeDark = Color3.fromRGB(35, 35, 45), -- Secondary border color
-	HoverBright = Color3.fromRGB(35, 35, 42),-- Hover state color
-	Success = Color3.fromRGB(80, 200, 120),  -- Success color
-	Warning = Color3.fromRGB(255, 180, 80),  -- Warning color
-	Error = Color3.fromRGB(255, 100, 100),   -- Error color,
-
-	TypeColors = {
-		Info = Color3.fromRGB(88, 139, 255),    -- Info notification color
-		Success = Color3.fromRGB(80, 200, 120), -- Success notification color
-		Warning = Color3.fromRGB(255, 180, 80), -- Warning notification color
-		Error = Color3.fromRGB(255, 100, 100)   -- Error notification color
-	}
+	Main = Color3.fromRGB(15, 15, 20),
+	Secondary = Color3.fromRGB(25, 25, 30),
+	Tertiary = Color3.fromRGB(20, 20, 25),
+	Accent = Color3.fromRGB(88, 139, 255),
+	Text = Color3.fromRGB(245, 245, 250),
+	TextDark = Color3.fromRGB(150, 150, 160),
+	TextDarker = Color3.fromRGB(100, 100, 110),
+	Stroke = Color3.fromRGB(50, 50, 60),
+	StrokeDark = Color3.fromRGB(35, 35, 45),
+	HoverBright = Color3.fromRGB(35, 35, 42),
+	Success = Color3.fromRGB(80, 200, 120),
+	Warning = Color3.fromRGB(255, 180, 80),
+	Error = Color3.fromRGB(255, 100, 100),
+	Info = Color3.fromRGB(88, 139, 255),
 }
 
-function Astral:SetTheme(NewTheme)
-	for Key, Value in pairs(NewTheme) do
-		if Astral.Theme[Key] ~= nil then
-			Astral.Theme[Key] = Value
-		end
-	end
-
-	if not NewTheme.TypeColors then
-		Astral.Theme.TypeColors.Info = Astral.Theme.Accent
-		Astral.Theme.TypeColors.Success = Astral.Theme.Success
-		Astral.Theme.TypeColors.Warning = Astral.Theme.Warning
-		Astral.Theme.TypeColors.Error = Astral.Theme.Error
-	end
-end
-
-function Astral:SetConfig(NewConfig)
-	local function UpdateConfigTable(Target, Source)
-		for Key, Value in pairs(Source) do
-			if type(Value) == "table" and Target[Key] ~= nil and type(Target[Key]) == "table" then
-				UpdateConfigTable(Target[Key], Value)
-			elseif Target[Key] ~= nil then
-				Target[Key] = Value
-			end
-		end
-	end
-
-	UpdateConfigTable(Astral.Config, NewConfig)
-end
+Astral.UIObjects = {
+	Windows = {},
+	Elements = {},
+	ScrollBars = {}
+}
 
 local IsStudio = game:GetService("RunService"):IsStudio()
 local TargetParent = IsStudio and Player.PlayerGui or CoreGui
@@ -268,6 +233,104 @@ if TargetParent:FindFirstChild("AstralUI") then
 			Child:Destroy()
 		end
 	end
+end
+
+function Astral:GetElementColor(ColorType)
+	local ColorMap = {
+		WindowBackground = self.Theme.Main,
+		WindowStroke = self.Theme.Stroke,
+		TopbarBackground = self.Theme.Main,
+		SidebarBackground = self.Theme.Main,
+		PagesBackground = self.Theme.Secondary,
+
+		SectionBackground = self.Theme.Tertiary,
+		SectionHeaderBackground = self.Theme.Main,
+		SectionTitle = self.Theme.Text,
+
+		ElementBackground = self.Theme.Main,
+		ElementSecondary = self.Theme.Secondary,
+		ElementTertiary = self.Theme.Tertiary,
+
+		ButtonBackground = self.Theme.Main,
+		ButtonHover = self.Theme.HoverBright,
+		ButtonText = self.Theme.Text,
+
+		ToggleOn = self.Theme.Accent,
+		ToggleOff = self.Theme.Tertiary,
+		ToggleCircle = self.Theme.Text,
+		ToggleBackground = self.Theme.Main,
+
+		SliderTrack = self.Theme.Tertiary,
+		SliderFill = self.Theme.Accent,
+		SliderBall = self.Theme.Text,
+		SliderInputBackground = self.Theme.Tertiary,
+		SliderInputText = self.Theme.Accent,
+		SliderLabel = self.Theme.Text,
+		SliderInputBorder = self.Theme.Stroke,
+
+		TextBoxBackground = self.Theme.Tertiary,
+		TextBoxText = self.Theme.Text,
+		TextBoxPlaceholder = self.Theme.TextDarker,
+		TextBoxBorder = self.Theme.Stroke,
+		TextBoxLabel = self.Theme.Text,
+
+		DropdownBackground = self.Theme.Tertiary,
+		DropdownSelected = self.Theme.Accent,
+		DropdownOptionText = self.Theme.TextDark,
+		DropdownOptionSelectedText = self.Theme.Text,
+		DropdownOptionBackground = self.Theme.Tertiary,
+		DropdownOptionSelectedBackground = self.Theme.Accent,
+		DropdownSearchBackground = self.Theme.Tertiary,
+		DropdownSearchText = self.Theme.Text,
+		DropdownSearchPlaceholder = self.Theme.TextDarker,
+		DropdownSearchBorder = self.Theme.Stroke,
+		DropdownArrow = self.Theme.Accent,
+		DropdownClearButton = self.Theme.Error,
+		DropdownClearButtonText = self.Theme.Text,
+		DropdownSelectAllButton = self.Theme.Success,
+		DropdownSelectAllButtonText = self.Theme.Text,
+		DropdownLabel = self.Theme.Text,
+
+		KeybindButton = self.Theme.Tertiary,
+		KeybindText = self.Theme.Accent,
+		KeybindLabel = self.Theme.Text,
+		KeybindBorder = self.Theme.Stroke,
+
+		ScrollBar = self.Theme.Accent,
+		TabIndicator = self.Theme.Accent,
+		BubbleBackground = self.Theme.Main,
+		BubbleIcon = self.Theme.Accent,
+
+		LabelText = self.Theme.TextDark,
+		LabelBackground = self.Theme.Main,
+		TitleText = self.Theme.Text,
+
+		ElementStroke = self.Theme.Stroke,
+		DarkStroke = self.Theme.StrokeDark,
+
+		NotificationInfo = self.Theme.Info,
+		NotificationSuccess = self.Theme.Success,
+		NotificationWarning = self.Theme.Warning,
+		NotificationError = self.Theme.Error,
+		NotificationBackground = self.Theme.Main,
+		NotificationTitle = self.Theme.Text,
+		NotificationContent = self.Theme.TextDark,
+
+		ControlButtonBackground = self.Theme.Main,
+		ControlButtonText = self.Theme.Text,
+		ControlButtonHover = self.Theme.HoverBright,
+
+		TabBackground = self.Theme.Main,
+		TabText = self.Theme.TextDark,
+		TabSelectedText = self.Theme.Text,
+		TabIcon = self.Theme.TextDark,
+		TabSelectedIcon = self.Theme.Accent,
+		TabHover = self.Theme.Tertiary,
+
+		LabelScrollBar = self.Theme.Accent,
+	}
+
+	return ColorMap[ColorType] or self.Theme.Main
 end
 
 local function ApplyPadding(Parent, Padding)
@@ -320,8 +383,10 @@ local function MakeDraggable(DragBar, WindowObject)
 	end)
 end
 
-local function AddHoverEffect(Object, HoverColor, NormalColor, HoverTransparency, NormalTransparency)
+-- Updated hover effect function to use GetElementColor dynamically
+local function AddHoverEffect(Object, HoverColorType, NormalColorType, HoverTransparency, NormalTransparency)
 	Object.MouseEnter:Connect(function()
+		local HoverColor = Astral:GetElementColor(HoverColorType)
 		local Properties = {BackgroundColor3 = HoverColor}
 		if HoverTransparency then
 			Properties.BackgroundTransparency = HoverTransparency
@@ -330,11 +395,33 @@ local function AddHoverEffect(Object, HoverColor, NormalColor, HoverTransparency
 	end)
 
 	Object.MouseLeave:Connect(function()
+		local NormalColor = Astral:GetElementColor(NormalColorType)
 		local Properties = {BackgroundColor3 = NormalColor}
 		if NormalTransparency then
 			Properties.BackgroundTransparency = NormalTransparency
 		end
 		TweenService:Create(Object, TweenInfo.new(Astral.Config.Animation.HoverDuration), Properties):Play()
+	end)
+end
+
+-- New function for tab hover effects that dynamically gets colors
+local function AddTabHoverEffect(TabButton, IsActive)
+	TabButton.MouseEnter:Connect(function()
+		if not IsActive then
+			TweenService:Create(TabButton, TweenInfo.new(Astral.Config.Animation.HoverDuration), {
+				BackgroundColor3 = Astral:GetElementColor("TabHover"),
+				BackgroundTransparency = 0.25
+			}):Play()
+		end
+	end)
+
+	TabButton.MouseLeave:Connect(function()
+		if not IsActive then
+			TweenService:Create(TabButton, TweenInfo.new(Astral.Config.Animation.HoverDuration), {
+				BackgroundColor3 = Astral:GetElementColor("TabBackground"),
+				BackgroundTransparency = Astral.Config.Tab.BackgroundTransparency
+			}):Play()
+		end
 	end)
 end
 
@@ -425,7 +512,7 @@ local function ScrollToElement(ScrollingFrame, Element, ElementFutureHeight)
 	end
 end
 
-local function CreateScrollBar(ScrollingFrame)
+local function CreateScrollBar(ScrollingFrame, WindowId)
 	ScrollingFrame.ScrollBarThickness = 0
 	ScrollingFrame.ScrollBarImageTransparency = 1
 
@@ -516,11 +603,220 @@ local function CreateScrollBar(ScrollingFrame)
 			end
 		end
 	end)
+
+	table.insert(Astral.UIObjects.ScrollBars, {
+		Frame = ScrollingFrame,
+		WindowId = WindowId
+	})
+end
+
+function Astral:SetTheme(NewTheme)
+	for Key, Value in pairs(NewTheme) do
+		if self.Theme[Key] ~= nil then
+			self.Theme[Key] = Value
+		end
+	end
+
+	self:ApplyThemeToAll()
+end
+
+function Astral:ApplyThemeToAll()
+	for _, WindowData in pairs(Astral.UIObjects.Windows) do
+		if WindowData.Window and WindowData.Window.MainFrame then
+			self:ApplyThemeToWindow(WindowData.Window)
+
+			if WindowData.Window.Functions and WindowData.Window.Functions.UpdateTabVisuals then
+				WindowData.Window.Functions:UpdateTabVisuals()
+			end
+		end
+	end
+
+	for _, Element in pairs(Astral.UIObjects.Elements) do
+		if Element.UpdateTheme then
+			Element:UpdateTheme()
+		end
+	end
+
+	for _, ScrollbarData in pairs(Astral.UIObjects.ScrollBars) do
+		if ScrollbarData.Frame and ScrollbarData.Frame.Parent then
+			ScrollbarData.Frame.ScrollBarImageColor3 = Astral:GetElementColor("ScrollBar")
+		end
+	end
+end
+
+function Astral:ApplyThemeToWindow(Window)
+	local MainFrame = Window.MainFrame
+	local ScreenGui = Window.ScreenGui
+
+	if not MainFrame then return end
+
+	-- Update main window
+	MainFrame.BackgroundColor3 = Astral:GetElementColor("WindowBackground")
+	if MainFrame.UIStroke then
+		MainFrame.UIStroke.Color = Astral:GetElementColor("WindowStroke")
+	end
+
+	-- Update topbar
+	local TopbarFrame = MainFrame:FindFirstChild("Topbar")
+	if TopbarFrame then
+		TopbarFrame.BackgroundColor3 = Astral:GetElementColor("TopbarBackground")
+
+		local TitleLabel = TopbarFrame:FindFirstChildOfClass("TextLabel")
+		if TitleLabel then
+			TitleLabel.TextColor3 = Astral:GetElementColor("TitleText")
+		end
+	end
+
+	-- Update control buttons
+	for _, child in pairs(MainFrame:GetDescendants()) do
+		if child:IsA("TextButton") then
+			if child.Text == self.Config.Controls.CloseButton.Text then
+				child.BackgroundColor3 = Astral:GetElementColor("ControlButtonBackground")
+				child.TextColor3 = Astral:GetElementColor("ControlButtonText")
+			elseif child.Text == self.Config.Controls.MinimizeButton.Text then
+				child.BackgroundColor3 = Astral:GetElementColor("ControlButtonBackground")
+				child.TextColor3 = Astral:GetElementColor("ControlButtonText")
+			end
+		end
+	end
+
+	local ContentFrame = MainFrame:FindFirstChildOfClass("Frame")
+	if ContentFrame then
+		-- Update sidebar
+		local SidebarFrame = ContentFrame:FindFirstChildOfClass("Frame")
+		if SidebarFrame then
+			SidebarFrame.BackgroundColor3 = Astral:GetElementColor("SidebarBackground")
+			-- Sidebar stroke removed
+
+			local TabContainer = SidebarFrame:FindFirstChildOfClass("ScrollingFrame")
+			if TabContainer then
+				TabContainer.ScrollBarImageColor3 = Astral:GetElementColor("ScrollBar")
+
+				if Window.Functions and Window.Functions.UpdateTabVisuals then
+					Window.Functions:UpdateTabVisuals()
+				end
+			end
+		end
+
+		-- Update pages frame
+		for _, child in pairs(ContentFrame:GetChildren()) do
+			if child:IsA("Frame") then
+				if child.Name ~= "Topbar" then
+					local isSidebar = child:FindFirstChildOfClass("ScrollingFrame") ~= nil
+					if not isSidebar then
+						child.BackgroundColor3 = Astral:GetElementColor("PagesBackground")
+					end
+				end
+			end
+		end
+	end
+
+	if ScreenGui then
+		local Bubble = ScreenGui:FindFirstChild("AstralBubble")
+		if Bubble then
+			Bubble.BackgroundColor3 = Astral:GetElementColor("BubbleBackground")
+			if Bubble.UIStroke then
+				Bubble.UIStroke.Color = Astral:GetElementColor("WindowStroke")
+			end
+			local BubbleIcon = Bubble:FindFirstChildOfClass("ImageLabel")
+			if BubbleIcon then
+				BubbleIcon.ImageColor3 = Astral:GetElementColor("BubbleIcon")
+			end
+		end
+	end
+
+	-- Apply theme to all elements within the window
+	self:ApplyThemeToWindowElements(Window)
+end
+
+function Astral:ApplyThemeToWindowElements(Window)
+	if not Window or not Window.MainFrame then return end
+
+	local MainFrame = Window.MainFrame
+
+	-- Recursively apply theme to all UI elements
+	local function ApplyThemeRecursive(Parent)
+		for _, child in pairs(Parent:GetDescendants()) do
+			if child:IsA("Frame") or child:IsA("TextButton") then
+				-- Apply background colors based on element type
+				if child.Name:find("Section") and not child.Name:find("Header") then
+					child.BackgroundColor3 = Astral:GetElementColor("SectionBackground")
+				elseif child.Name:find("Header") then
+					child.BackgroundColor3 = Astral:GetElementColor("SectionHeaderBackground")
+				elseif child.Name == "CheckButton" or child.Name:find("Toggle") then
+					-- Skip toggle buttons as they handle their own state
+				elseif child.Name:find("Button") and child:IsA("TextButton") then
+					-- Check if it's a control button
+					if child.Text == self.Config.Controls.CloseButton.Text or 
+						child.Text == self.Config.Controls.MinimizeButton.Text then
+						child.BackgroundColor3 = Astral:GetElementColor("ControlButtonBackground")
+						child.TextColor3 = Astral:GetElementColor("ControlButtonText")
+					end
+				else
+					-- Check if this is an element frame
+					local isElement = false
+					for _, element in pairs(Astral.UIObjects.Elements) do
+						if element.Frame == child then
+							isElement = true
+							break
+						end
+					end
+
+					if not isElement then
+						-- Apply default background color
+						if child.BackgroundTransparency < 1 then
+							child.BackgroundColor3 = Astral:GetElementColor("ElementBackground")
+						end
+					end
+				end
+			end
+
+			-- Apply text colors
+			if child:IsA("TextLabel") or child:IsA("TextBox") then
+				if child.Name:find("SectionLabel") or child.Name:find("Section") then
+					child.TextColor3 = Astral:GetElementColor("SectionTitle")
+				elseif child.Name:find("Label") or child.Name:find("Content") then
+					child.TextColor3 = Astral:GetElementColor("LabelText")
+				elseif child.Name:find("Title") or child.Name:find("Text") then
+					child.TextColor3 = Astral:GetElementColor("TitleText")
+				else
+					-- Default text color
+					child.TextColor3 = Astral:GetElementColor("ButtonText")
+				end
+			end
+
+			-- Apply stroke colors
+			if child:IsA("UIStroke") then
+				if child.Parent.Name == "MainFrame" then
+					child.Color = Astral:GetElementColor("WindowStroke")
+				else
+					child.Color = Astral:GetElementColor("ElementStroke")
+				end
+			end
+		end
+	end
+
+	ApplyThemeRecursive(MainFrame)
+end
+
+function Astral:SetConfig(NewConfig)
+	local function UpdateConfigTable(Target, Source)
+		for Key, Value in pairs(Source) do
+			if type(Value) == "table" and Target[Key] ~= nil and type(Target[Key]) == "table" then
+				UpdateConfigTable(Target[Key], Value)
+			elseif Target[Key] ~= nil then
+				Target[Key] = Value
+			end
+		end
+	end
+
+	UpdateConfigTable(Astral.Config, NewConfig)
 end
 
 function Astral:Window(Options)
 	local Name = Options.Name or "Astral"
 	local Scale = Options.Scale or 1
+	local WindowId = #Astral.UIObjects.Windows + 1
 
 	local function ApplyScale(Value)
 		return Value * Scale
@@ -537,9 +833,9 @@ function Astral:Window(Options)
 	local ActiveNotifications = {}
 	local MaxNotifications = Astral.Config.Notification.MaxNotifications
 
-	local BaseWidth = Astral.Config.Window.BaseWidth
-	local BaseHeight = Astral.Config.Window.BaseHeight
-	local BasePadding = Astral.Config.Window.BasePadding
+	local BaseWidth = Astral.Config.Window.Width
+	local BaseHeight = Astral.Config.Window.Height
+	local BasePadding = Astral.Config.Window.Padding
 	local ElementHeight = Astral.Config.Elements.Height
 	local TopbarHeight = Astral.Config.Topbar.Height
 	local ButtonSize = Astral.Config.Controls.ButtonSize
@@ -549,7 +845,7 @@ function Astral:Window(Options)
 
 	local MainFrame = Instance.new("Frame")
 	MainFrame.Parent = ScreenGui
-	MainFrame.BackgroundColor3 = Astral.Theme.Main
+	MainFrame.BackgroundColor3 = Astral:GetElementColor("WindowBackground")
 	MainFrame.BackgroundTransparency = Astral.Config.Window.BackgroundTransparency
 	MainFrame.Position = UDim2.new(0.5, -CurrentWidth / 2, 0.5, -CurrentHeight / 2)
 	MainFrame.Size = UDim2.new(0, CurrentWidth, 0, CurrentHeight)
@@ -561,7 +857,7 @@ function Astral:Window(Options)
 	MainCorner.Parent = MainFrame
 
 	local MainStroke = Instance.new("UIStroke")
-	MainStroke.Color = Astral.Theme.Stroke
+	MainStroke.Color = Astral:GetElementColor("WindowStroke")
 	MainStroke.Thickness = ApplyScale(Astral.Config.Window.StrokeThickness)
 	MainStroke.Transparency = Astral.Config.Window.StrokeTransparency
 	MainStroke.Parent = MainFrame
@@ -569,7 +865,7 @@ function Astral:Window(Options)
 	local TopbarFrame = Instance.new("Frame")
 	TopbarFrame.Name = "Topbar"
 	TopbarFrame.Parent = MainFrame
-	TopbarFrame.BackgroundColor3 = Astral.Theme.Main
+	TopbarFrame.BackgroundColor3 = Astral:GetElementColor("TopbarBackground")
 	TopbarFrame.BackgroundTransparency = Astral.Config.Topbar.BackgroundTransparency
 	TopbarFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 0, ApplyScale(BasePadding))
 	TopbarFrame.Size = UDim2.new(1, -ApplyScale(88), 0, ApplyScale(TopbarHeight))
@@ -586,7 +882,7 @@ function Astral:Window(Options)
 	ApplyPadding(TitleLabel, ApplyScale(BasePadding))
 	TitleLabel.Font = Astral.Config.Topbar.TitleFont
 	TitleLabel.Text = Name
-	TitleLabel.TextColor3 = Astral.Theme.Text
+	TitleLabel.TextColor3 = Astral:GetElementColor("TitleText")
 	TitleLabel.TextSize = ApplyScale(Astral.Config.Topbar.TitleSize)
 	TitleLabel.TextXAlignment = Astral.Config.Topbar.TitleAlignment
 
@@ -601,15 +897,15 @@ function Astral:Window(Options)
 
 	local CloseButton = Instance.new("TextButton")
 	CloseButton.Parent = ControlsFrame
-	CloseButton.BackgroundColor3 = Astral.Theme.Main
+	CloseButton.BackgroundColor3 = Astral:GetElementColor("ControlButtonBackground")
 	CloseButton.BackgroundTransparency = Astral.Config.Topbar.BackgroundTransparency
 	CloseButton.Size = UDim2.new(0, ApplyScale(ButtonSize), 0, ApplyScale(TopbarHeight))
 	CloseButton.Position = UDim2.new(1, -ApplyScale(ButtonSize + BasePadding), 0, 0)
 	CloseButton.AutoButtonColor = false
 	CloseButton.Font = Enum.Font.GothamBold
-	CloseButton.Text = Astral.Config.Controls.CloseButtonText
-	CloseButton.TextColor3 = Astral.Theme.Error
-	CloseButton.TextSize = ApplyScale(Astral.Config.Controls.CloseButtonSize)
+	CloseButton.Text = Astral.Config.Controls.CloseButton.Text
+	CloseButton.TextColor3 = Astral:GetElementColor("ControlButtonText")
+	CloseButton.TextSize = ApplyScale(Astral.Config.Controls.CloseButton.Size)
 	CloseButton.TextYAlignment = Enum.TextYAlignment.Center
 	CloseButton.ZIndex = 11
 
@@ -619,8 +915,8 @@ function Astral:Window(Options)
 
 	AddHoverEffect(
 		CloseButton,
-		Astral.Theme.HoverBright,
-		Astral.Theme.Main,
+		"ControlButtonHover",
+		"ControlButtonBackground",
 		Astral.Config.Elements.Button.HoverTransparency,
 		Astral.Config.Topbar.BackgroundTransparency
 	)
@@ -644,19 +940,26 @@ function Astral:Window(Options)
 		Tween:Play()
 		task.wait(Astral.Config.Animation.WindowCloseDuration)
 		ScreenGui:Destroy()
+
+		for i, WindowData in ipairs(Astral.UIObjects.Windows) do
+			if WindowData.Window.MainFrame == MainFrame then
+				table.remove(Astral.UIObjects.Windows, i)
+				break
+			end
+		end
 	end)
-	
+
 	local MinimizeButton = Instance.new("TextButton")
 	MinimizeButton.Parent = ControlsFrame
-	MinimizeButton.BackgroundColor3 = Astral.Theme.Main
+	MinimizeButton.BackgroundColor3 = Astral:GetElementColor("ControlButtonBackground")
 	MinimizeButton.BackgroundTransparency = Astral.Config.Topbar.BackgroundTransparency
 	MinimizeButton.Size = UDim2.new(0, ApplyScale(ButtonSize), 0, ApplyScale(TopbarHeight))
 	MinimizeButton.Position = UDim2.new(1, -ApplyScale(ButtonSize * 2 + BasePadding * 1.5), 0, 0)
 	MinimizeButton.AutoButtonColor = false
 	MinimizeButton.Font = Enum.Font.GothamBold
-	MinimizeButton.Text = Astral.Config.Controls.MinimizeButtonText
-	MinimizeButton.TextColor3 = Astral.Theme.TextDark
-	MinimizeButton.TextSize = ApplyScale(Astral.Config.Controls.MinimizeButtonSize)
+	MinimizeButton.Text = Astral.Config.Controls.MinimizeButton.Text
+	MinimizeButton.TextColor3 = Astral:GetElementColor("ControlButtonText")
+	MinimizeButton.TextSize = ApplyScale(Astral.Config.Controls.MinimizeButton.Size)
 	MinimizeButton.TextYAlignment = Enum.TextYAlignment.Center
 	MinimizeButton.ZIndex = 11
 
@@ -666,8 +969,8 @@ function Astral:Window(Options)
 
 	AddHoverEffect(
 		MinimizeButton,
-		Astral.Theme.HoverBright,
-		Astral.Theme.Main,
+		"ControlButtonHover",
+		"ControlButtonBackground",
 		Astral.Config.Elements.Button.HoverTransparency,
 		Astral.Config.Topbar.BackgroundTransparency
 	)
@@ -678,11 +981,10 @@ function Astral:Window(Options)
 		MainFrame.Visible = not MainFrame.Visible
 	end)
 
-
 	local Bubble = Instance.new("TextButton")
 	Bubble.Name = "AstralBubble"
 	Bubble.Parent = ScreenGui
-	Bubble.BackgroundColor3 = Astral.Theme.Main
+	Bubble.BackgroundColor3 = Astral:GetElementColor("BubbleBackground")
 	Bubble.Position = UDim2.new(1, -50, 0.5, -25)
 	Bubble.Size = UDim2.new(0, Astral.Config.Bubble.Size, 0, Astral.Config.Bubble.Size)
 	Bubble.ZIndex = 500
@@ -699,12 +1001,12 @@ function Astral:Window(Options)
 	BubbleIcon.Size = UDim2.new(1, 0, 1, 0)
 	BubbleIcon.Position = UDim2.new(0, 0, 0, 0)
 	BubbleIcon.Image = Options.Icon or Astral.Config.Bubble.Icon
-	BubbleIcon.ImageColor3 = Astral.Theme.Accent
+	BubbleIcon.ImageColor3 = Astral:GetElementColor("BubbleIcon")
 	BubbleIcon.ScaleType = Enum.ScaleType.Fit
 
 	local BubbleStroke = Instance.new("UIStroke")
 	BubbleStroke.Thickness = Astral.Config.Bubble.StrokeThickness
-	BubbleStroke.Color = Astral.Theme.Stroke
+	BubbleStroke.Color = Astral:GetElementColor("WindowStroke")
 	BubbleStroke.Transparency = Astral.Config.Bubble.StrokeTransparency
 	BubbleStroke.Parent = Bubble
 
@@ -789,19 +1091,13 @@ function Astral:Window(Options)
 
 	local SidebarFrame = Instance.new("Frame")
 	SidebarFrame.Parent = ContentFrame
-	SidebarFrame.BackgroundColor3 = Astral.Theme.Tertiary
+	SidebarFrame.BackgroundColor3 = Astral:GetElementColor("SidebarBackground")
 	SidebarFrame.BackgroundTransparency = Astral.Config.Sidebar.BackgroundTransparency
 	SidebarFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 0, 0)
 	SidebarFrame.Size = UDim2.new(0, ApplyScale(Astral.Config.Sidebar.Width), 1, -ApplyScale(BasePadding))
 	local SidebarCorner = Instance.new("UICorner")
 	SidebarCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Sidebar.CornerRadius))
 	SidebarCorner.Parent = SidebarFrame
-
-	local SidebarStroke = Instance.new("UIStroke")
-	SidebarStroke.Color = Astral.Theme.StrokeDark
-	SidebarStroke.Thickness = ApplyScale(Astral.Config.Sidebar.StrokeThickness)
-	SidebarStroke.Transparency = Astral.Config.Sidebar.StrokeTransparency
-	SidebarStroke.Parent = SidebarFrame
 
 	local TabContainer = Instance.new("ScrollingFrame")
 	TabContainer.Parent = SidebarFrame
@@ -810,14 +1106,14 @@ function Astral:Window(Options)
 	TabContainer.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 1, -ApplyScale(BasePadding * 2))
 	TabContainer.ScrollBarThickness = 0
 	TabContainer.ScrollBarImageTransparency = 1
-	TabContainer.ScrollBarImageColor3 = Astral.Theme.Accent
+	TabContainer.ScrollBarImageColor3 = Astral:GetElementColor("ScrollBar")
 	TabContainer.BorderSizePixel = 0
 	TabContainer.VerticalScrollBarInset = Enum.ScrollBarInset.None
 	TabContainer.HorizontalScrollBarInset = Enum.ScrollBarInset.None
 	TabContainer.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
 	TabContainer.ScrollingEnabled = true
 
-	CreateScrollBar(TabContainer)
+	CreateScrollBar(TabContainer, WindowId)
 
 	local TabLayout = Instance.new("UIListLayout")
 	TabLayout.Parent = TabContainer
@@ -828,7 +1124,7 @@ function Astral:Window(Options)
 
 	local PagesFrame = Instance.new("Frame")
 	PagesFrame.Parent = ContentFrame
-	PagesFrame.BackgroundColor3 = Astral.Theme.Secondary
+	PagesFrame.BackgroundColor3 = Astral:GetElementColor("PagesBackground")
 	PagesFrame.BackgroundTransparency = Astral.Config.Pages.BackgroundTransparency
 	PagesFrame.Position = UDim2.new(0, ApplyScale(Astral.Config.Sidebar.Width + BasePadding * 2), 0, 0)
 	PagesFrame.Size = UDim2.new(1, -ApplyScale(Astral.Config.Sidebar.Width + BasePadding * 3), 1, -ApplyScale(BasePadding))
@@ -847,6 +1143,50 @@ function Astral:Window(Options)
 	local FirstTab = true
 	local AllTabs = {}
 	local ActiveTab = nil
+	local ActiveTabName = nil
+
+	local function UpdateTabVisuals()
+		for _, TabData in pairs(AllTabs) do
+			local Tab = TabData.Button
+			local IsActive = (Tab == ActiveTab)
+
+			if TabData.Icon then
+				TabData.Icon.ImageColor3 = IsActive and Astral:GetElementColor("TabSelectedIcon") or Astral:GetElementColor("TabIcon")
+			end
+
+			if TabData.Label then
+				TabData.Label.TextColor3 = IsActive and Astral:GetElementColor("TabSelectedText") or Astral:GetElementColor("TabText")
+			end
+
+			local Indicator = Tab:FindFirstChild("Indicator")
+			if Indicator then
+				Indicator.Visible = IsActive
+				Indicator.BackgroundColor3 = Astral:GetElementColor("TabIndicator")
+			end
+
+			Tab.BackgroundColor3 = Astral:GetElementColor("TabBackground")
+			Tab.BackgroundTransparency = IsActive and 0 or Astral.Config.Tab.BackgroundTransparency
+
+			-- Update tab hover effect when theme changes
+			Tab.MouseEnter:Connect(function()
+				if not IsActive then
+					TweenService:Create(Tab, TweenInfo.new(Astral.Config.Animation.HoverDuration), {
+						BackgroundColor3 = Astral:GetElementColor("TabHover"),
+						BackgroundTransparency = 0.25
+					}):Play()
+				end
+			end)
+
+			Tab.MouseLeave:Connect(function()
+				if not IsActive then
+					TweenService:Create(Tab, TweenInfo.new(Astral.Config.Animation.HoverDuration), {
+						BackgroundColor3 = Astral:GetElementColor("TabBackground"),
+						BackgroundTransparency = Astral.Config.Tab.BackgroundTransparency
+					}):Play()
+				end
+			end)
+		end
+	end
 
 	local function UpdateNotificationPositions()
 		for Index, Notification in ipairs(ActiveNotifications) do
@@ -887,21 +1227,68 @@ function Astral:Window(Options)
 	function WindowFunctions:Notify(Options)
 		local Title = Options.Title or "Notification"
 		local Content = Options.Content or "Message"
-		local Duration = Options.Duration or Astral.Config.Notification.DefaultDuration
+		local Duration = tonumber(Options.Duration) or tonumber(Astral.Config.Notification.DefaultDuration) or 3
 		local Type = Options.Type or "Info"
 
-		local TypeColors = Astral.Theme.TypeColors
+		local NotificationColor
+		if Type == "Info" then
+			NotificationColor = Astral:GetElementColor("NotificationInfo")
+		elseif Type == "Success" then
+			NotificationColor = Astral:GetElementColor("NotificationSuccess")
+		elseif Type == "Warning" then
+			NotificationColor = Astral:GetElementColor("NotificationWarning")
+		elseif Type == "Error" then
+			NotificationColor = Astral:GetElementColor("NotificationError")
+		else
+			NotificationColor = Astral:GetElementColor("NotificationInfo")
+		end
 
 		if #ActiveNotifications >= MaxNotifications then
-			table.insert(NotificationQueue, Options)
-			return
+			local ToRemove = #ActiveNotifications - MaxNotifications + 1
+
+			for i = 1, ToRemove do
+				if ActiveNotifications[1] then
+					local Notif = ActiveNotifications[1]
+					table.remove(ActiveNotifications, 1)
+					Notif:Destroy()
+				end
+			end
+			UpdateNotificationPositions()
 		end
+
+		local BaseHeight = ApplyScale(Astral.Config.Notification.Height)
+		local MaxNotificationWidth = ApplyScale(Astral.Config.Notification.Width) - ApplyScale(BasePadding * 4)
+
+		local function CalculateTextHeight(Text, Font, TextSize, MaxWidth)
+			local TextService = game:GetService("TextService")
+			local TextBounds = TextService:GetTextSize(
+				Text,
+				TextSize,
+				Font,
+				Vector2.new(MaxWidth, 10000)
+			)
+			return TextBounds.Y
+		end
+
+		local TitleHeight = ApplyScale(18)
+		local TitleTextSize = ApplyScale(Astral.Config.Notification.TitleSize)
+		local ContentTextSize = ApplyScale(Astral.Config.Notification.ContentSize)
+
+		local ContentLines = string.split(Content, "\n")
+		local MaxContentHeight = ApplyScale(100)
+		local MinContentHeight = ApplyScale(20)
+
+		local CalculatedContentHeight = CalculateTextHeight(Content, Astral.Config.Notification.ContentFont, ContentTextSize, MaxNotificationWidth)
+		CalculatedContentHeight = math.min(math.max(CalculatedContentHeight, MinContentHeight), MaxContentHeight)
+
+		local TotalHeight = TitleHeight + CalculatedContentHeight + ApplyScale(BasePadding * 3)
+		TotalHeight = math.max(BaseHeight, TotalHeight)
 
 		local NotificationFrame = Instance.new("Frame")
 		NotificationFrame.Parent = ScreenGui
-		NotificationFrame.BackgroundColor3 = Astral.Theme.Main
+		NotificationFrame.BackgroundColor3 = Astral:GetElementColor("NotificationBackground")
 		NotificationFrame.BackgroundTransparency = Astral.Config.Notification.BackgroundTransparency
-		NotificationFrame.Size = UDim2.new(0, ApplyScale(Astral.Config.Notification.Width), 0, ApplyScale(Astral.Config.Notification.Height))
+		NotificationFrame.Size = UDim2.new(0, ApplyScale(Astral.Config.Notification.Width), 0, TotalHeight)
 		NotificationFrame.AnchorPoint = Vector2.new(1, 1)
 		NotificationFrame.Position = UDim2.new(1.5, 0, 1, -ApplyScale(20))
 		NotificationFrame.ZIndex = 100
@@ -911,66 +1298,138 @@ function Astral:Window(Options)
 		NotificationCorner.Parent = NotificationFrame
 
 		local NotificationStroke = Instance.new("UIStroke")
-		NotificationStroke.Color = TypeColors[Type]
+		NotificationStroke.Color = NotificationColor
 		NotificationStroke.Thickness = ApplyScale(Astral.Config.Notification.StrokeThickness)
-		NotificationStroke.Transparency = Astral.Config.Notification.StrokeThickness
 		NotificationStroke.Parent = NotificationFrame
 
 		local NotificationTitle = Instance.new("TextLabel")
 		NotificationTitle.Parent = NotificationFrame
 		NotificationTitle.BackgroundTransparency = 1
-		NotificationTitle.Size = UDim2.new(1, 0, 0, ApplyScale(18))
+		NotificationTitle.Size = UDim2.new(1, 0, 0, TitleHeight)
 		ApplyPadding(NotificationTitle, ApplyScale(BasePadding))
 		NotificationTitle.Font = Astral.Config.Notification.TitleFont
 		NotificationTitle.Text = Title
-		NotificationTitle.TextColor3 = Astral.Theme.Text
-		NotificationTitle.TextSize = ApplyScale(Astral.Config.Notification.TitleSize)
+		NotificationTitle.TextColor3 = Astral:GetElementColor("NotificationTitle")
+		NotificationTitle.TextSize = TitleTextSize
 		NotificationTitle.TextXAlignment = Enum.TextXAlignment.Left
+		NotificationTitle.TextTruncate = Enum.TextTruncate.AtEnd
 
 		local NotificationContent = Instance.new("TextLabel")
 		NotificationContent.Parent = NotificationFrame
 		NotificationContent.BackgroundTransparency = 1
-		NotificationContent.Position = UDim2.new(0, 0, 0, ApplyScale(28))
-		NotificationContent.Size = UDim2.new(1, 0, 1, -ApplyScale(36))
-		ApplyPadding(NotificationContent, ApplyScale(BasePadding))
+		NotificationContent.Position = UDim2.new(0, 0, 0, TitleHeight + ApplyScale(BasePadding))
+		NotificationContent.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, CalculatedContentHeight)
+		NotificationContent.Position = UDim2.new(0.5, 0, 0, TitleHeight + ApplyScale(BasePadding))
+		NotificationContent.AnchorPoint = Vector2.new(0.5, 0)
 		NotificationContent.Font = Astral.Config.Notification.ContentFont
 		NotificationContent.Text = Content
-		NotificationContent.TextColor3 = Astral.Theme.TextDark
-		NotificationContent.TextSize = ApplyScale(Astral.Config.Notification.ContentSize)
+		NotificationContent.TextColor3 = Astral:GetElementColor("NotificationContent")
+		NotificationContent.TextSize = ContentTextSize
 		NotificationContent.TextXAlignment = Enum.TextXAlignment.Left
 		NotificationContent.TextYAlignment = Enum.TextYAlignment.Top
 		NotificationContent.TextWrapped = true
+		NotificationContent.TextTruncate = Enum.TextTruncate.None
+
+		local ClickOverlay = Instance.new("TextButton")
+		ClickOverlay.Parent = NotificationFrame
+		ClickOverlay.BackgroundTransparency = 1
+		ClickOverlay.Size = UDim2.new(1, 0, 1, 0)
+		ClickOverlay.Text = ""
+		ClickOverlay.AutoButtonColor = false
+		ClickOverlay.ZIndex = 101
 
 		table.insert(ActiveNotifications, NotificationFrame)
 		UpdateNotificationPositions()
 
-		task.delay(Duration, function()
-			local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(
-				Astral.Config.Animation.NotificationDuration,
-				Enum.EasingStyle.Quart,
-				Enum.EasingDirection.In
-				), {
-					Position = UDim2.new(1.5, 0, 1, NotificationFrame.Position.Y.Offset),
-					BackgroundTransparency = 1
-				})
+		local NotificationSpacing = ApplyScale(80)
+		TweenService:Create(NotificationFrame, TweenInfo.new(
+			Astral.Config.Animation.NotificationDuration,
+			Astral.Config.Animation.EasingStyle,
+			Astral.Config.Animation.EasingDirection
+			), {
+				Position = UDim2.new(1, -ApplyScale(20), 1, -ApplyScale(20) - ((#ActiveNotifications - 1) * NotificationSpacing))
+			}):Play()
 
-			ExitTween:Play()
-			ExitTween.Completed:Connect(function()
-				NotificationFrame:Destroy()
-				for i, v in ipairs(ActiveNotifications) do
-					if v == NotificationFrame then
-						table.remove(ActiveNotifications, i)
-						break
-					end
+		local NotificationData = {
+			Frame = NotificationFrame,
+			Active = true,
+			StartTime = os.clock(),
+			Duration = Duration
+		}
+
+		local function DestroyNotification(Immediate)
+			NotificationData.Active = false
+
+			for i, v in ipairs(ActiveNotifications) do
+				if v == NotificationFrame then
+					table.remove(ActiveNotifications, i)
+					break
 				end
+			end
+
+			if Immediate then
+				NotificationFrame:Destroy()
 				UpdateNotificationPositions()
 
 				if #NotificationQueue > 0 then
 					local Next = table.remove(NotificationQueue, 1)
 					WindowFunctions:Notify(Next)
 				end
-			end)
+			else
+				local ExitTween = TweenService:Create(NotificationFrame, TweenInfo.new(
+					Astral.Config.Animation.NotificationDuration,
+					Enum.EasingStyle.Quart,
+					Enum.EasingDirection.In
+					), {
+						Position = UDim2.new(1.5, 0, 1, NotificationFrame.Position.Y.Offset),
+						BackgroundTransparency = 1
+					})
+
+				ExitTween:Play()
+				ExitTween.Completed:Connect(function()
+					NotificationFrame:Destroy()
+					UpdateNotificationPositions()
+
+					if #NotificationQueue > 0 then
+						local Next = table.remove(NotificationQueue, 1)
+						WindowFunctions:Notify(Next)
+					end
+				end)
+			end
+		end
+
+		ClickOverlay.MouseButton1Click:Connect(function()
+			DestroyNotification(false)
 		end)
+
+		task.spawn(function()
+			while NotificationData.Active do
+				local elapsed = os.clock() - NotificationData.StartTime
+				if elapsed >= NotificationData.Duration then
+					DestroyNotification(false)
+					break
+				end
+				task.wait(0.1)
+			end
+		end)
+
+		return {
+			Destroy = function(Immediate)
+				if NotificationData.Active then
+					DestroyNotification(Immediate == true)
+				end
+			end,
+			Extend = function(AdditionalSeconds)
+				local seconds = tonumber(AdditionalSeconds) or 0
+				NotificationData.Duration = NotificationData.Duration + seconds
+			end,
+			GetTimeRemaining = function()
+				if NotificationData.Active then
+					return math.max(0, NotificationData.Duration - (os.clock() - NotificationData.StartTime))
+				end
+				return 0
+			end
+		}
 	end
 
 	function WindowFunctions:Hide()
@@ -988,6 +1447,13 @@ function Astral:Window(Options)
 
 	function WindowFunctions:Destroy()
 		ScreenGui:Destroy()
+
+		for i, WindowData in ipairs(Astral.UIObjects.Windows) do
+			if WindowData.Window.MainFrame == MainFrame then
+				table.remove(Astral.UIObjects.Windows, i)
+				break
+			end
+		end
 	end
 
 	function WindowFunctions:Minimize()
@@ -1021,13 +1487,46 @@ function Astral:Window(Options)
 		return Scale
 	end
 
+	function WindowFunctions:UpdateTabVisuals()
+		UpdateTabVisuals()
+	end
+
+	function WindowFunctions:GetActiveTab()
+		return ActiveTabName
+	end
+
+	function WindowFunctions:SetActiveTab(TabName)
+		for _, TabData in pairs(AllTabs) do
+			if TabData.Name == TabName then
+				local function ActivateTab()
+					for _, Page in pairs(PagesContainer:GetChildren()) do
+						if Page:IsA("ScrollingFrame") then
+							Page.Visible = false
+						end
+					end
+
+					ActiveTab = TabData.Button
+					ActiveTabName = TabName
+
+					TabData.Page.Visible = true
+
+					UpdateTabVisuals()
+				end
+
+				ActivateTab()
+				return true
+			end
+		end
+		return false
+	end
+
 	function WindowFunctions:Tab(Options)
 		local TabName = Options.Name or "Tab"
 		local TabIcon = Options.Icon or "rbxassetid://7733954760"
 
 		local TabButton = Instance.new("TextButton")
 		TabButton.Parent = TabContainer
-		TabButton.BackgroundColor3 = Astral.Theme.Main
+		TabButton.BackgroundColor3 = Astral:GetElementColor("TabBackground")
 		TabButton.BackgroundTransparency = Astral.Config.Tab.BackgroundTransparency
 		TabButton.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Tab.Height))
 		TabButton.AutoButtonColor = false
@@ -1043,32 +1542,33 @@ function Astral:Window(Options)
 		IconImage.Position = UDim2.new(0, ApplyScale(BasePadding), 0.5, -ApplyScale(Astral.Config.Tab.IconSize / 2))
 		IconImage.Size = UDim2.new(0, ApplyScale(Astral.Config.Tab.IconSize), 0, ApplyScale(Astral.Config.Tab.IconSize))
 		IconImage.Image = TabIcon
-		IconImage.ImageColor3 = Astral.Theme.TextDark
+		IconImage.ImageColor3 = Astral:GetElementColor("TabIcon")
 
 		local LabelText = Instance.new("TextLabel")
 		LabelText.Parent = TabButton
 		LabelText.BackgroundTransparency = 1
 		LabelText.Position = UDim2.new(0, ApplyScale(30), 0, 0)
 		LabelText.Size = UDim2.new(1, -ApplyScale(35), 1, 0)
-		LabelText.Font = Astral.Config.Tab.LabelFont
+		LabelText.Font = Astral.Config.Tab.Font
 		LabelText.Text = TabName
-		LabelText.TextColor3 = Astral.Theme.TextDark
-		LabelText.TextSize = ApplyScale(Astral.Config.Tab.LabelSize)
+		LabelText.TextColor3 = Astral:GetElementColor("TabText")
+		LabelText.TextSize = ApplyScale(Astral.Config.Tab.Size)
 		LabelText.TextXAlignment = Enum.TextXAlignment.Left
 
 		local IndicatorFrame = Instance.new("Frame")
 		IndicatorFrame.Name = "Indicator"
 		IndicatorFrame.Parent = TabButton
-		IndicatorFrame.BackgroundColor3 = Astral.Theme.Accent
+		IndicatorFrame.BackgroundColor3 = Astral:GetElementColor("TabIndicator")
 		IndicatorFrame.BorderSizePixel = 0
 		IndicatorFrame.Position = UDim2.new(0, ApplyScale(2), 0.5, -ApplyScale(Astral.Config.Tab.IndicatorHeight / 2))
 		IndicatorFrame.Size = UDim2.new(0, ApplyScale(Astral.Config.Tab.IndicatorWidth), 0, ApplyScale(Astral.Config.Tab.IndicatorHeight))
 		IndicatorFrame.Visible = false
 
+		-- Add dynamic hover effect for tabs
 		local function ApplyTabHover()
 			if ActiveTab ~= TabButton then
 				TweenService:Create(TabButton, TweenInfo.new(Astral.Config.Animation.HoverDuration), {
-					BackgroundColor3 = Astral.Theme.Tertiary,
+					BackgroundColor3 = Astral:GetElementColor("TabHover"),
 					BackgroundTransparency = 0.25
 				}):Play()
 			end
@@ -1077,7 +1577,7 @@ function Astral:Window(Options)
 		local function RemoveTabHover()
 			if ActiveTab ~= TabButton then
 				TweenService:Create(TabButton, TweenInfo.new(Astral.Config.Animation.HoverDuration), {
-					BackgroundColor3 = Astral.Theme.Main,
+					BackgroundColor3 = Astral:GetElementColor("TabBackground"),
 					BackgroundTransparency = Astral.Config.Tab.BackgroundTransparency
 				}):Play()
 			end
@@ -1095,14 +1595,14 @@ function Astral:Window(Options)
 		PageFrame.Size = UDim2.new(1, 0, 1, 0)
 		PageFrame.ScrollBarThickness = 0
 		PageFrame.ScrollBarImageTransparency = 1
-		PageFrame.ScrollBarImageColor3 = Astral.Theme.Accent
+		PageFrame.ScrollBarImageColor3 = Astral:GetElementColor("ScrollBar")
 		PageFrame.Visible = false
 		PageFrame.VerticalScrollBarInset = Enum.ScrollBarInset.None
 		PageFrame.HorizontalScrollBarInset = Enum.ScrollBarInset.None
 		PageFrame.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
 		PageFrame.ScrollingEnabled = true
 
-		CreateScrollBar(PageFrame)
+		CreateScrollBar(PageFrame, WindowId)
 		ApplyPadding(PageFrame, ApplyScale(Astral.Config.Pages.Padding))
 
 		local PageLayout = Instance.new("UIListLayout")
@@ -1118,37 +1618,30 @@ function Astral:Window(Options)
 					Page.Visible = false
 				end
 			end
-			for _, TabData in pairs(AllTabs) do
-				TabData.Button.Indicator.Visible = false
-				TweenService:Create(TabData.Button, TweenInfo.new(Astral.Config.Animation.TweenDuration), {
-					BackgroundColor3 = Astral.Theme.Main,
-					BackgroundTransparency = Astral.Config.Tab.BackgroundTransparency
-				}):Play()
-				TweenService:Create(TabData.Label, TweenInfo.new(Astral.Config.Animation.TweenDuration), {TextColor3 = Astral.Theme.TextDark}):Play()
-				TweenService:Create(TabData.Icon, TweenInfo.new(Astral.Config.Animation.TweenDuration), {ImageColor3 = Astral.Theme.TextDark}):Play()
-			end
-
-			PageFrame.Visible = true
-			IndicatorFrame.Visible = true
-			TweenService:Create(TabButton, TweenInfo.new(Astral.Config.Animation.TweenDuration), {
-				BackgroundColor3 = Astral.Theme.Main,
-				BackgroundTransparency = 0
-			}):Play()
-			TweenService:Create(LabelText, TweenInfo.new(Astral.Config.Animation.TweenDuration), {TextColor3 = Astral.Theme.Text}):Play()
-			TweenService:Create(IconImage, TweenInfo.new(Astral.Config.Animation.TweenDuration), {ImageColor3 = Astral.Theme.Accent}):Play()
 
 			ActiveTab = TabButton
+			ActiveTabName = TabName
+
+			PageFrame.Visible = true
+
+			UpdateTabVisuals()
 		end
 
 		TabButton.MouseButton1Click:Connect(Activate)
-		table.insert(AllTabs, {Name = TabName, Button = TabButton, Label = LabelText, Icon = IconImage})
+
+		local TabData = {
+			Button = TabButton,
+			Label = LabelText,
+			Icon = IconImage,
+			Name = TabName,
+			Page = PageFrame
+		}
+		table.insert(AllTabs, TabData)
 
 		if FirstTab then
 			FirstTab = false
 			Activate()
 		end
-
-		local TabFunctions = {}
 
 		local TabFunctions = {}
 
@@ -1191,8 +1684,8 @@ function Astral:Window(Options)
 
 				local SectionFrame = Instance.new("Frame")
 				SectionFrame.Parent = Parent
-				SectionFrame.BackgroundColor3 = Astral.Theme.Tertiary
-				SectionFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+				SectionFrame.BackgroundColor3 = Astral:GetElementColor("SectionBackground")
+				SectionFrame.BackgroundTransparency = Astral.Config.Elements.Section.BackgroundTransparency
 				SectionFrame.Size = UDim2.new(1, 0, 0, 0)
 				SectionFrame.AutomaticSize = Enum.AutomaticSize.Y
 
@@ -1202,7 +1695,7 @@ function Astral:Window(Options)
 
 				local HeaderFrame = Instance.new("Frame")
 				HeaderFrame.Parent = SectionFrame
-				HeaderFrame.BackgroundColor3 = Astral.Theme.Main
+				HeaderFrame.BackgroundColor3 = Astral:GetElementColor("SectionHeaderBackground")
 				HeaderFrame.BackgroundTransparency = Astral.Config.Elements.Section.HeaderBackgroundTransparency
 				HeaderFrame.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.Section.HeaderHeight))
 				local HeaderCorner = Instance.new("UICorner")
@@ -1216,7 +1709,7 @@ function Astral:Window(Options)
 				ApplyPadding(SectionLabel, ApplyScale(BasePadding))
 				SectionLabel.Font = Astral.Config.Elements.Section.TitleFont
 				SectionLabel.Text = SectionName
-				SectionLabel.TextColor3 = Astral.Theme.Text
+				SectionLabel.TextColor3 = Astral:GetElementColor("SectionTitle")
 				SectionLabel.TextSize = ApplyScale(Astral.Config.Elements.Section.TitleSize)
 				SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -1262,8 +1755,8 @@ function Astral:Window(Options)
 
 			local SectionFrame = Instance.new("Frame")
 			SectionFrame.Parent = PageFrame
-			SectionFrame.BackgroundColor3 = Astral.Theme.Tertiary
-			SectionFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			SectionFrame.BackgroundColor3 = Astral:GetElementColor("SectionBackground")
+			SectionFrame.BackgroundTransparency = Astral.Config.Elements.Section.BackgroundTransparency
 			SectionFrame.Size = UDim2.new(1, 0, 0, 0)
 			SectionFrame.AutomaticSize = Enum.AutomaticSize.Y
 
@@ -1273,7 +1766,7 @@ function Astral:Window(Options)
 
 			local HeaderFrame = Instance.new("Frame")
 			HeaderFrame.Parent = SectionFrame
-			HeaderFrame.BackgroundColor3 = Astral.Theme.Main
+			HeaderFrame.BackgroundColor3 = Astral:GetElementColor("SectionHeaderBackground")
 			HeaderFrame.BackgroundTransparency = Astral.Config.Elements.Section.HeaderBackgroundTransparency
 			HeaderFrame.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.Section.HeaderHeight))
 			local HeaderCorner = Instance.new("UICorner")
@@ -1287,7 +1780,7 @@ function Astral:Window(Options)
 			ApplyPadding(SectionLabel, ApplyScale(BasePadding))
 			SectionLabel.Font = Astral.Config.Elements.Section.TitleFont
 			SectionLabel.Text = SectionName
-			SectionLabel.TextColor3 = Astral.Theme.Text
+			SectionLabel.TextColor3 = Astral:GetElementColor("SectionTitle")
 			SectionLabel.TextSize = ApplyScale(Astral.Config.Elements.Section.TitleSize)
 			SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -1321,23 +1814,23 @@ function Astral:Window(Options)
 			Parent = Parent or PageFrame
 			local ButtonName = Options.Name or "Button"
 			local Callback = Options.Callback or function() end
-			local ButtonFont = Options.Font or Astral.Config.Elements.LabelFont
-			local ButtonSize = Options.Size or Astral.Config.Elements.LabelSize
+			local ButtonFont = Options.Font or Astral.Config.Elements.Font
+			local ButtonSize = Options.Size or Astral.Config.Elements.Size
 			local ButtonHeight = Options.Height or Astral.Config.Elements.Height
 			local ButtonWidth = Options.Width
-			local ButtonAlignment = Options.Alignment or Astral.Config.Elements.LabelAlignment
+			local ButtonAlignment = Options.Alignment or Astral.Config.Elements.Alignment
 
 			local ButtonFrame = Instance.new("TextButton")
 			ButtonFrame.Parent = Parent
-			ButtonFrame.BackgroundColor3 = Astral.Theme.Main
+			ButtonFrame.BackgroundColor3 = Astral:GetElementColor("ButtonBackground")
 			ButtonFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			
+
 			if ButtonWidth then
 				ButtonFrame.Size = UDim2.new(0, ApplyScale(ButtonWidth), 0, ApplyScale(ButtonHeight))
 			else
 				ButtonFrame.Size = UDim2.new(1, 0, 0, ApplyScale(ButtonHeight))
 			end
-			
+
 			ButtonFrame.AutoButtonColor = false
 			ButtonFrame.Text = ""
 
@@ -1352,60 +1845,99 @@ function Astral:Window(Options)
 			ApplyPadding(ButtonLabel, ApplyScale(BasePadding))
 			ButtonLabel.Font = ButtonFont
 			ButtonLabel.Text = ButtonName
-			ButtonLabel.TextColor3 = Astral.Theme.Text
+			ButtonLabel.TextColor3 = Astral:GetElementColor("ButtonText")
 			ButtonLabel.TextSize = ApplyScale(ButtonSize)
 			ButtonLabel.TextXAlignment = ButtonAlignment
 
+			-- Updated to use dynamic color types
 			AddHoverEffect(
 				ButtonFrame, 
-				Astral.Theme.HoverBright, 
-				Astral.Theme.Main, 
+				"ButtonHover", 
+				"ButtonBackground", 
 				Astral.Config.Elements.Button.HoverTransparency, 
 				Astral.Config.Elements.Button.NormalTransparency
 			)
 			AddClickEffect(ButtonFrame)
-			ButtonFrame.MouseButton1Click:Connect(Callback)
 
-			-- Button update functions
-			local ButtonObject = {}
+			local ButtonObject = {
+				Frame = ButtonFrame,
+				Label = ButtonLabel,
+				Type = "Button"
+			}
+
+			local Connection = ButtonFrame.MouseButton1Click:Connect(function()
+				Callback(ButtonObject)
+			end)
+			ButtonObject.Connection = Connection
+
 			function ButtonObject:Update(NewOptions)
 				if NewOptions.Name then
-					ButtonLabel.Text = NewOptions.Name
+					self.Label.Text = NewOptions.Name
 				end
 				if NewOptions.Callback then
-					-- Disconnect old callback and connect new one
-					ButtonFrame.MouseButton1Click:Disconnect()
-					ButtonFrame.MouseButton1Click:Connect(NewOptions.Callback)
+					if self.Connection then
+						self.Connection:Disconnect()
+					end
+					Callback = NewOptions.Callback
+					self.Connection = self.Frame.MouseButton1Click:Connect(function()
+						Callback(self)
+					end)
 				end
 				if NewOptions.Font then
-					ButtonLabel.Font = NewOptions.Font
+					self.Label.Font = NewOptions.Font
 				end
 				if NewOptions.Size then
-					ButtonLabel.TextSize = ApplyScale(NewOptions.Size)
+					self.Label.TextSize = ApplyScale(NewOptions.Size)
 				end
 				if NewOptions.Height then
 					local NewHeight = ApplyScale(NewOptions.Height)
-					ButtonFrame.Size = ButtonWidth and 
+					self.Frame.Size = ButtonWidth and 
 						UDim2.new(0, ApplyScale(ButtonWidth), 0, NewHeight) or
 						UDim2.new(1, 0, 0, NewHeight)
 				end
 				if NewOptions.Width then
 					ButtonWidth = NewOptions.Width
-					ButtonFrame.Size = UDim2.new(0, ApplyScale(ButtonWidth), 0, ButtonFrame.Size.Y.Offset)
+					self.Frame.Size = UDim2.new(0, ApplyScale(ButtonWidth), 0, self.Frame.Size.Y.Offset)
 				end
 				if NewOptions.Alignment then
-					ButtonLabel.TextXAlignment = NewOptions.Alignment
+					self.Label.TextXAlignment = NewOptions.Alignment
 				end
+				return self
 			end
-			
+
 			function ButtonObject:SetText(Text)
-				ButtonLabel.Text = Text
+				self.Label.Text = Text
+				return self
 			end
-			
+
+			function ButtonObject:GetText()
+				return self.Label.Text
+			end
+
 			function ButtonObject:SetCallback(NewCallback)
-				ButtonFrame.MouseButton1Click:Disconnect()
-				ButtonFrame.MouseButton1Click:Connect(NewCallback)
+				if self.Connection then
+					self.Connection:Disconnect()
+				end
+				Callback = NewCallback
+				self.Connection = self.Frame.MouseButton1Click:Connect(function()
+					Callback(self)
+				end)
+				return self
 			end
+
+			function ButtonObject:Destroy()
+				if self.Connection then
+					self.Connection:Disconnect()
+				end
+				self.Frame:Destroy()
+			end
+
+			function ButtonObject:UpdateTheme()
+				self.Frame.BackgroundColor3 = Astral:GetElementColor("ButtonBackground")
+				self.Label.TextColor3 = Astral:GetElementColor("ButtonText")
+			end
+
+			table.insert(Astral.UIObjects.Elements, ButtonObject)
 
 			return ButtonObject
 		end
@@ -1416,17 +1948,17 @@ function Astral:Window(Options)
 			local Default = Options.Default or false
 			local Callback = Options.Callback or function() end
 			local State = Default
-			local ToggleFont = Options.Font or Astral.Config.Elements.LabelFont
-			local ToggleSize = Options.Size or Astral.Config.Elements.LabelSize
+			local ToggleFont = Options.Font or Astral.Config.Elements.Font
+			local ToggleSize = Options.Size or Astral.Config.Elements.Size
 			local ToggleHeight = Options.Height or Astral.Config.Elements.Height
 			local ToggleWidth = Options.Width
-			local ToggleAlignment = Options.Alignment or Astral.Config.Elements.LabelAlignment
+			local ToggleAlignment = Options.Alignment or Astral.Config.Elements.Alignment
 
 			local ToggleFrame = Instance.new("Frame")
 			ToggleFrame.Parent = Parent
-			ToggleFrame.BackgroundColor3 = Astral.Theme.Main
+			ToggleFrame.BackgroundColor3 = Astral:GetElementColor("ToggleBackground")
 			ToggleFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			
+
 			if ToggleWidth then
 				ToggleFrame.Size = UDim2.new(0, ApplyScale(ToggleWidth), 0, ApplyScale(ToggleHeight))
 			else
@@ -1444,17 +1976,17 @@ function Astral:Window(Options)
 			ApplyPadding(ToggleLabel, ApplyScale(BasePadding))
 			ToggleLabel.Font = ToggleFont
 			ToggleLabel.Text = ToggleName
-			ToggleLabel.TextColor3 = Astral.Theme.Text
+			ToggleLabel.TextColor3 = Astral:GetElementColor("ButtonText")
 			ToggleLabel.TextSize = ApplyScale(ToggleSize)
 			ToggleLabel.TextXAlignment = ToggleAlignment
 
 			local ToggleSwitchWidth = ApplyScale(Astral.Config.Elements.Toggle.Width)
 			local ToggleSwitchHeight = ApplyScale(Astral.Config.Elements.Toggle.Height)
 			local ToggleCircleSize = ApplyScale(Astral.Config.Elements.Toggle.CircleSize)
-			
+
 			local CheckButton = Instance.new("TextButton")
 			CheckButton.Parent = ToggleFrame
-			CheckButton.BackgroundColor3 = State and Astral.Theme.Accent or Astral.Theme.Tertiary
+			CheckButton.BackgroundColor3 = State and Astral:GetElementColor("ToggleOn") or Astral:GetElementColor("ToggleOff")
 			CheckButton.Position = UDim2.new(1, -ToggleSwitchWidth - ApplyScale(8), 0.5, -ToggleSwitchHeight / 2)
 			CheckButton.Size = UDim2.new(0, ToggleSwitchWidth, 0, ToggleSwitchHeight)
 			CheckButton.AutoButtonColor = false
@@ -1466,7 +1998,7 @@ function Astral:Window(Options)
 
 			local CircleFrame = Instance.new("Frame")
 			CircleFrame.Parent = CheckButton
-			CircleFrame.BackgroundColor3 = Astral.Theme.Text
+			CircleFrame.BackgroundColor3 = Astral:GetElementColor("ToggleCircle")
 			CircleFrame.Size = UDim2.new(0, ToggleCircleSize, 0, ToggleCircleSize)
 			CircleFrame.Position = State and UDim2.new(1, -ToggleCircleSize - ApplyScale(2), 0.5, -ToggleCircleSize / 2) or UDim2.new(0, ApplyScale(2), 0.5, -ToggleCircleSize / 2)
 
@@ -1476,85 +2008,158 @@ function Astral:Window(Options)
 
 			local function Update()
 				local Position = State and UDim2.new(1, -ToggleCircleSize - ApplyScale(2), 0.5, -ToggleCircleSize / 2) or UDim2.new(0, ApplyScale(2), 0.5, -ToggleCircleSize / 2)
-				local Color = State and Astral.Theme.Accent or Astral.Theme.Tertiary
+				local Color = State and Astral:GetElementColor("ToggleOn") or Astral:GetElementColor("ToggleOff")
 				TweenService:Create(CircleFrame, TweenInfo.new(Astral.Config.Animation.TweenDuration), {Position = Position}):Play()
 				TweenService:Create(CheckButton, TweenInfo.new(Astral.Config.Animation.TweenDuration), {BackgroundColor3 = Color}):Play()
-				Callback(State)
 			end
 
-			CheckButton.MouseButton1Click:Connect(function()
+			local ToggleObject = {
+				Frame = ToggleFrame,
+				Label = ToggleLabel,
+				CheckButton = CheckButton,
+				CircleFrame = CircleFrame,
+				Type = "Toggle",
+				State = State,
+				Name = ToggleName
+			}
+
+			-- Store the Update function in the object so UpdateTheme can access it
+			ToggleObject.UpdateVisuals = Update
+
+			local function OnClick()
 				State = not State
+				ToggleObject.State = State
 				Update()
-			end)
+				Callback(ToggleObject, State)
+			end
+
+			local ClickConnection = CheckButton.MouseButton1Click:Connect(OnClick)
+			ToggleObject.Connection = ClickConnection
+
 			Update()
 
-			-- Toggle update functions
-			local ToggleObject = {}
 			function ToggleObject:Update(NewOptions)
 				if NewOptions.Name then
-					ToggleLabel.Text = NewOptions.Name
+					self.Label.Text = NewOptions.Name
+					self.Name = NewOptions.Name
 				end
 				if NewOptions.Callback then
+					if self.Connection then
+						self.Connection:Disconnect()
+					end
 					Callback = NewOptions.Callback
-					-- Reconnect with new callback
-					CheckButton.MouseButton1Click:Disconnect()
-					CheckButton.MouseButton1Click:Connect(function()
-						State = not State
+					self.Connection = self.CheckButton.MouseButton1Click:Connect(function()
+						self.State = not self.State
+						State = self.State
 						Update()
+						Callback(self, State)
 					end)
 				end
 				if NewOptions.Default ~= nil and NewOptions.Default ~= State then
 					State = NewOptions.Default
+					self.State = State
 					Update()
 				end
 				if NewOptions.Font then
-					ToggleLabel.Font = NewOptions.Font
+					self.Label.Font = NewOptions.Font
 				end
 				if NewOptions.Size then
-					ToggleLabel.TextSize = ApplyScale(NewOptions.Size)
+					self.Label.TextSize = ApplyScale(NewOptions.Size)
 				end
 				if NewOptions.Height then
 					local NewHeight = ApplyScale(NewOptions.Height)
-					ToggleFrame.Size = ToggleWidth and 
+					self.Frame.Size = ToggleWidth and 
 						UDim2.new(0, ApplyScale(ToggleWidth), 0, NewHeight) or
 						UDim2.new(1, 0, 0, NewHeight)
-					-- Update switch position
-					CheckButton.Position = UDim2.new(1, -ToggleSwitchWidth - ApplyScale(8), 0.5, -ToggleSwitchHeight / 2)
+					self.CheckButton.Position = UDim2.new(1, -ToggleSwitchWidth - ApplyScale(8), 0.5, -ToggleSwitchHeight / 2)
 				end
 				if NewOptions.Width then
 					ToggleWidth = NewOptions.Width
-					ToggleFrame.Size = UDim2.new(0, ApplyScale(ToggleWidth), 0, ToggleFrame.Size.Y.Offset)
-					CheckButton.Position = UDim2.new(1, -ToggleSwitchWidth - ApplyScale(8), 0.5, -ToggleSwitchHeight / 2)
+					self.Frame.Size = UDim2.new(0, ApplyScale(ToggleWidth), 0, self.Frame.Size.Y.Offset)
+					self.CheckButton.Position = UDim2.new(1, -ToggleSwitchWidth - ApplyScale(8), 0.5, -ToggleSwitchHeight / 2)
 				end
 				if NewOptions.Alignment then
-					ToggleLabel.TextXAlignment = NewOptions.Alignment
+					self.Label.TextXAlignment = NewOptions.Alignment
 				end
+				return self
 			end
-			
+
 			function ToggleObject:SetState(NewState)
 				if State ~= NewState then
 					State = NewState
+					self.State = State
 					Update()
+					Callback(self, State)
 				end
+				return self
 			end
-			
+
 			function ToggleObject:GetState()
 				return State
 			end
-			
+
 			function ToggleObject:SetText(Text)
-				ToggleLabel.Text = Text
+				if self.Label then
+					self.Label.Text = Text
+					self.Name = Text
+				end
+				return self
 			end
-			
+
+			function ToggleObject:GetText()
+				return self.Label and self.Label.Text or ""
+			end
+
 			function ToggleObject:SetCallback(NewCallback)
+				if self.Connection then
+					self.Connection:Disconnect()
+				end
 				Callback = NewCallback
+				self.Connection = self.CheckButton.MouseButton1Click:Connect(function()
+					self.State = not self.State
+					State = self.State
+					Update()
+					Callback(self, State)
+				end)
+				return self
 			end
-			
+
 			function ToggleObject:Toggle()
 				State = not State
+				self.State = State
 				Update()
+				Callback(self, State)
 				return State
 			end
+
+			function ToggleObject:Destroy()
+				if self.Connection then
+					self.Connection:Disconnect()
+				end
+				self.Frame:Destroy()
+			end
+
+			function ToggleObject:UpdateTheme()
+				if self.Frame then
+					self.Frame.BackgroundColor3 = Astral:GetElementColor("ToggleBackground")
+				end
+				if self.Label then
+					self.Label.TextColor3 = Astral:GetElementColor("ButtonText")
+				end
+				if self.CheckButton then
+					local currentState = self.State or false
+					self.CheckButton.BackgroundColor3 = currentState and Astral:GetElementColor("ToggleOn") or Astral:GetElementColor("ToggleOff")
+				end
+				if self.CircleFrame then
+					self.CircleFrame.BackgroundColor3 = Astral:GetElementColor("ToggleCircle")
+				end
+				-- Refresh the visual state
+				if self.UpdateVisuals then
+					self.UpdateVisuals()
+				end
+			end
+
+			table.insert(Astral.UIObjects.Elements, ToggleObject)
 
 			return ToggleObject
 		end
@@ -1568,17 +2173,17 @@ function Astral:Window(Options)
 			local Increment = Options.Increment or 1
 			local Callback = Options.Callback or function() end
 			local Value = Default
-			local SliderFont = Options.Font or Astral.Config.Elements.LabelFont
-			local SliderSize = Options.Size or Astral.Config.Elements.LabelSize
+			local SliderFont = Options.Font or Astral.Config.Elements.Font
+			local SliderSize = Options.Size or Astral.Config.Elements.Size
 			local SliderHeight = Options.Height or Astral.Config.Elements.Slider.Height
 			local SliderWidth = Options.Width
-			local SliderAlignment = Options.Alignment or Astral.Config.Elements.LabelAlignment
+			local SliderAlignment = Options.Alignment or Astral.Config.Elements.Alignment
 
 			local SliderFrame = Instance.new("Frame")
 			SliderFrame.Parent = Parent
-			SliderFrame.BackgroundColor3 = Astral.Theme.Main
+			SliderFrame.BackgroundColor3 = Astral:GetElementColor("ElementBackground")
 			SliderFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			
+
 			if SliderWidth then
 				SliderFrame.Size = UDim2.new(0, ApplyScale(SliderWidth), 0, ApplyScale(SliderHeight))
 			else
@@ -1593,35 +2198,57 @@ function Astral:Window(Options)
 			SliderLabel.Parent = SliderFrame
 			SliderLabel.BackgroundTransparency = 1
 			SliderLabel.Size = UDim2.new(1, 0, 0, ApplyScale(Astral.Config.Elements.Slider.LabelHeight))
+			SliderLabel.Position = UDim2.new(0, 0, 0, ApplyScale(8))
 			ApplyPadding(SliderLabel, ApplyScale(BasePadding))
 			SliderLabel.Font = SliderFont
 			SliderLabel.Text = SliderName
-			SliderLabel.TextColor3 = Astral.Theme.Text
+			SliderLabel.TextColor3 = Astral:GetElementColor("SliderLabel")
 			SliderLabel.TextSize = ApplyScale(SliderSize)
 			SliderLabel.TextXAlignment = SliderAlignment
 
+			local ValueInputScrollingFrame = Instance.new("ScrollingFrame")
+			ValueInputScrollingFrame.Parent = SliderFrame
+			ValueInputScrollingFrame.BackgroundColor3 = Astral:GetElementColor("SliderInputBackground")
+			ValueInputScrollingFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			ValueInputScrollingFrame.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Slider.InputWidth + 12), 0, ApplyScale(4))
+			ValueInputScrollingFrame.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Slider.InputWidth), 0, ApplyScale(Astral.Config.Elements.Slider.InputHeight))
+			ValueInputScrollingFrame.ScrollBarThickness = 0
+			ValueInputScrollingFrame.ScrollBarImageTransparency = 1
+			ValueInputScrollingFrame.BorderSizePixel = 0
+			ValueInputScrollingFrame.ClipsDescendants = true
+
+			local ValueInputScrollingCorner = Instance.new("UICorner")
+			ValueInputScrollingCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.TextBox.InputCornerRadius))
+			ValueInputScrollingCorner.Parent = ValueInputScrollingFrame
+
+			local ValueInputPadding = Instance.new("UIPadding")
+			ValueInputPadding.Parent = ValueInputScrollingFrame
+			ValueInputPadding.PaddingLeft = UDim.new(0, ApplyScale(4))
+			ValueInputPadding.PaddingRight = UDim.new(0, ApplyScale(4))
+
 			local ValueInput = Instance.new("TextBox")
-			ValueInput.Parent = SliderFrame
-			ValueInput.BackgroundColor3 = Astral.Theme.Tertiary
-			ValueInput.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			ValueInput.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Slider.InputWidth + 12), 0, ApplyScale(4))
-			ValueInput.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Slider.InputWidth), 0, ApplyScale(Astral.Config.Elements.Slider.InputHeight))
-			ValueInput.Font = Astral.Config.Elements.Slider.ValueInputFont
+			ValueInput.Parent = ValueInputScrollingFrame
+			ValueInput.BackgroundTransparency = 1
+			ValueInput.Size = UDim2.new(1, 0, 1, 0)
+			ValueInput.Font = Astral.Config.Elements.Slider.InputFont
 			ValueInput.Text = tostring(Value)
-			ValueInput.TextColor3 = Astral.Theme.Accent
-			ValueInput.TextSize = ApplyScale(Astral.Config.Elements.Slider.InputTextSize)
+			ValueInput.TextColor3 = Astral:GetElementColor("SliderInputText")
+			ValueInput.TextSize = ApplyScale(Astral.Config.Elements.Slider.InputSize)
 			ValueInput.ClearTextOnFocus = false
+			ValueInput.TextXAlignment = Enum.TextXAlignment.Center
+			ValueInput.TextTruncate = Enum.TextTruncate.None
 
 			local InputStroke = Instance.new("UIStroke")
-			InputStroke.Parent = ValueInput
-			InputStroke.Color = Astral.Theme.Stroke
+			InputStroke.Parent = ValueInputScrollingFrame
+			InputStroke.Color = Astral:GetElementColor("SliderInputBorder")
 			InputStroke.Thickness = ApplyScale(Astral.Config.Elements.TextBox.StrokeThickness)
 			InputStroke.Transparency = Astral.Config.Elements.TextBox.StrokeTransparency
 
 			local BackgroundFrame = Instance.new("Frame")
+			BackgroundFrame.Name = "BackgroundFrame"
 			BackgroundFrame.Parent = SliderFrame
-			BackgroundFrame.BackgroundColor3 = Astral.Theme.Tertiary
-			BackgroundFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 1, -ApplyScale(Astral.Config.Elements.Slider.TrackHeight + 12))
+			BackgroundFrame.BackgroundColor3 = Astral:GetElementColor("SliderTrack")
+			BackgroundFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 1, -ApplyScale(Astral.Config.Elements.Slider.TrackHeight + 6))
 			BackgroundFrame.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, ApplyScale(Astral.Config.Elements.Slider.TrackHeight))
 
 			local BackgroundCorner = Instance.new("UICorner")
@@ -1630,8 +2257,8 @@ function Astral:Window(Options)
 
 			local FillFrame = Instance.new("Frame")
 			FillFrame.Parent = BackgroundFrame
-			FillFrame.BackgroundColor3 = Astral.Theme.Accent
-			FillFrame.Size = UDim2.new((Value - Min) / (Max - Min), 0, 1, 0)
+			FillFrame.BackgroundColor3 = Astral:GetElementColor("SliderFill")
+			FillFrame.Size = UDim2.new(0, 0, 1, 0)
 
 			local FillCorner = Instance.new("UICorner")
 			FillCorner.CornerRadius = UDim.new(1, 0)
@@ -1639,10 +2266,10 @@ function Astral:Window(Options)
 
 			local BallSize = ApplyScale(Astral.Config.Elements.Slider.BallSize)
 			local BallFrame = Instance.new("Frame")
+			BallFrame.Name = "BallFrame"
 			BallFrame.Parent = BackgroundFrame
-			BallFrame.BackgroundColor3 = Astral.Theme.Text
+			BallFrame.BackgroundColor3 = Astral:GetElementColor("SliderBall")
 			BallFrame.Size = UDim2.new(0, BallSize, 0, BallSize)
-			BallFrame.Position = UDim2.new((Value - Min) / (Max - Min), -BallSize / 2, 0.5, -BallSize / 2)
 			BallFrame.ZIndex = 2
 
 			local BallCorner = Instance.new("UICorner")
@@ -1651,18 +2278,129 @@ function Astral:Window(Options)
 
 			local Dragging = false
 
-			local function UpdateVisuals()
-				local VisualPercentage = (Value - Min) / (Max - Min)
-				TweenService:Create(FillFrame, TweenInfo.new(0.05), {Size = UDim2.new(VisualPercentage, 0, 1, 0)}):Play()
-				TweenService:Create(BallFrame, TweenInfo.new(0.05), {Position = UDim2.new(VisualPercentage, -BallSize / 2, 0.5, -BallSize / 2)}):Play()
-				ValueInput.Text = tostring(Value)
-				Callback(Value)
+			local SliderObject = {
+				Frame = SliderFrame,
+				Label = SliderLabel,
+				ValueInputScrollingFrame = ValueInputScrollingFrame,
+				ValueInput = ValueInput,
+				BackgroundFrame = BackgroundFrame,
+				FillFrame = FillFrame,
+				BallFrame = BallFrame,
+				Type = "Slider",
+				Value = Value,
+				Min = Min,
+				Max = Max
+			}
+
+			local function TruncateTextWithEllipsis(Text, MaxWidth, TextSize, Font)
+				local TextService = game:GetService("TextService")
+
+				local TextBounds = TextService:GetTextSize(Text, TextSize, Font, Vector2.new(10000, 10000))
+				if TextBounds.X <= MaxWidth then
+					return Text
+				end
+
+				local Ellipsis = "..."
+				local EllipsisWidth = TextService:GetTextSize(Ellipsis, TextSize, Font, Vector2.new(10000, 10000)).X
+
+				local Low, High = 1, #Text
+				local Result = ""
+
+				while Low <= High do
+					local Mid = math.floor((Low + High) / 2)
+					local TestText = Text:sub(1, Mid) .. Ellipsis
+					local TestBounds = TextService:GetTextSize(TestText, TextSize, Font, Vector2.new(10000, 10000))
+
+					if TestBounds.X <= MaxWidth then
+						Result = TestText
+						Low = Mid + 1
+					else
+						High = Mid - 1
+					end
+				end
+
+				return Result == "" and Ellipsis or Result
 			end
+
+			local function UpdateTextDisplay()
+				local TextService = game:GetService("TextService")
+				local CurrentText = ValueInput.Text
+				local MaxWidth = ValueInputScrollingFrame.AbsoluteSize.X
+				local TextSize = ValueInput.TextSize
+				local Font = ValueInput.Font
+
+				if ValueInput:IsFocused() then
+					ValueInput.Text = CurrentText
+					ValueInput.TextTruncate = Enum.TextTruncate.None
+
+					local TextBounds = TextService:GetTextSize(CurrentText, TextSize, Font, Vector2.new(10000, 10000))
+					ValueInputScrollingFrame.CanvasSize = UDim2.new(0, TextBounds.X, 0, 0)
+
+					if TextBounds.X > MaxWidth then
+						local ScrollPosition = TextBounds.X - MaxWidth
+						ValueInputScrollingFrame.CanvasPosition = Vector2.new(ScrollPosition, 0)
+					else
+						ValueInputScrollingFrame.CanvasPosition = Vector2.new(0, 0)
+					end
+				else
+					local FullText = ValueInput:GetAttribute("FullText") or CurrentText
+					local TruncatedText = TruncateTextWithEllipsis(FullText, MaxWidth, TextSize, Font)
+					ValueInput.Text = TruncatedText
+					ValueInput.TextTruncate = Enum.TextTruncate.None
+
+					local TextBounds = TextService:GetTextSize(TruncatedText, TextSize, Font, Vector2.new(10000, 10000))
+					ValueInputScrollingFrame.CanvasSize = UDim2.new(0, TextBounds.X, 0, 0)
+					ValueInputScrollingFrame.CanvasPosition = Vector2.new(0, 0)
+				end
+			end
+
+			local function CalculateBallPosition(Percentage)
+				local TrackWidth = BackgroundFrame.AbsoluteSize.X
+				local BallRadius = BallSize / 2
+				local Padding = BallRadius
+				local AvailableWidth = TrackWidth - (Padding * 2)
+				local Position = Padding + (AvailableWidth * Percentage)
+				return Position
+			end
+
+			local function UpdateVisualsOnly()
+				local VisualPercentage = (Value - Min) / (Max - Min)
+
+				local TrackWidth = BackgroundFrame.AbsoluteSize.X
+				local FillWidth = TrackWidth * VisualPercentage
+
+				TweenService:Create(FillFrame, TweenInfo.new(0.05), {
+					Size = UDim2.new(0, FillWidth, 1, 0)
+				}):Play()
+
+				local BallPosition = CalculateBallPosition(VisualPercentage)
+				local BallRadius = BallSize / 2
+
+				TweenService:Create(BallFrame, TweenInfo.new(0.05), {
+					Position = UDim2.new(0, BallPosition - BallRadius, 0.5, -BallRadius)
+				}):Play()
+
+				local FullValueText = tostring(Value)
+				ValueInput:SetAttribute("FullText", FullValueText)
+				UpdateTextDisplay()
+			end
+
+			local function UpdateVisuals()
+				UpdateVisualsOnly()
+				Callback(SliderObject, Value)
+			end
+
+			SliderObject.UpdateVisualsOnly = UpdateVisualsOnly
 
 			local function Update(Input)
 				local SizeX = BackgroundFrame.AbsoluteSize.X
 				local OffsetX = math.clamp(Input.Position.X - BackgroundFrame.AbsolutePosition.X, 0, SizeX)
-				local Percentage = OffsetX / SizeX
+				local BallRadius = BallSize / 2
+				local Padding = BallRadius
+				local AvailableWidth = SizeX - (Padding * 2)
+
+				local AdjustedOffsetX = math.clamp(OffsetX - Padding, 0, AvailableWidth)
+				local Percentage = AvailableWidth > 0 and (AdjustedOffsetX / AvailableWidth) or 0
 
 				Value = math.floor(((Max - Min) * Percentage + Min) / Increment + 0.5) * Increment
 				Value = math.clamp(Value, Min, Max)
@@ -1670,14 +2408,42 @@ function Astral:Window(Options)
 			end
 
 			local function UpdateFromText()
-				local InputValue = tonumber(ValueInput.Text)
+				local InputText = ValueInput.Text
+				local FullText = ValueInput:GetAttribute("FullText") or InputText
+				local InputValue = tonumber(FullText)
+
 				if InputValue then
 					Value = math.clamp(math.floor(InputValue / Increment + 0.5) * Increment, Min, Max)
 					UpdateVisuals()
 				else
-					ValueInput.Text = tostring(Value)
+					UpdateVisualsOnly()
 				end
 			end
+
+			ValueInput:GetPropertyChangedSignal("Text"):Connect(function()
+				if ValueInput:IsFocused() then
+					ValueInput:SetAttribute("FullText", ValueInput.Text)
+					UpdateTextDisplay()
+				end
+			end)
+
+			ValueInput.Focused:Connect(function()
+				ScrollToElement(PageFrame, SliderFrame)
+				local FullText = ValueInput:GetAttribute("FullText") or tostring(Value)
+				ValueInput.Text = FullText
+				UpdateTextDisplay()
+
+				ValueInput:CaptureFocus()
+				delay(0.01, function()
+					ValueInput.SelectionStart = 1
+					ValueInput.CursorPosition = #FullText + 1
+				end)
+			end)
+
+			ValueInput.FocusLost:Connect(function(EnterPressed)
+				UpdateFromText()
+				UpdateTextDisplay()
+			end)
 
 			BallFrame.InputBegan:Connect(function(Input)
 				if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
@@ -1706,36 +2472,30 @@ function Astral:Window(Options)
 				end
 			end)
 
-			ValueInput.Focused:Connect(function()
-				ScrollToElement(PageFrame, SliderFrame)
-			end)
+			UpdateVisualsOnly()
 
-			ValueInput.FocusLost:Connect(function(EnterPressed)
-				UpdateFromText()
-			end)
-
-			-- Slider update functions
-			local SliderObject = {}
 			function SliderObject:Update(NewOptions)
 				if NewOptions.Name then
-					SliderLabel.Text = NewOptions.Name
+					self.Label.Text = NewOptions.Name
 				end
 				if NewOptions.Callback then
 					Callback = NewOptions.Callback
-					Callback(Value) -- Call with current value
 				end
 				if NewOptions.Min then
 					Min = NewOptions.Min
+					self.Min = Min
 					Value = math.clamp(Value, Min, Max)
 					UpdateVisuals()
 				end
 				if NewOptions.Max then
 					Max = NewOptions.Max
+					self.Max = Max
 					Value = math.clamp(Value, Min, Max)
 					UpdateVisuals()
 				end
 				if NewOptions.Default ~= nil then
 					Value = math.clamp(NewOptions.Default, Min, Max)
+					self.Value = Value
 					UpdateVisuals()
 				end
 				if NewOptions.Increment then
@@ -1744,49 +2504,87 @@ function Astral:Window(Options)
 					UpdateVisuals()
 				end
 				if NewOptions.Font then
-					SliderLabel.Font = NewOptions.Font
+					self.Label.Font = NewOptions.Font
 				end
 				if NewOptions.Size then
-					SliderLabel.TextSize = ApplyScale(NewOptions.Size)
+					self.Label.TextSize = ApplyScale(NewOptions.Size)
 				end
 				if NewOptions.Height then
 					local NewHeight = ApplyScale(NewOptions.Height)
-					SliderFrame.Size = SliderWidth and 
+					self.Frame.Size = SliderWidth and 
 						UDim2.new(0, ApplyScale(SliderWidth), 0, NewHeight) or
 						UDim2.new(1, 0, 0, NewHeight)
 				end
 				if NewOptions.Width then
 					SliderWidth = NewOptions.Width
-					SliderFrame.Size = UDim2.new(0, ApplyScale(SliderWidth), 0, SliderFrame.Size.Y.Offset)
+					self.Frame.Size = UDim2.new(0, ApplyScale(SliderWidth), 0, self.Frame.Size.Y.Offset)
 				end
 				if NewOptions.Alignment then
-					SliderLabel.TextXAlignment = NewOptions.Alignment
+					self.Label.TextXAlignment = NewOptions.Alignment
 				end
+				return self
 			end
-			
+
 			function SliderObject:SetValue(NewValue)
 				Value = math.clamp(NewValue, Min, Max)
+				self.Value = Value
 				UpdateVisuals()
+				return self
 			end
-			
+
 			function SliderObject:GetValue()
 				return Value
 			end
-			
+
 			function SliderObject:SetRange(NewMin, NewMax)
 				Min = NewMin
 				Max = NewMax
+				self.Min = Min
+				self.Max = Max
 				Value = math.clamp(Value, Min, Max)
+				self.Value = Value
 				UpdateVisuals()
+				return self
 			end
-			
+
 			function SliderObject:SetText(Text)
-				SliderLabel.Text = Text
+				self.Label.Text = Text
+				return self
 			end
-			
+
+			function SliderObject:GetText()
+				return self.Label.Text
+			end
+
 			function SliderObject:SetCallback(NewCallback)
 				Callback = NewCallback
+				return self
 			end
+
+			function SliderObject:Destroy()
+				self.Frame:Destroy()
+			end
+
+			function SliderObject:UpdateTheme()
+				self.Frame.BackgroundColor3 = Astral:GetElementColor("ElementBackground")
+				self.Label.TextColor3 = Astral:GetElementColor("SliderLabel")
+				self.ValueInputScrollingFrame.BackgroundColor3 = Astral:GetElementColor("SliderInputBackground")
+				self.ValueInput.TextColor3 = Astral:GetElementColor("SliderInputText")
+				self.BackgroundFrame.BackgroundColor3 = Astral:GetElementColor("SliderTrack")
+				self.FillFrame.BackgroundColor3 = Astral:GetElementColor("SliderFill")
+				self.BallFrame.BackgroundColor3 = Astral:GetElementColor("SliderBall")
+
+				local InputStroke = self.ValueInputScrollingFrame:FindFirstChildOfClass("UIStroke")
+				if InputStroke then
+					InputStroke.Color = Astral:GetElementColor("SliderInputBorder")
+				end
+
+				if self.UpdateVisualsOnly then
+					self.UpdateVisualsOnly()
+				end
+			end
+
+			table.insert(Astral.UIObjects.Elements, SliderObject)
 
 			return SliderObject
 		end
@@ -1797,17 +2595,17 @@ function Astral:Window(Options)
 			local Default = Options.Default or ""
 			local Placeholder = Options.Placeholder or "Enter text..."
 			local Callback = Options.Callback or function() end
-			local TextBoxFont = Options.Font or Astral.Config.Elements.LabelFont
-			local TextBoxSize = Options.Size or Astral.Config.Elements.LabelSize
+			local TextBoxFont = Options.Font or Astral.Config.Elements.Font
+			local TextBoxSize = Options.Size or Astral.Config.Elements.Size
 			local TextBoxHeight = Options.Height or Astral.Config.Elements.TextBox.Height
 			local TextBoxWidth = Options.Width
-			local TextBoxAlignment = Options.Alignment or Astral.Config.Elements.LabelAlignment
+			local TextBoxAlignment = Options.Alignment or Astral.Config.Elements.Alignment
 
 			local TextBoxFrame = Instance.new("Frame")
 			TextBoxFrame.Parent = Parent
-			TextBoxFrame.BackgroundColor3 = Astral.Theme.Main
+			TextBoxFrame.BackgroundColor3 = Astral:GetElementColor("ElementBackground")
 			TextBoxFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			
+
 			if TextBoxWidth then
 				TextBoxFrame.Size = UDim2.new(0, ApplyScale(TextBoxWidth), 0, ApplyScale(TextBoxHeight))
 			else
@@ -1825,103 +2623,253 @@ function Astral:Window(Options)
 			ApplyPadding(TextBoxLabel, ApplyScale(BasePadding))
 			TextBoxLabel.Font = TextBoxFont
 			TextBoxLabel.Text = TextBoxName
-			TextBoxLabel.TextColor3 = Astral.Theme.Text
+			TextBoxLabel.TextColor3 = Astral:GetElementColor("TextBoxLabel")
 			TextBoxLabel.TextSize = ApplyScale(TextBoxSize)
 			TextBoxLabel.TextXAlignment = TextBoxAlignment
 
-			local InputBox = Instance.new("TextBox")
-			InputBox.Parent = TextBoxFrame
-			InputBox.BackgroundColor3 = Astral.Theme.Tertiary
-			InputBox.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			InputBox.Position = UDim2.new(0, ApplyScale(BasePadding), 0, ApplyScale(Astral.Config.Elements.TextBox.LabelHeight + 8))
-			InputBox.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, ApplyScale(Astral.Config.Elements.TextBox.InputHeight))
-			InputBox.Font = Enum.Font.Gotham
-			InputBox.PlaceholderText = Placeholder
-			InputBox.PlaceholderColor3 = Astral.Config.Elements.TextBox.PlaceholderColor
-			InputBox.Text = Default
-			InputBox.TextColor3 = Astral.Theme.Text
-			InputBox.TextSize = ApplyScale(Astral.Config.Elements.TextBox.InputTextSize)
-			InputBox.TextXAlignment = Enum.TextXAlignment.Left
-			InputBox.ClearTextOnFocus = false
+			local LabelHeight = ApplyScale(Astral.Config.Elements.TextBox.LabelHeight)
+			local InputHeight = ApplyScale(Astral.Config.Elements.TextBox.InputHeight)
+			local TotalHeight = ApplyScale(TextBoxHeight)
+
+			local RemainingSpace = TotalHeight - LabelHeight
+			local InputTopPosition = LabelHeight + (RemainingSpace - InputHeight) / 2
+
+			local InputScrollingFrame = Instance.new("ScrollingFrame")
+			InputScrollingFrame.Parent = TextBoxFrame
+			InputScrollingFrame.BackgroundColor3 = Astral:GetElementColor("TextBoxBackground")
+			InputScrollingFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
+			InputScrollingFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 0, InputTopPosition)
+			InputScrollingFrame.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, InputHeight)
+			InputScrollingFrame.ScrollBarThickness = 0
+			InputScrollingFrame.ScrollBarImageTransparency = 1
+			InputScrollingFrame.BorderSizePixel = 0
+			InputScrollingFrame.ClipsDescendants = true
 
 			local InputCorner = Instance.new("UICorner")
 			InputCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.TextBox.InputCornerRadius))
-			InputCorner.Parent = InputBox
+			InputCorner.Parent = InputScrollingFrame
+
+			local InputPadding = Instance.new("UIPadding")
+			InputPadding.Parent = InputScrollingFrame
+			InputPadding.PaddingLeft = UDim.new(0, ApplyScale(6))
+			InputPadding.PaddingRight = UDim.new(0, ApplyScale(6))
+
+			local InputBox = Instance.new("TextBox")
+			InputBox.Parent = InputScrollingFrame
+			InputBox.BackgroundTransparency = 1
+			InputBox.Size = UDim2.new(1, 0, 1, 0)
+			InputBox.Font = Enum.Font.Gotham
+			InputBox.PlaceholderText = Placeholder
+			InputBox.PlaceholderColor3 = Astral:GetElementColor("TextBoxPlaceholder")
+			InputBox.Text = Default
+			InputBox.TextColor3 = Astral:GetElementColor("TextBoxText")
+			InputBox.TextSize = ApplyScale(Astral.Config.Elements.TextBox.InputSize)
+			InputBox.TextXAlignment = Enum.TextXAlignment.Left
+			InputBox.ClearTextOnFocus = false
+			InputBox.TextTruncate = Enum.TextTruncate.None
 
 			local InputStroke = Instance.new("UIStroke")
-			InputStroke.Parent = InputBox
-			InputStroke.Color = Astral.Theme.Stroke
+			InputStroke.Parent = InputScrollingFrame
+			InputStroke.Color = Astral:GetElementColor("TextBoxBorder")
 			InputStroke.Thickness = ApplyScale(Astral.Config.Elements.TextBox.StrokeThickness)
 			InputStroke.Transparency = Astral.Config.Elements.TextBox.StrokeTransparency
 
+			local TextBoxObject = {
+				Frame = TextBoxFrame,
+				Label = TextBoxLabel,
+				InputScrollingFrame = InputScrollingFrame,
+				InputBox = InputBox,
+				Type = "TextBox"
+			}
+
+			local function TruncateTextWithEllipsis(Text, MaxWidth, TextSize, Font)
+				local TextService = game:GetService("TextService")
+
+				local TextBounds = TextService:GetTextSize(Text, TextSize, Font, Vector2.new(10000, 10000))
+				if TextBounds.X <= MaxWidth then
+					return Text
+				end
+
+				local Ellipsis = "..."
+				local EllipsisWidth = TextService:GetTextSize(Ellipsis, TextSize, Font, Vector2.new(10000, 10000)).X
+
+				local Low, High = 1, #Text
+				local Result = ""
+
+				while Low <= High do
+					local Mid = math.floor((Low + High) / 2)
+					local TestText = Text:sub(1, Mid) .. Ellipsis
+					local TestBounds = TextService:GetTextSize(TestText, TextSize, Font, Vector2.new(10000, 10000))
+
+					if TestBounds.X <= MaxWidth then
+						Result = TestText
+						Low = Mid + 1
+					else
+						High = Mid - 1
+					end
+				end
+
+				return Result == "" and Ellipsis or Result
+			end
+
+			local function UpdateTextDisplay()
+				local TextService = game:GetService("TextService")
+				local CurrentText = InputBox.Text
+				local MaxWidth = InputScrollingFrame.AbsoluteSize.X
+				local TextSize = InputBox.TextSize
+				local Font = InputBox.Font
+
+				if InputBox:IsFocused() then
+					InputBox.Text = CurrentText
+					InputBox.TextTruncate = Enum.TextTruncate.None
+
+					local TextBounds = TextService:GetTextSize(CurrentText, TextSize, Font, Vector2.new(10000, 10000))
+					InputScrollingFrame.CanvasSize = UDim2.new(0, TextBounds.X, 0, 0)
+
+					if TextBounds.X > MaxWidth then
+						local ScrollPosition = TextBounds.X - MaxWidth
+						InputScrollingFrame.CanvasPosition = Vector2.new(ScrollPosition, 0)
+					else
+						InputScrollingFrame.CanvasPosition = Vector2.new(0, 0)
+					end
+
+					InputBox:SetAttribute("FullText", CurrentText)
+				else
+					local FullText = InputBox:GetAttribute("FullText") or CurrentText
+					local TruncatedText = TruncateTextWithEllipsis(FullText, MaxWidth, TextSize, Font)
+					InputBox.Text = TruncatedText
+					InputBox.TextTruncate = Enum.TextTruncate.None
+
+					local TextBounds = TextService:GetTextSize(TruncatedText, TextSize, Font, Vector2.new(10000, 10000))
+					InputScrollingFrame.CanvasSize = UDim2.new(0, TextBounds.X, 0, 0)
+					InputScrollingFrame.CanvasPosition = Vector2.new(0, 0)
+				end
+			end
+
+			InputBox:GetPropertyChangedSignal("Text"):Connect(function()
+				if InputBox:IsFocused() then
+					InputBox:SetAttribute("FullText", InputBox.Text)
+					UpdateTextDisplay()
+				end
+			end)
+
 			InputBox.Focused:Connect(function()
 				ScrollToElement(PageFrame, TextBoxFrame)
+				local FullText = InputBox:GetAttribute("FullText") or InputBox.Text
+				InputBox.Text = FullText
+				UpdateTextDisplay()
+
+				InputBox:CaptureFocus()
+				delay(0.01, function()
+					InputBox.SelectionStart = 1
+					InputBox.CursorPosition = #FullText + 1
+				end)
 			end)
 
 			InputBox.FocusLost:Connect(function(EnterPressed)
 				if EnterPressed then
-					Callback(InputBox.Text)
+					Callback(TextBoxObject, InputBox:GetAttribute("FullText") or InputBox.Text)
 				end
+				UpdateTextDisplay()
 			end)
 
-			-- TextBox update functions
-			local TextBoxObject = {}
+			InputBox:SetAttribute("FullText", Default)
+			UpdateTextDisplay()
+
 			function TextBoxObject:Update(NewOptions)
 				if NewOptions.Name then
-					TextBoxLabel.Text = NewOptions.Name
+					self.Label.Text = NewOptions.Name
 				end
 				if NewOptions.Callback then
 					Callback = NewOptions.Callback
 				end
 				if NewOptions.Default then
-					InputBox.Text = NewOptions.Default
+					self.InputBox.Text = NewOptions.Default
+					self.InputBox:SetAttribute("FullText", NewOptions.Default)
+					UpdateTextDisplay()
 				end
 				if NewOptions.Placeholder then
-					InputBox.PlaceholderText = NewOptions.Placeholder
+					self.InputBox.PlaceholderText = NewOptions.Placeholder
 				end
 				if NewOptions.Font then
-					TextBoxLabel.Font = NewOptions.Font
+					self.Label.Font = NewOptions.Font
 				end
 				if NewOptions.Size then
-					TextBoxLabel.TextSize = ApplyScale(NewOptions.Size)
+					self.Label.TextSize = ApplyScale(NewOptions.Size)
 				end
 				if NewOptions.Height then
 					local NewHeight = ApplyScale(NewOptions.Height)
-					TextBoxFrame.Size = TextBoxWidth and 
+					self.Frame.Size = TextBoxWidth and 
 						UDim2.new(0, ApplyScale(TextBoxWidth), 0, NewHeight) or
 						UDim2.new(1, 0, 0, NewHeight)
-					-- Update input box position
-					InputBox.Position = UDim2.new(0, ApplyScale(BasePadding), 0, ApplyScale(Astral.Config.Elements.TextBox.LabelHeight + 8))
+
+					local LabelHeight = ApplyScale(Astral.Config.Elements.TextBox.LabelHeight)
+					local InputHeight = ApplyScale(Astral.Config.Elements.TextBox.InputHeight)
+					local TotalHeight = NewHeight
+					local RemainingSpace = TotalHeight - LabelHeight
+					local InputTopPosition = LabelHeight + (RemainingSpace - InputHeight) / 2
+
+					self.InputScrollingFrame.Position = UDim2.new(0, ApplyScale(BasePadding), 0, InputTopPosition)
+					UpdateTextDisplay()
 				end
 				if NewOptions.Width then
 					TextBoxWidth = NewOptions.Width
-					TextBoxFrame.Size = UDim2.new(0, ApplyScale(TextBoxWidth), 0, TextBoxFrame.Size.Y.Offset)
-					InputBox.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, ApplyScale(Astral.Config.Elements.TextBox.InputHeight))
+					self.Frame.Size = UDim2.new(0, ApplyScale(TextBoxWidth), 0, self.Frame.Size.Y.Offset)
+					self.InputScrollingFrame.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 0, ApplyScale(Astral.Config.Elements.TextBox.InputHeight))
+					UpdateTextDisplay()
 				end
 				if NewOptions.Alignment then
-					TextBoxLabel.TextXAlignment = NewOptions.Alignment
+					self.Label.TextXAlignment = NewOptions.Alignment
 				end
+				return self
 			end
-			
+
 			function TextBoxObject:SetText(Text)
-				InputBox.Text = Text
+				self.InputBox.Text = Text
+				self.InputBox:SetAttribute("FullText", Text)
+				UpdateTextDisplay()
+				return self
 			end
-			
+
 			function TextBoxObject:GetText()
-				return InputBox.Text
+				return self.InputBox:GetAttribute("FullText") or self.InputBox.Text
 			end
-			
+
 			function TextBoxObject:SetPlaceholder(Text)
-				InputBox.PlaceholderText = Text
+				self.InputBox.PlaceholderText = Text
+				return self
 			end
-			
+
 			function TextBoxObject:SetName(Text)
-				TextBoxLabel.Text = Text
+				self.Label.Text = Text
+				return self
 			end
-			
+
 			function TextBoxObject:SetCallback(NewCallback)
 				Callback = NewCallback
+				return self
 			end
+
+			function TextBoxObject:Destroy()
+				self.Frame:Destroy()
+			end
+
+			function TextBoxObject:UpdateTheme()
+				self.Frame.BackgroundColor3 = Astral:GetElementColor("ElementBackground")
+				self.Label.TextColor3 = Astral:GetElementColor("TextBoxLabel")
+				self.InputScrollingFrame.BackgroundColor3 = Astral:GetElementColor("TextBoxBackground")
+				self.InputBox.TextColor3 = Astral:GetElementColor("TextBoxText")
+				self.InputBox.PlaceholderColor3 = Astral:GetElementColor("TextBoxPlaceholder")
+
+				local InputStroke = self.InputScrollingFrame:FindFirstChildOfClass("UIStroke")
+				if InputStroke then
+					InputStroke.Color = Astral:GetElementColor("TextBoxBorder")
+				end
+
+				UpdateTextDisplay()
+			end
+
+			table.insert(Astral.UIObjects.Elements, TextBoxObject)
 
 			return TextBoxObject
 		end
@@ -1934,8 +2882,8 @@ function Astral:Window(Options)
 			local Callback = Options.Callback or function() end
 			local Dropped = false
 			local VisibleOptions = Options.VisibleOptions or 4
-			local DropdownFont = Options.Font or Astral.Config.Elements.LabelFont
-			local DropdownSize = Options.Size or Astral.Config.Elements.LabelSize
+			local DropdownFont = Options.Font or Astral.Config.Elements.Font
+			local DropdownSize = Options.Size or Astral.Config.Elements.Size
 			local DropdownHeight = Options.Height or Astral.Config.Elements.Dropdown.Height
 			local DropdownWidth = Options.Width
 
@@ -1961,15 +2909,15 @@ function Astral:Window(Options)
 
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
-			DropdownFrame.BackgroundColor3 = Astral.Theme.Main
+			DropdownFrame.BackgroundColor3 = Astral:GetElementColor("ElementBackground")
 			DropdownFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			
+
 			if DropdownWidth then
 				DropdownFrame.Size = UDim2.new(0, ApplyScale(DropdownWidth), 0, BaseTotalHeight)
 			else
 				DropdownFrame.Size = UDim2.new(1, 0, 0, BaseTotalHeight)
 			end
-			
+
 			DropdownFrame.ClipsDescendants = true
 			local DropdownCorner = Instance.new("UICorner")
 			DropdownCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
@@ -1991,7 +2939,7 @@ function Astral:Window(Options)
 			ApplyPadding(DropdownLabel, ApplyScale(BasePaddingValue))
 			DropdownLabel.Font = DropdownFont
 			DropdownLabel.Text = DropdownName .. (CurrentSelected and (": " .. tostring(CurrentSelected)) or "")
-			DropdownLabel.TextColor3 = Astral.Theme.Text
+			DropdownLabel.TextColor3 = Astral:GetElementColor("DropdownLabel")
 			DropdownLabel.TextSize = ApplyScale(DropdownSize)
 			DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
 			DropdownLabel.BackgroundTransparency = 1
@@ -2002,7 +2950,7 @@ function Astral:Window(Options)
 			ArrowImage.Position = UDim2.new(1, -ApplyScale(26), 0.5, -Astral.Config.Elements.Dropdown.ArrowSize / 2)
 			ArrowImage.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Dropdown.ArrowSize), 0, Astral.Config.Elements.Dropdown.ArrowSize)
 			ArrowImage.Image = "rbxassetid://6031091004"
-			ArrowImage.ImageColor3 = Astral.Theme.Accent
+			ArrowImage.ImageColor3 = Astral:GetElementColor("DropdownArrow")
 
 			local Header = Instance.new("Frame")
 			Header.Parent = DropdownFrame
@@ -2014,20 +2962,20 @@ function Astral:Window(Options)
 			local SearchBox = Instance.new("TextBox")
 			SearchBox.Parent = Header
 			SearchBox.Size = UDim2.new(1, -ApplyScale(50), 1, 0)
-			SearchBox.BackgroundColor3 = Astral.Theme.Tertiary
+			SearchBox.BackgroundColor3 = Astral:GetElementColor("DropdownSearchBackground")
 			SearchBox.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			SearchBox.PlaceholderText = Astral.Config.Elements.Dropdown.SearchPlaceholder
+			SearchBox.PlaceholderText = "Search..."
 			SearchBox.Text = ""
-			SearchBox.TextColor3 = Astral.Theme.Text
+			SearchBox.TextColor3 = Astral:GetElementColor("DropdownSearchText")
 			SearchBox.Font = Enum.Font.Gotham
-			SearchBox.TextSize = Astral.Config.Elements.Dropdown.SearchTextSize
+			SearchBox.TextSize = Astral.Config.Elements.Dropdown.SearchSize
 			local SearchBoxCorner = Instance.new("UICorner")
 			SearchBoxCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 			SearchBoxCorner.Parent = SearchBox
 
 			local SearchStroke = Instance.new("UIStroke")
 			SearchStroke.Parent = SearchBox
-			SearchStroke.Color = Astral.Theme.Stroke
+			SearchStroke.Color = Astral:GetElementColor("DropdownSearchBorder")
 			SearchStroke.Thickness = ApplyScale(Astral.Config.Elements.Dropdown.StrokeThickness)
 			SearchStroke.Transparency = Astral.Config.Elements.Dropdown.StrokeTransparency
 
@@ -2035,12 +2983,12 @@ function Astral:Window(Options)
 			ClearBtn.Parent = Header
 			ClearBtn.Position = UDim2.new(1, -ApplyScale(45), 0, 0)
 			ClearBtn.Size = UDim2.new(0, ApplyScale(45), 1, 0)
-			ClearBtn.BackgroundColor3 = Astral.Theme.Error
+			ClearBtn.BackgroundColor3 = Astral:GetElementColor("DropdownClearButton")
 			ClearBtn.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			ClearBtn.Text = Astral.Config.Elements.Dropdown.ClearButtonText
+			ClearBtn.Text = "CLEAR"
 			ClearBtn.Font = Enum.Font.GothamBold
-			ClearBtn.TextColor3 = Astral.Theme.Text
-			ClearBtn.TextSize = Astral.Config.Elements.Dropdown.ButtonTextSize
+			ClearBtn.TextColor3 = Astral:GetElementColor("DropdownClearButtonText")
+			ClearBtn.TextSize = Astral.Config.Elements.Dropdown.ButtonSize
 			local ClearBtnCorner = Instance.new("UICorner")
 			ClearBtnCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 			ClearBtnCorner.Parent = ClearBtn
@@ -2052,37 +3000,46 @@ function Astral:Window(Options)
 			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, CalculatedListHeight)
 			DropdownList.ScrollBarThickness = 0
 			DropdownList.ScrollBarImageTransparency = 1
+			DropdownList.ScrollBarImageColor3 = Astral:GetElementColor("ScrollBar")
 			DropdownList.BorderSizePixel = 0
-			DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
 			DropdownList.VerticalScrollBarInset = Enum.ScrollBarInset.None
 			DropdownList.HorizontalScrollBarInset = Enum.ScrollBarInset.None
 			DropdownList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
 			DropdownList.ScrollingEnabled = false
 			DropdownList.Visible = false
 
-			CreateScrollBar(DropdownList)
+			CreateScrollBar(DropdownList, WindowId)
 
 			local DropdownLayout = Instance.new("UIListLayout")
 			DropdownLayout.Parent = DropdownList
 			DropdownLayout.Padding = UDim.new(0, ApplyScale(BasePaddingValue))
 
+			local DropdownObject = {
+				Frame = DropdownFrame,
+				Label = DropdownLabel,
+				DropdownList = DropdownList,
+				Type = "Dropdown",
+				CurrentSelected = CurrentSelected,
+				DropdownOptions = DropdownOptions
+			}
+
 			local function Refresh(Filter)
 				for _, Child in pairs(DropdownList:GetChildren()) do
 					if Child:IsA("TextButton") then Child:Destroy() end
 				end
-				for _, Option in pairs(DropdownOptions) do
+				for _, Option in pairs(DropdownObject.DropdownOptions) do
 					if Filter and Filter ~= "" and not string.find(string.lower(Option), string.lower(Filter)) then continue end
 
 					local IsSelected = (CurrentSelected == Option)
 					local OptionButton = Instance.new("TextButton")
 					OptionButton.Parent = DropdownList
-					OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
+					OptionButton.BackgroundColor3 = IsSelected and Astral:GetElementColor("DropdownOptionSelectedBackground") or Astral:GetElementColor("DropdownOptionBackground")
 					OptionButton.BackgroundTransparency = IsSelected and 0.15 or Astral.Config.Elements.BackgroundTransparency
 					OptionButton.Size = UDim2.new(1, 0, 0, Astral.Config.Elements.Dropdown.OptionHeight)
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
-					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
-					OptionButton.TextSize = Astral.Config.Elements.Dropdown.OptionTextSize
+					OptionButton.TextColor3 = IsSelected and Astral:GetElementColor("DropdownOptionSelectedText") or Astral:GetElementColor("DropdownOptionText")
+					OptionButton.TextSize = Astral.Config.Elements.Dropdown.OptionSize
 					local OptionCorner = Instance.new("UICorner")
 					OptionCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 					OptionCorner.Parent = OptionButton
@@ -2090,7 +3047,8 @@ function Astral:Window(Options)
 					OptionButton.MouseButton1Click:Connect(function()
 						CurrentSelected = Option
 						DropdownLabel.Text = DropdownName .. ": " .. Option
-						Callback(Option)
+						DropdownObject.CurrentSelected = Option
+						Callback(DropdownObject, Option)
 						Refresh(SearchBox.Text)
 					end)
 				end
@@ -2100,12 +3058,16 @@ function Astral:Window(Options)
 				DropdownList.ScrollingEnabled = ContentHeight > CalculatedListHeight
 			end
 
+			-- Store the Refresh function in the object
+			DropdownObject.RefreshFunction = Refresh
+
 			SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
 
 			ClearBtn.MouseButton1Click:Connect(function()
 				CurrentSelected = nil
+				DropdownObject.CurrentSelected = nil
 				DropdownLabel.Text = DropdownName
-				Callback(nil)
+				Callback(DropdownObject, nil)
 				Refresh(SearchBox.Text)
 			end)
 
@@ -2137,34 +3099,37 @@ function Astral:Window(Options)
 				end
 			end)
 
-			-- Dropdown update functions
-			local DropdownObject = {}
 			function DropdownObject:Update(NewOptions)
 				if NewOptions.Name then
 					DropdownName = NewOptions.Name
-					DropdownLabel.Text = DropdownName .. (CurrentSelected and (": " .. tostring(CurrentSelected)) or "")
+					self.Label.Text = DropdownName .. (self.CurrentSelected and (": " .. tostring(self.CurrentSelected)) or "")
 				end
 				if NewOptions.Callback then
 					Callback = NewOptions.Callback
 				end
 				if NewOptions.Options then
-					DropdownOptions = NewOptions.Options
+					self.DropdownOptions = NewOptions.Options
+					if self.CurrentSelected and not table.find(self.DropdownOptions, self.CurrentSelected) then
+						self.CurrentSelected = nil
+						CurrentSelected = nil
+						self.Label.Text = DropdownName
+					end
 					Refresh(SearchBox.Text)
 				end
 				if NewOptions.Default ~= nil then
 					if NewOptions.Default == nil then
+						self.CurrentSelected = nil
 						CurrentSelected = nil
-						DropdownLabel.Text = DropdownName
-					elseif table.find(DropdownOptions, NewOptions.Default) then
+						self.Label.Text = DropdownName
+					elseif table.find(self.DropdownOptions, NewOptions.Default) then
+						self.CurrentSelected = NewOptions.Default
 						CurrentSelected = NewOptions.Default
-						DropdownLabel.Text = DropdownName .. ": " .. CurrentSelected
+						self.Label.Text = DropdownName .. ": " .. self.CurrentSelected
 					end
-					Callback(CurrentSelected)
 					Refresh(SearchBox.Text)
 				end
 				if NewOptions.VisibleOptions then
 					VisibleOptions = NewOptions.VisibleOptions
-					-- Recalculate heights
 					CalculatedListHeight = (OptionHeight + OptionPadding) * VisibleOptions - OptionPadding
 					if CalculatedListHeight < OptionHeight then
 						CalculatedListHeight = OptionHeight
@@ -2174,79 +3139,123 @@ function Astral:Window(Options)
 						ApplyScale(BasePaddingValue) + 
 						CalculatedListHeight + 
 						ApplyScale(BasePaddingValue * 2)
-					
-					DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, CalculatedListHeight)
+
+					self.DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, CalculatedListHeight)
 				end
 				if NewOptions.Font then
-					DropdownLabel.Font = NewOptions.Font
+					self.Label.Font = NewOptions.Font
 				end
 				if NewOptions.Size then
-					DropdownLabel.TextSize = ApplyScale(NewOptions.Size)
+					self.Label.TextSize = ApplyScale(NewOptions.Size)
 				end
 				if NewOptions.Height then
 					BaseElementHeight = NewOptions.Height
 					BaseTotalHeight = ApplyScale(BaseElementHeight)
 					DropdownButton.Size = UDim2.new(1, 0, 0, BaseTotalHeight)
-					DropdownFrame.Size = DropdownWidth and 
+					self.Frame.Size = DropdownWidth and 
 						UDim2.new(0, ApplyScale(DropdownWidth), 0, BaseTotalHeight) or
 						UDim2.new(1, 0, 0, BaseTotalHeight)
 				end
 				if NewOptions.Width then
 					DropdownWidth = NewOptions.Width
-					DropdownFrame.Size = UDim2.new(0, ApplyScale(DropdownWidth), 0, BaseTotalHeight)
+					self.Frame.Size = UDim2.new(0, ApplyScale(DropdownWidth), 0, BaseTotalHeight)
 				end
+				return self
 			end
-			
+
 			function DropdownObject:SetOptions(NewOptions)
-				DropdownOptions = NewOptions
+				self.DropdownOptions = NewOptions
+				if self.CurrentSelected and not table.find(self.DropdownOptions, self.CurrentSelected) then
+					self.CurrentSelected = nil
+					CurrentSelected = nil
+					self.Label.Text = DropdownName
+				end
 				Refresh(SearchBox.Text)
+				return self
 			end
-			
+
 			function DropdownObject:AddOption(Option)
-				table.insert(DropdownOptions, Option)
+				table.insert(self.DropdownOptions, Option)
 				Refresh(SearchBox.Text)
+				return self
 			end
-			
+
 			function DropdownObject:RemoveOption(Option)
-				for i, v in ipairs(DropdownOptions) do
+				for i, v in ipairs(self.DropdownOptions) do
 					if v == Option then
-						table.remove(DropdownOptions, i)
+						table.remove(self.DropdownOptions, i)
 						break
 					end
 				end
-				if CurrentSelected == Option then
+				if self.CurrentSelected == Option then
+					self.CurrentSelected = nil
 					CurrentSelected = nil
-					DropdownLabel.Text = DropdownName
-					Callback(nil)
+					self.Label.Text = DropdownName
 				end
 				Refresh(SearchBox.Text)
+				return self
 			end
-			
+
 			function DropdownObject:SetSelected(Option)
-				if Option == nil or table.find(DropdownOptions, Option) then
+				if Option == nil or table.find(self.DropdownOptions, Option) then
+					self.CurrentSelected = Option
 					CurrentSelected = Option
-					DropdownLabel.Text = DropdownName .. (Option and (": " .. Option) or "")
-					Callback(Option)
+					self.Label.Text = DropdownName .. (Option and (": " .. Option) or "")
+					Callback(self, Option)
 					Refresh(SearchBox.Text)
 				end
+				return self
 			end
-			
+
 			function DropdownObject:GetSelected()
-				return CurrentSelected
+				return self.CurrentSelected
 			end
-			
+
 			function DropdownObject:GetOptions()
-				return DropdownOptions
+				return self.DropdownOptions
 			end
-			
+
 			function DropdownObject:SetName(Text)
 				DropdownName = Text
-				DropdownLabel.Text = DropdownName .. (CurrentSelected and (": " .. CurrentSelected) or "")
+				self.Label.Text = DropdownName .. (self.CurrentSelected and (": " .. self.CurrentSelected) or "")
+				return self
 			end
-			
+
 			function DropdownObject:SetCallback(NewCallback)
 				Callback = NewCallback
+				return self
 			end
+
+			function DropdownObject:Destroy()
+				self.Frame:Destroy()
+			end
+
+			function DropdownObject:UpdateTheme()
+				self.Frame.BackgroundColor3 = Astral:GetElementColor("ElementBackground")
+				self.Label.TextColor3 = Astral:GetElementColor("DropdownLabel")
+				ArrowImage.ImageColor3 = Astral:GetElementColor("DropdownArrow")
+
+				SearchBox.BackgroundColor3 = Astral:GetElementColor("DropdownSearchBackground")
+				SearchBox.TextColor3 = Astral:GetElementColor("DropdownSearchText")
+				SearchBox.PlaceholderColor3 = Astral:GetElementColor("DropdownSearchPlaceholder")
+
+				local SearchStroke = SearchBox:FindFirstChildOfClass("UIStroke")
+				if SearchStroke then
+					SearchStroke.Color = Astral:GetElementColor("DropdownSearchBorder")
+				end
+
+				ClearBtn.BackgroundColor3 = Astral:GetElementColor("DropdownClearButton")
+				ClearBtn.TextColor3 = Astral:GetElementColor("DropdownClearButtonText")
+
+				self.DropdownList.ScrollBarImageColor3 = Astral:GetElementColor("ScrollBar")
+
+				-- Refresh options with new theme colors
+				if self.RefreshFunction then
+					self.RefreshFunction(SearchBox.Text)
+				end
+			end
+
+			table.insert(Astral.UIObjects.Elements, DropdownObject)
 
 			return DropdownObject
 		end
@@ -2260,8 +3269,8 @@ function Astral:Window(Options)
 			local Max = Options.Max or #DropdownOptions
 			local Min = Options.Min or 0
 			local VisibleOptions = Options.VisibleOptions or 4
-			local MultiDropdownFont = Options.Font or Astral.Config.Elements.LabelFont
-			local MultiDropdownSize = Options.Size or Astral.Config.Elements.LabelSize
+			local MultiDropdownFont = Options.Font or Astral.Config.Elements.Font
+			local MultiDropdownSize = Options.Size or Astral.Config.Elements.Size
 			local MultiDropdownHeight = Options.Height or Astral.Config.Elements.MultiDropdown.Height
 			local MultiDropdownWidth = Options.Width
 
@@ -2298,15 +3307,15 @@ function Astral:Window(Options)
 
 			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Parent = Parent
-			DropdownFrame.BackgroundColor3 = Astral.Theme.Main
+			DropdownFrame.BackgroundColor3 = Astral:GetElementColor("ElementBackground")
 			DropdownFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			
+
 			if MultiDropdownWidth then
 				DropdownFrame.Size = UDim2.new(0, ApplyScale(MultiDropdownWidth), 0, BaseTotalHeight)
 			else
 				DropdownFrame.Size = UDim2.new(1, 0, 0, BaseTotalHeight)
 			end
-			
+
 			DropdownFrame.ClipsDescendants = true
 			local DropdownCorner = Instance.new("UICorner")
 			DropdownCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.CornerRadius))
@@ -2327,7 +3336,7 @@ function Astral:Window(Options)
 			DropdownLabel.Size = UDim2.new(1, 0, 1, 0)
 			ApplyPadding(DropdownLabel, ApplyScale(BasePaddingValue))
 			DropdownLabel.Font = MultiDropdownFont
-			DropdownLabel.TextColor3 = Astral.Theme.Text
+			DropdownLabel.TextColor3 = Astral:GetElementColor("DropdownLabel")
 			DropdownLabel.TextSize = ApplyScale(MultiDropdownSize)
 			DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
 			DropdownLabel.BackgroundTransparency = 1
@@ -2349,7 +3358,7 @@ function Astral:Window(Options)
 			ArrowImage.Position = UDim2.new(1, -ApplyScale(26), 0.5, -Astral.Config.Elements.Dropdown.ArrowSize / 2)
 			ArrowImage.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Dropdown.ArrowSize), 0, Astral.Config.Elements.Dropdown.ArrowSize)
 			ArrowImage.Image = "rbxassetid://6031091004"
-			ArrowImage.ImageColor3 = Astral.Theme.Accent
+			ArrowImage.ImageColor3 = Astral:GetElementColor("DropdownArrow")
 
 			local Header = Instance.new("Frame")
 			Header.Parent = DropdownFrame
@@ -2361,20 +3370,20 @@ function Astral:Window(Options)
 			local SearchBox = Instance.new("TextBox")
 			SearchBox.Parent = Header
 			SearchBox.Size = UDim2.new(1, -ApplyScale(100), 1, 0)
-			SearchBox.BackgroundColor3 = Astral.Theme.Tertiary
+			SearchBox.BackgroundColor3 = Astral:GetElementColor("DropdownSearchBackground")
 			SearchBox.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			SearchBox.PlaceholderText = Astral.Config.Elements.MultiDropdown.SearchPlaceholder
+			SearchBox.PlaceholderText = "Search options..."
 			SearchBox.Text = ""
-			SearchBox.TextColor3 = Astral.Theme.Text
+			SearchBox.TextColor3 = Astral:GetElementColor("DropdownSearchText")
 			SearchBox.Font = Enum.Font.Gotham
-			SearchBox.TextSize = Astral.Config.Elements.MultiDropdown.SearchTextSize
+			SearchBox.TextSize = Astral.Config.Elements.MultiDropdown.SearchSize
 			local SearchBoxCorner = Instance.new("UICorner")
 			SearchBoxCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 			SearchBoxCorner.Parent = SearchBox
 
 			local SearchStroke = Instance.new("UIStroke")
 			SearchStroke.Parent = SearchBox
-			SearchStroke.Color = Astral.Theme.Stroke
+			SearchStroke.Color = Astral:GetElementColor("DropdownSearchBorder")
 			SearchStroke.Thickness = ApplyScale(Astral.Config.Elements.Dropdown.StrokeThickness)
 			SearchStroke.Transparency = Astral.Config.Elements.Dropdown.StrokeTransparency
 
@@ -2382,12 +3391,12 @@ function Astral:Window(Options)
 			SelectAllBtn.Parent = Header
 			SelectAllBtn.Position = UDim2.new(1, -ApplyScale(95), 0, 0)
 			SelectAllBtn.Size = UDim2.new(0, ApplyScale(45), 1, 0)
-			SelectAllBtn.BackgroundColor3 = Astral.Theme.Success
+			SelectAllBtn.BackgroundColor3 = Astral:GetElementColor("DropdownSelectAllButton")
 			SelectAllBtn.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			SelectAllBtn.Text = Astral.Config.Elements.MultiDropdown.SelectAllButtonText
+			SelectAllBtn.Text = "ALL"
 			SelectAllBtn.Font = Enum.Font.GothamBold
-			SelectAllBtn.TextColor3 = Astral.Theme.Text
-			SelectAllBtn.TextSize = Astral.Config.Elements.MultiDropdown.ButtonTextSize
+			SelectAllBtn.TextColor3 = Astral:GetElementColor("DropdownSelectAllButtonText")
+			SelectAllBtn.TextSize = Astral.Config.Elements.MultiDropdown.ButtonSize
 			local SelectAllCorner = Instance.new("UICorner")
 			SelectAllCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 			SelectAllCorner.Parent = SelectAllBtn
@@ -2396,12 +3405,12 @@ function Astral:Window(Options)
 			ClearAllBtn.Parent = Header
 			ClearAllBtn.Position = UDim2.new(1, -ApplyScale(45), 0, 0)
 			ClearAllBtn.Size = UDim2.new(0, ApplyScale(45), 1, 0)
-			ClearAllBtn.BackgroundColor3 = Astral.Theme.Error
+			ClearAllBtn.BackgroundColor3 = Astral:GetElementColor("DropdownClearButton")
 			ClearAllBtn.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			ClearAllBtn.Text = Astral.Config.Elements.MultiDropdown.ClearButtonText
+			ClearAllBtn.Text = "CLEAR"
 			ClearAllBtn.Font = Enum.Font.GothamBold
-			ClearAllBtn.TextColor3 = Astral.Theme.Text
-			ClearAllBtn.TextSize = Astral.Config.Elements.MultiDropdown.ButtonTextSize
+			ClearAllBtn.TextColor3 = Astral:GetElementColor("DropdownClearButtonText")
+			ClearAllBtn.TextSize = Astral.Config.Elements.MultiDropdown.ButtonSize
 			local ClearAllCorner = Instance.new("UICorner")
 			ClearAllCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 			ClearAllCorner.Parent = ClearAllBtn
@@ -2413,36 +3422,48 @@ function Astral:Window(Options)
 			DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, CalculatedListHeight)
 			DropdownList.ScrollBarThickness = 0
 			DropdownList.ScrollBarImageTransparency = 1
-			DropdownList.ScrollBarImageColor3 = Astral.Theme.Accent
+			DropdownList.ScrollBarImageColor3 = Astral:GetElementColor("ScrollBar")
 			DropdownList.BorderSizePixel = 0
 			DropdownList.VerticalScrollBarInset = Enum.ScrollBarInset.None
 			DropdownList.HorizontalScrollBarInset = Enum.ScrollBarInset.None
 			DropdownList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
 			DropdownList.Visible = false
 
-			CreateScrollBar(DropdownList)
+			CreateScrollBar(DropdownList, WindowId)
 
 			local DropdownLayout = Instance.new("UIListLayout")
 			DropdownLayout.Parent = DropdownList
 			DropdownLayout.Padding = UDim.new(0, ApplyScale(BasePaddingValue))
 
+			local MultiDropdownObject = {
+				Frame = DropdownFrame,
+				Label = DropdownLabel,
+				DropdownList = DropdownList,
+				Type = "MultiDropdown",
+				Selected = Selected,
+				SelectionOrder = SelectionOrder,
+				DropdownOptions = DropdownOptions,
+				Max = Max,
+				Min = Min
+			}
+
 			local function Refresh(Filter)
 				for _, Child in pairs(DropdownList:GetChildren()) do
 					if Child:IsA("TextButton") then Child:Destroy() end
 				end
-				for _, Option in pairs(DropdownOptions) do
+				for _, Option in pairs(MultiDropdownObject.DropdownOptions) do
 					if Filter and Filter ~= "" and not string.find(string.lower(Option), string.lower(Filter)) then continue end
 
 					local IsSelected = Selected[Option]
 					local OptionButton = Instance.new("TextButton")
 					OptionButton.Parent = DropdownList
-					OptionButton.BackgroundColor3 = IsSelected and Astral.Theme.Accent or Astral.Theme.Tertiary
+					OptionButton.BackgroundColor3 = IsSelected and Astral:GetElementColor("DropdownOptionSelectedBackground") or Astral:GetElementColor("DropdownOptionBackground")
 					OptionButton.BackgroundTransparency = IsSelected and 0.15 or Astral.Config.Elements.BackgroundTransparency
 					OptionButton.Size = UDim2.new(1, 0, 0, Astral.Config.Elements.MultiDropdown.OptionHeight)
 					OptionButton.Text = Option
 					OptionButton.Font = IsSelected and Enum.Font.GothamBold or Enum.Font.Gotham
-					OptionButton.TextColor3 = IsSelected and Astral.Theme.Text or Astral.Theme.TextDark
-					OptionButton.TextSize = Astral.Config.Elements.MultiDropdown.OptionTextSize
+					OptionButton.TextColor3 = IsSelected and Astral:GetElementColor("DropdownOptionSelectedText") or Astral:GetElementColor("DropdownOptionText")
+					OptionButton.TextSize = Astral.Config.Elements.MultiDropdown.OptionSize
 					local OptionCorner = Instance.new("UICorner")
 					OptionCorner.CornerRadius = UDim.new(0, ApplyScale(Astral.Config.Elements.Dropdown.InputCornerRadius))
 					OptionCorner.Parent = OptionButton
@@ -2452,23 +3473,33 @@ function Astral:Window(Options)
 							if #SelectionOrder > Min then
 								Selected[Option] = false
 								for i, v in ipairs(SelectionOrder) do if v == Option then table.remove(SelectionOrder, i) break end end
+								UpdateLabel()
+								MultiDropdownObject.Selected = Selected
+								MultiDropdownObject.SelectionOrder = SelectionOrder
+								Refresh(SearchBox.Text)
+								Callback(MultiDropdownObject, SelectionOrder)
 							end
 						elseif #SelectionOrder < Max then
 							Selected[Option] = true
 							table.insert(SelectionOrder, Option)
+							UpdateLabel()
+							MultiDropdownObject.Selected = Selected
+							MultiDropdownObject.SelectionOrder = SelectionOrder
+							Refresh(SearchBox.Text)
+							Callback(MultiDropdownObject, SelectionOrder)
 						end
-						UpdateLabel()
-						Refresh(SearchBox.Text)
-						Callback(SelectionOrder)
 					end)
 				end
 				DropdownList.CanvasSize = UDim2.new(0, 0, 0, DropdownLayout.AbsoluteContentSize.Y + ApplyScale(BasePaddingValue))
 			end
 
+			-- Store the Refresh function in the object
+			MultiDropdownObject.RefreshFunction = Refresh
+
 			SearchBox:GetPropertyChangedSignal("Text"):Connect(function() Refresh(SearchBox.Text) end)
 
 			SelectAllBtn.MouseButton1Click:Connect(function()
-				for _, Option in ipairs(DropdownOptions) do
+				for _, Option in ipairs(MultiDropdownObject.DropdownOptions) do
 					if #SelectionOrder >= Max then break end
 					if not Selected[Option] then
 						Selected[Option] = true
@@ -2476,8 +3507,10 @@ function Astral:Window(Options)
 					end
 				end
 				UpdateLabel()
+				MultiDropdownObject.Selected = Selected
+				MultiDropdownObject.SelectionOrder = SelectionOrder
 				Refresh(SearchBox.Text)
-				Callback(SelectionOrder)
+				Callback(MultiDropdownObject, SelectionOrder)
 			end)
 
 			ClearAllBtn.MouseButton1Click:Connect(function()
@@ -2486,8 +3519,10 @@ function Astral:Window(Options)
 					Selected[removed] = false
 				end
 				UpdateLabel()
+				MultiDropdownObject.Selected = Selected
+				MultiDropdownObject.SelectionOrder = SelectionOrder
 				Refresh(SearchBox.Text)
-				Callback(SelectionOrder)
+				Callback(MultiDropdownObject, SelectionOrder)
 			end)
 
 			DropdownButton.MouseButton1Click:Connect(function()
@@ -2518,8 +3553,6 @@ function Astral:Window(Options)
 				end
 			end)
 
-			-- MultiDropdown update functions
-			local MultiDropdownObject = {}
 			function MultiDropdownObject:Update(NewOptions)
 				if NewOptions.Name then
 					DropdownName = NewOptions.Name
@@ -2529,12 +3562,13 @@ function Astral:Window(Options)
 					Callback = NewOptions.Callback
 				end
 				if NewOptions.Options then
-					DropdownOptions = NewOptions.Options
-					-- Filter out selections that are no longer in options
-					for i = #SelectionOrder, 1, -1 do
-						local option = SelectionOrder[i]
-						if not table.find(DropdownOptions, option) then
+					self.DropdownOptions = NewOptions.Options
+					for i = #self.SelectionOrder, 1, -1 do
+						local option = self.SelectionOrder[i]
+						if not table.find(self.DropdownOptions, option) then
+							self.Selected[option] = false
 							Selected[option] = false
+							table.remove(self.SelectionOrder, i)
 							table.remove(SelectionOrder, i)
 						end
 					end
@@ -2542,34 +3576,39 @@ function Astral:Window(Options)
 					Refresh(SearchBox.Text)
 				end
 				if NewOptions.Default then
+					self.Selected = {}
+					self.SelectionOrder = {}
 					Selected = {}
 					SelectionOrder = {}
 					for _, v in pairs(NewOptions.Default) do
-						if #SelectionOrder < Max then
+						if #self.SelectionOrder < self.Max then
+							self.Selected[v] = true
 							Selected[v] = true
+							table.insert(self.SelectionOrder, v)
 							table.insert(SelectionOrder, v)
 						end
 					end
 					UpdateLabel()
 					Refresh(SearchBox.Text)
-					Callback(SelectionOrder)
 				end
 				if NewOptions.Max then
+					self.Max = NewOptions.Max
 					Max = NewOptions.Max
-					-- Remove excess selections if needed
-					while #SelectionOrder > Max do
-						local removed = table.remove(SelectionOrder, 1)
+					while #self.SelectionOrder > self.Max do
+						local removed = table.remove(self.SelectionOrder, 1)
+						self.Selected[removed] = false
+						table.remove(SelectionOrder, 1)
 						Selected[removed] = false
 					end
 					UpdateLabel()
 					Refresh(SearchBox.Text)
 				end
 				if NewOptions.Min then
+					self.Min = NewOptions.Min
 					Min = NewOptions.Min
 				end
 				if NewOptions.VisibleOptions then
 					VisibleOptions = NewOptions.VisibleOptions
-					-- Recalculate heights
 					CalculatedListHeight = (OptionHeight + OptionPadding) * VisibleOptions - OptionPadding
 					if CalculatedListHeight < OptionHeight then
 						CalculatedListHeight = OptionHeight
@@ -2579,57 +3618,68 @@ function Astral:Window(Options)
 						ApplyScale(BasePaddingValue) + 
 						CalculatedListHeight + 
 						ApplyScale(BasePaddingValue * 2)
-					
-					DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, CalculatedListHeight)
+
+					self.DropdownList.Size = UDim2.new(1, -ApplyScale(BasePaddingValue * 2), 0, CalculatedListHeight)
 				end
 				if NewOptions.Font then
-					DropdownLabel.Font = NewOptions.Font
+					self.Label.Font = NewOptions.Font
 				end
 				if NewOptions.Size then
-					DropdownLabel.TextSize = ApplyScale(NewOptions.Size)
+					self.Label.TextSize = ApplyScale(NewOptions.Size)
 				end
 				if NewOptions.Height then
 					BaseElementHeight = NewOptions.Height
 					BaseTotalHeight = ApplyScale(BaseElementHeight)
 					DropdownButton.Size = UDim2.new(1, 0, 0, BaseTotalHeight)
-					DropdownFrame.Size = MultiDropdownWidth and 
+					self.Frame.Size = MultiDropdownWidth and 
 						UDim2.new(0, ApplyScale(MultiDropdownWidth), 0, BaseTotalHeight) or
 						UDim2.new(1, 0, 0, BaseTotalHeight)
 				end
 				if NewOptions.Width then
 					MultiDropdownWidth = NewOptions.Width
-					DropdownFrame.Size = UDim2.new(0, ApplyScale(MultiDropdownWidth), 0, BaseTotalHeight)
+					self.Frame.Size = UDim2.new(0, ApplyScale(MultiDropdownWidth), 0, BaseTotalHeight)
 				end
+				return self
 			end
-			
+
 			function MultiDropdownObject:SetOptions(NewOptions)
-				DropdownOptions = NewOptions
-				-- Filter out selections that are no longer in options
-				for i = #SelectionOrder, 1, -1 do
-					local option = SelectionOrder[i]
-					if not table.find(DropdownOptions, option) then
+				self.DropdownOptions = NewOptions
+				for i = #self.SelectionOrder, 1, -1 do
+					local option = self.SelectionOrder[i]
+					if not table.find(self.DropdownOptions, option) then
+						self.Selected[option] = false
 						Selected[option] = false
+						table.remove(self.SelectionOrder, i)
 						table.remove(SelectionOrder, i)
 					end
 				end
 				UpdateLabel()
 				Refresh(SearchBox.Text)
+				return self
 			end
-			
+
 			function MultiDropdownObject:AddOption(Option)
-				table.insert(DropdownOptions, Option)
+				table.insert(self.DropdownOptions, Option)
 				Refresh(SearchBox.Text)
+				return self
 			end
-			
+
 			function MultiDropdownObject:RemoveOption(Option)
-				for i, v in ipairs(DropdownOptions) do
+				for i, v in ipairs(self.DropdownOptions) do
 					if v == Option then
-						table.remove(DropdownOptions, i)
+						table.remove(self.DropdownOptions, i)
 						break
 					end
 				end
-				if Selected[Option] then
+				if self.Selected[Option] then
+					self.Selected[Option] = false
 					Selected[Option] = false
+					for i, v in ipairs(self.SelectionOrder) do
+						if v == Option then
+							table.remove(self.SelectionOrder, i)
+							break
+						end
+					end
 					for i, v in ipairs(SelectionOrder) do
 						if v == Option then
 							table.remove(SelectionOrder, i)
@@ -2637,46 +3687,62 @@ function Astral:Window(Options)
 						end
 					end
 					UpdateLabel()
-					Callback(SelectionOrder)
+					Callback(self, self.SelectionOrder)
 				end
 				Refresh(SearchBox.Text)
+				return self
 			end
-			
+
 			function MultiDropdownObject:SetSelected(Options)
+				self.Selected = {}
+				self.SelectionOrder = {}
 				Selected = {}
 				SelectionOrder = {}
 				for _, v in pairs(Options) do
-					if #SelectionOrder < Max then
+					if #self.SelectionOrder < self.Max then
+						self.Selected[v] = true
 						Selected[v] = true
+						table.insert(self.SelectionOrder, v)
 						table.insert(SelectionOrder, v)
 					end
 				end
 				UpdateLabel()
 				Refresh(SearchBox.Text)
-				Callback(SelectionOrder)
+				Callback(self, self.SelectionOrder)
+				return self
 			end
-			
+
 			function MultiDropdownObject:GetSelected()
-				return SelectionOrder
+				return self.SelectionOrder
 			end
-			
+
 			function MultiDropdownObject:GetOptions()
-				return DropdownOptions
+				return self.DropdownOptions
 			end
-			
+
 			function MultiDropdownObject:AddSelection(Option)
-				if not Selected[Option] and #SelectionOrder < Max then
+				if not self.Selected[Option] and #self.SelectionOrder < self.Max then
+					self.Selected[Option] = true
 					Selected[Option] = true
+					table.insert(self.SelectionOrder, Option)
 					table.insert(SelectionOrder, Option)
 					UpdateLabel()
 					Refresh(SearchBox.Text)
-					Callback(SelectionOrder)
+					Callback(self, self.SelectionOrder)
 				end
+				return self
 			end
-			
+
 			function MultiDropdownObject:RemoveSelection(Option)
-				if Selected[Option] and #SelectionOrder > Min then
+				if self.Selected[Option] and #self.SelectionOrder > self.Min then
+					self.Selected[Option] = false
 					Selected[Option] = false
+					for i, v in ipairs(self.SelectionOrder) do
+						if v == Option then
+							table.remove(self.SelectionOrder, i)
+							break
+						end
+					end
 					for i, v in ipairs(SelectionOrder) do
 						if v == Option then
 							table.remove(SelectionOrder, i)
@@ -2685,26 +3751,66 @@ function Astral:Window(Options)
 					end
 					UpdateLabel()
 					Refresh(SearchBox.Text)
-					Callback(SelectionOrder)
+					Callback(self, self.SelectionOrder)
 				end
+				return self
 			end
-			
+
 			function MultiDropdownObject:ClearSelections()
+				self.Selected = {}
+				self.SelectionOrder = {}
 				Selected = {}
 				SelectionOrder = {}
 				UpdateLabel()
 				Refresh(SearchBox.Text)
-				Callback(SelectionOrder)
+				Callback(self, self.SelectionOrder)
+				return self
 			end
-			
+
 			function MultiDropdownObject:SetName(Text)
 				DropdownName = Text
 				UpdateLabel()
+				return self
 			end
-			
+
 			function MultiDropdownObject:SetCallback(NewCallback)
 				Callback = NewCallback
+				return self
 			end
+
+			function MultiDropdownObject:Destroy()
+				self.Frame:Destroy()
+			end
+
+			function MultiDropdownObject:UpdateTheme()
+				self.Frame.BackgroundColor3 = Astral:GetElementColor("ElementBackground")
+				self.Label.TextColor3 = Astral:GetElementColor("DropdownLabel")
+				ArrowImage.ImageColor3 = Astral:GetElementColor("DropdownArrow")
+
+				SearchBox.BackgroundColor3 = Astral:GetElementColor("DropdownSearchBackground")
+				SearchBox.TextColor3 = Astral:GetElementColor("DropdownSearchText")
+				SearchBox.PlaceholderColor3 = Astral:GetElementColor("DropdownSearchPlaceholder")
+
+				local SearchStroke = SearchBox:FindFirstChildOfClass("UIStroke")
+				if SearchStroke then
+					SearchStroke.Color = Astral:GetElementColor("DropdownSearchBorder")
+				end
+
+				SelectAllBtn.BackgroundColor3 = Astral:GetElementColor("DropdownSelectAllButton")
+				SelectAllBtn.TextColor3 = Astral:GetElementColor("DropdownSelectAllButtonText")
+
+				ClearAllBtn.BackgroundColor3 = Astral:GetElementColor("DropdownClearButton")
+				ClearAllBtn.TextColor3 = Astral:GetElementColor("DropdownClearButtonText")
+
+				self.DropdownList.ScrollBarImageColor3 = Astral:GetElementColor("ScrollBar")
+
+				-- Refresh options with new theme colors
+				if self.RefreshFunction then
+					self.RefreshFunction(SearchBox.Text)
+				end
+			end
+
+			table.insert(Astral.UIObjects.Elements, MultiDropdownObject)
 
 			return MultiDropdownObject
 		end
@@ -2715,17 +3821,17 @@ function Astral:Window(Options)
 			local Default = Options.Default or Enum.KeyCode.E
 			local Callback = Options.Callback or function() end
 			local Current = Default
-			local KeybindFont = Options.Font or Astral.Config.Elements.LabelFont
-			local KeybindSize = Options.Size or Astral.Config.Elements.LabelSize
+			local KeybindFont = Options.Font or Astral.Config.Elements.Font
+			local KeybindSize = Options.Size or Astral.Config.Elements.Size
 			local KeybindHeight = Options.Height or Astral.Config.Elements.Height
 			local KeybindWidth = Options.Width
-			local KeybindAlignment = Options.Alignment or Astral.Config.Elements.LabelAlignment
+			local KeybindAlignment = Options.Alignment or Astral.Config.Elements.Alignment
 
 			local KeybindFrame = Instance.new("Frame")
 			KeybindFrame.Parent = Parent
-			KeybindFrame.BackgroundColor3 = Astral.Theme.Main
+			KeybindFrame.BackgroundColor3 = Astral:GetElementColor("ElementBackground")
 			KeybindFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			
+
 			if KeybindWidth then
 				KeybindFrame.Size = UDim2.new(0, ApplyScale(KeybindWidth), 0, ApplyScale(KeybindHeight))
 			else
@@ -2743,13 +3849,13 @@ function Astral:Window(Options)
 			ApplyPadding(KeybindLabel, ApplyScale(BasePadding))
 			KeybindLabel.Font = KeybindFont
 			KeybindLabel.Text = KeybindName
-			KeybindLabel.TextColor3 = Astral.Theme.Text
+			KeybindLabel.TextColor3 = Astral:GetElementColor("KeybindLabel")
 			KeybindLabel.TextSize = ApplyScale(KeybindSize)
 			KeybindLabel.TextXAlignment = KeybindAlignment
 
 			local KeybindButton = Instance.new("Frame")
 			KeybindButton.Parent = KeybindFrame
-			KeybindButton.BackgroundColor3 = Astral.Theme.Tertiary
+			KeybindButton.BackgroundColor3 = Astral:GetElementColor("KeybindButton")
 			KeybindButton.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
 			KeybindButton.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Keybind.ButtonWidth + 12), 0.5, -ApplyScale(Astral.Config.Elements.Keybind.ButtonHeight / 2))
 			KeybindButton.Size = UDim2.new(0, ApplyScale(Astral.Config.Elements.Keybind.ButtonWidth), 0, ApplyScale(Astral.Config.Elements.Keybind.ButtonHeight))
@@ -2760,7 +3866,7 @@ function Astral:Window(Options)
 
 			local KeybindStroke = Instance.new("UIStroke")
 			KeybindStroke.Parent = KeybindButton
-			KeybindStroke.Color = Astral.Theme.Stroke
+			KeybindStroke.Color = Astral:GetElementColor("KeybindBorder")
 			KeybindStroke.Thickness = ApplyScale(Astral.Config.Elements.Keybind.StrokeThickness)
 			KeybindStroke.Transparency = Astral.Config.Elements.Keybind.StrokeTransparency
 
@@ -2770,8 +3876,8 @@ function Astral:Window(Options)
 			KeybindText.Size = UDim2.new(1, 0, 1, 0)
 			KeybindText.Font = Enum.Font.GothamBold
 			KeybindText.Text = Current.Name
-			KeybindText.TextColor3 = Astral.Theme.Accent
-			KeybindText.TextSize = ApplyScale(Astral.Config.Elements.Keybind.ButtonTextSize)
+			KeybindText.TextColor3 = Astral:GetElementColor("KeybindText")
+			KeybindText.TextSize = ApplyScale(Astral.Config.Elements.Keybind.ButtonSize)
 			KeybindText.AutoButtonColor = false
 
 			local Binding = false
@@ -2781,73 +3887,109 @@ function Astral:Window(Options)
 				KeybindText.TextColor3 = Astral.Theme.Warning
 			end)
 
+			local KeybindObject = {
+				Frame = KeybindFrame,
+				Label = KeybindLabel,
+				Button = KeybindButton,
+				Text = KeybindText,
+				Type = "Keybind",
+				Current = Current
+			}
+
 			UserInputService.InputBegan:Connect(function(Input, GameProcessed)
 				if not GameProcessed and Binding and Input.UserInputType == Enum.UserInputType.Keyboard then
 					Current = Input.KeyCode
 					KeybindText.Text = Current.Name
-					KeybindText.TextColor3 = Astral.Theme.Accent
+					KeybindText.TextColor3 = Astral:GetElementColor("KeybindText")
 					Binding = false
-					Callback(Current)
+					KeybindObject.Current = Current
+					Callback(KeybindObject, Current)
 				elseif not GameProcessed and Input.KeyCode == Current then
-					Callback(Current)
+					Callback(KeybindObject, Current)
 				end
 			end)
 
-			-- Keybind update functions
-			local KeybindObject = {}
 			function KeybindObject:Update(NewOptions)
 				if NewOptions.Name then
-					KeybindLabel.Text = NewOptions.Name
+					self.Label.Text = NewOptions.Name
 				end
 				if NewOptions.Callback then
 					Callback = NewOptions.Callback
 				end
 				if NewOptions.Default then
+					self.Current = NewOptions.Default
 					Current = NewOptions.Default
-					KeybindText.Text = Current.Name
-					KeybindText.TextColor3 = Astral.Theme.Accent
+					self.Text.Text = self.Current.Name
+					self.Text.TextColor3 = Astral:GetElementColor("KeybindText")
 				end
 				if NewOptions.Font then
-					KeybindLabel.Font = NewOptions.Font
+					self.Label.Font = NewOptions.Font
 				end
 				if NewOptions.Size then
-					KeybindLabel.TextSize = ApplyScale(NewOptions.Size)
+					self.Label.TextSize = ApplyScale(NewOptions.Size)
 				end
 				if NewOptions.Height then
 					local NewHeight = ApplyScale(NewOptions.Height)
-					KeybindFrame.Size = KeybindWidth and 
+					self.Frame.Size = KeybindWidth and 
 						UDim2.new(0, ApplyScale(KeybindWidth), 0, NewHeight) or
 						UDim2.new(1, 0, 0, NewHeight)
-					-- Update button position
-					KeybindButton.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Keybind.ButtonWidth + 12), 0.5, -ApplyScale(Astral.Config.Elements.Keybind.ButtonHeight / 2))
+					self.Button.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Keybind.ButtonWidth + 12), 0.5, -ApplyScale(Astral.Config.Elements.Keybind.ButtonHeight / 2))
 				end
 				if NewOptions.Width then
 					KeybindWidth = NewOptions.Width
-					KeybindFrame.Size = UDim2.new(0, ApplyScale(KeybindWidth), 0, KeybindFrame.Size.Y.Offset)
-					KeybindButton.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Keybind.ButtonWidth + 12), 0.5, -ApplyScale(Astral.Config.Elements.Keybind.ButtonHeight / 2))
+					self.Frame.Size = UDim2.new(0, ApplyScale(KeybindWidth), 0, self.Frame.Size.Y.Offset)
+					self.Button.Position = UDim2.new(1, -ApplyScale(Astral.Config.Elements.Keybind.ButtonWidth + 12), 0.5, -ApplyScale(Astral.Config.Elements.Keybind.ButtonHeight / 2))
 				end
 				if NewOptions.Alignment then
-					KeybindLabel.TextXAlignment = NewOptions.Alignment
+					self.Label.TextXAlignment = NewOptions.Alignment
 				end
+				return self
 			end
-			
+
 			function KeybindObject:SetKey(Key)
+				self.Current = Key
 				Current = Key
-				KeybindText.Text = Current.Name
-				KeybindText.TextColor3 = Astral.Theme.Accent
+				self.Text.Text = self.Current.Name
+				self.Text.TextColor3 = Astral:GetElementColor("KeybindText")
+				Callback(self, Current)
+				return self
 			end
-			
+
 			function KeybindObject:GetKey()
-				return Current
+				return self.Current
 			end
-			
+
 			function KeybindObject:SetText(Text)
-				KeybindLabel.Text = Text
+				self.Label.Text = Text
+				return self
 			end
-			
+
+			function KeybindObject:GetText()
+				return self.Label.Text
+			end
+
 			function KeybindObject:SetCallback(NewCallback)
 				Callback = NewCallback
+				return self
 			end
+
+			function KeybindObject:Destroy()
+				self.Frame:Destroy()
+			end
+
+			function KeybindObject:UpdateTheme()
+				self.Frame.BackgroundColor3 = Astral:GetElementColor("ElementBackground")
+				self.Label.TextColor3 = Astral:GetElementColor("KeybindLabel")
+				self.Button.BackgroundColor3 = Astral:GetElementColor("KeybindButton")
+				self.Text.TextColor3 = Astral:GetElementColor("KeybindText")
+
+				local KeybindStroke = self.Button:FindFirstChildOfClass("UIStroke")
+				if KeybindStroke then
+					KeybindStroke.Color = Astral:GetElementColor("KeybindBorder")
+				end
+			end
+
+			table.insert(Astral.UIObjects.Elements, KeybindObject)
 
 			return KeybindObject
 		end
@@ -2856,20 +3998,45 @@ function Astral:Window(Options)
 			Parent = Parent or PageFrame
 			local LabelText = Options.Text or "Label"
 			local LabelFont = Options.Font or Astral.Config.Elements.Label.Font
-			local LabelSize = Options.Size or Astral.Config.Elements.Label.TextSize
-			local LabelHeight = Options.Height or Astral.Config.Elements.Label.Height
+			local LabelSize = Options.Size or Astral.Config.Elements.Label.Size
+			local LabelHeight = Options.Height
 			local LabelWidth = Options.Width
 			local LabelAlignment = Options.Alignment or Enum.TextXAlignment.Left
+			local MaxHeight = Options.MaxHeight or ApplyScale(300)
+			local MinHeight = Options.MinHeight or ApplyScale(Astral.Config.Elements.Label.Height)
+
+			local function CalculateTextHeight(Text, Font, TextSize, MaxWidth)
+				local TextService = game:GetService("TextService")
+				local TextBounds = TextService:GetTextSize(
+					Text,
+					TextSize,
+					Font,
+					Vector2.new(MaxWidth, 10000)
+				)
+				return TextBounds.Y
+			end
+
+			local ActualWidth = LabelWidth and ApplyScale(LabelWidth) or (Parent.AbsoluteSize.X - ApplyScale(BasePadding * 2))
+
+			local CalculatedHeight
+			local IsAutoHeight = (LabelHeight == nil)
+
+			if IsAutoHeight then
+				local TextHeight = CalculateTextHeight(LabelText, LabelFont, ApplyScale(LabelSize), ActualWidth - ApplyScale(BasePadding * 2))
+				CalculatedHeight = math.min(math.max(TextHeight + ApplyScale(BasePadding * 2), MinHeight), MaxHeight)
+			else
+				CalculatedHeight = ApplyScale(LabelHeight)
+			end
 
 			local LabelFrame = Instance.new("Frame")
 			LabelFrame.Parent = Parent
-			LabelFrame.BackgroundColor3 = Astral.Theme.Main
+			LabelFrame.BackgroundColor3 = Astral:GetElementColor("LabelBackground")
 			LabelFrame.BackgroundTransparency = Astral.Config.Elements.BackgroundTransparency
-			
+
 			if LabelWidth then
-				LabelFrame.Size = UDim2.new(0, ApplyScale(LabelWidth), 0, ApplyScale(LabelHeight))
+				LabelFrame.Size = UDim2.new(0, ApplyScale(LabelWidth), 0, CalculatedHeight)
 			else
-				LabelFrame.Size = UDim2.new(1, 0, 0, ApplyScale(LabelHeight))
+				LabelFrame.Size = UDim2.new(1, 0, 0, CalculatedHeight)
 			end
 
 			local LabelCorner = Instance.new("UICorner")
@@ -2879,63 +4046,227 @@ function Astral:Window(Options)
 			local Label = Instance.new("TextLabel")
 			Label.Parent = LabelFrame
 			Label.BackgroundTransparency = 1
-			Label.Size = UDim2.new(1, 0, 1, 0)
-			ApplyPadding(Label, ApplyScale(BasePadding))
+			Label.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 1, -ApplyScale(BasePadding * 2))
+			Label.Position = UDim2.new(0.5, 0, 0.5, 0)
+			Label.AnchorPoint = Vector2.new(0.5, 0.5)
 			Label.Font = LabelFont
 			Label.Text = LabelText
-			Label.TextColor3 = Astral.Theme.TextDark
+			Label.TextColor3 = Astral:GetElementColor("LabelText")
 			Label.TextSize = ApplyScale(LabelSize)
 			Label.TextXAlignment = LabelAlignment
 			Label.TextWrapped = true
+			Label.TextTruncate = Enum.TextTruncate.None
 
-			local LabelObject = {}
-			function LabelObject:Update(NewOptions)
-				if NewOptions.Text then
-					Label.Text = NewOptions.Text
+			if not IsAutoHeight then
+				local TextHeight = CalculateTextHeight(LabelText, LabelFont, ApplyScale(LabelSize), ActualWidth - ApplyScale(BasePadding * 2))
+				if TextHeight > CalculatedHeight - ApplyScale(BasePadding * 2) then
+					Label:Destroy()
+
+					local ScrollFrame = Instance.new("ScrollingFrame")
+					ScrollFrame.Parent = LabelFrame
+					ScrollFrame.BackgroundTransparency = 1
+					ScrollFrame.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 1, -ApplyScale(BasePadding * 2))
+					ScrollFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+					ScrollFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+					ScrollFrame.ScrollBarThickness = 4
+					ScrollFrame.ScrollBarImageColor3 = Astral:GetElementColor("LabelScrollBar")
+					ScrollFrame.ScrollBarImageTransparency = 0.5
+					ScrollFrame.BorderSizePixel = 0
+					ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, TextHeight)
+
+					local ScrollLabel = Instance.new("TextLabel")
+					ScrollLabel.Parent = ScrollFrame
+					ScrollLabel.BackgroundTransparency = 1
+					ScrollLabel.Size = UDim2.new(1, 0, 0, TextHeight)
+					ScrollLabel.Font = LabelFont
+					ScrollLabel.Text = LabelText
+					ScrollLabel.TextColor3 = Astral:GetElementColor("LabelText")
+					ScrollLabel.TextSize = ApplyScale(LabelSize)
+					ScrollLabel.TextXAlignment = LabelAlignment
+					ScrollLabel.TextWrapped = true
+					ScrollLabel.TextYAlignment = Enum.TextYAlignment.Top
+
+					CreateScrollBar(ScrollFrame, WindowId)
+
+					Label = ScrollLabel
 				end
-				if NewOptions.Font then
-					Label.Font = NewOptions.Font
-				end
-				if NewOptions.Size then
-					Label.TextSize = ApplyScale(NewOptions.Size)
-				end
-				if NewOptions.Height then
-					local NewHeight = ApplyScale(NewOptions.Height)
-					LabelFrame.Size = LabelWidth and 
+			end
+
+			local LabelObject = {
+				Frame = LabelFrame,
+				Label = Label,
+				Type = "Label",
+				IsScrollable = not IsAutoHeight,
+				IsAutoHeight = IsAutoHeight
+			}
+
+			local function UpdateLabelSize()
+				if LabelObject.IsAutoHeight then
+					local CurrentTextHeight = CalculateTextHeight(LabelObject.Label.Text, LabelObject.Label.Font, LabelObject.Label.TextSize, ActualWidth - ApplyScale(BasePadding * 2))
+					local NewHeight = math.min(math.max(CurrentTextHeight + ApplyScale(BasePadding * 2), MinHeight), MaxHeight)
+
+					LabelObject.Frame.Size = LabelWidth and 
 						UDim2.new(0, ApplyScale(LabelWidth), 0, NewHeight) or
 						UDim2.new(1, 0, 0, NewHeight)
+				elseif LabelObject.IsScrollable then
+					local ScrollFrame = LabelFrame:FindFirstChildOfClass("ScrollingFrame")
+					if ScrollFrame then
+						local ScrollLabel = ScrollFrame:FindFirstChildOfClass("TextLabel")
+						if ScrollLabel then
+							local TextHeight = CalculateTextHeight(ScrollLabel.Text, ScrollLabel.Font, ScrollLabel.TextSize, ActualWidth - ApplyScale(BasePadding * 2))
+							ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, TextHeight)
+							ScrollLabel.Size = UDim2.new(1, 0, 0, TextHeight)
+						end
+					end
+				end
+			end
+
+			function LabelObject:Update(NewOptions)
+				local ShouldUpdateSize = false
+				local HeightChanged = false
+
+				if NewOptions.Text then
+					self.Label.Text = NewOptions.Text
+					ShouldUpdateSize = true
+				end
+				if NewOptions.Font then
+					self.Label.Font = NewOptions.Font
+					ShouldUpdateSize = true
+				end
+				if NewOptions.Size then
+					local NewSize = ApplyScale(NewOptions.Size)
+					self.Label.TextSize = NewSize
+					ShouldUpdateSize = true
+				end
+				if NewOptions.Height ~= nil then
+					HeightChanged = true
+					LabelHeight = NewOptions.Height
+					self.IsAutoHeight = (NewOptions.Height == nil)
+					self.IsScrollable = not self.IsAutoHeight
+
+					if not self.IsAutoHeight then
+						local NewHeight = ApplyScale(NewOptions.Height)
+						self.Frame.Size = LabelWidth and 
+							UDim2.new(0, ApplyScale(LabelWidth), 0, NewHeight) or
+							UDim2.new(1, 0, 0, NewHeight)
+						ShouldUpdateSize = true
+					else
+						ShouldUpdateSize = true
+					end
 				end
 				if NewOptions.Width then
 					LabelWidth = NewOptions.Width
-					LabelFrame.Size = UDim2.new(0, ApplyScale(LabelWidth), 0, LabelFrame.Size.Y.Offset)
+					local NewWidth = ApplyScale(NewOptions.Width)
+					self.Frame.Size = UDim2.new(0, NewWidth, 0, self.Frame.Size.Y.Offset)
+					ActualWidth = NewWidth
+					ShouldUpdateSize = true
 				end
 				if NewOptions.Alignment then
-					Label.TextXAlignment = NewOptions.Alignment
+					self.Label.TextXAlignment = NewOptions.Alignment
 				end
 				if NewOptions.Color then
-					Label.TextColor3 = NewOptions.Color
+					self.Label.TextColor3 = NewOptions.Color
+				end
+				if NewOptions.MaxHeight then
+					MaxHeight = ApplyScale(NewOptions.MaxHeight)
+					if self.IsAutoHeight then
+						ShouldUpdateSize = true
+					end
+				end
+				if NewOptions.MinHeight then
+					MinHeight = ApplyScale(NewOptions.MinHeight)
+					if self.IsAutoHeight then
+						ShouldUpdateSize = true
+					end
+				end
+
+				if ShouldUpdateSize then
+					UpdateLabelSize()
+				end
+
+				if HeightChanged and self.IsAutoHeight then
+					local ScrollFrame = self.Frame:FindFirstChildOfClass("ScrollingFrame")
+					if ScrollFrame then
+						ScrollFrame:Destroy()
+
+						local NewLabel = Instance.new("TextLabel")
+						NewLabel.Parent = self.Frame
+						NewLabel.BackgroundTransparency = 1
+						NewLabel.Size = UDim2.new(1, -ApplyScale(BasePadding * 2), 1, -ApplyScale(BasePadding * 2))
+						NewLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+						NewLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+						NewLabel.Font = self.Label.Font
+						NewLabel.Text = self.Label.Text
+						NewLabel.TextColor3 = self.Label.TextColor3
+						NewLabel.TextSize = self.Label.TextSize
+						NewLabel.TextXAlignment = self.Label.TextXAlignment
+						NewLabel.TextWrapped = true
+						NewLabel.TextTruncate = Enum.TextTruncate.None
+
+						self.Label = NewLabel
+					end
+				end
+
+				return self
+			end
+
+			function LabelObject:SetText(Text)
+				self.Label.Text = Text
+				UpdateLabelSize()
+				return self
+			end
+
+			function LabelObject:GetText()
+				return self.Label.Text
+			end
+
+			function LabelObject:SetFont(Font, Size, Color)
+				if Font then 
+					self.Label.Font = Font 
+				end
+				if Size then 
+					self.Label.TextSize = ApplyScale(Size) 
+				end
+				if Color then 
+					self.Label.TextColor3 = Color 
+				end
+				UpdateLabelSize()
+				return self
+			end
+
+			function LabelObject:Destroy()
+				self.Frame:Destroy()
+			end
+
+			function LabelObject:UpdateTheme()
+				self.Frame.BackgroundColor3 = Astral:GetElementColor("LabelBackground")
+				self.Label.TextColor3 = Astral:GetElementColor("LabelText")
+
+				if self.IsScrollable then
+					local ScrollFrame = self.Frame:FindFirstChildOfClass("ScrollingFrame")
+					if ScrollFrame then
+						ScrollFrame.ScrollBarImageColor3 = Astral:GetElementColor("LabelScrollBar")
+					end
 				end
 			end
-			
-			function LabelObject:SetText(Text)
-				Label.Text = Text
-			end
-			
-			function LabelObject:SetFont(Font, Size, Color)
-				if Font then Label.Font = Font end
-				if Size then Label.TextSize = ApplyScale(Size) end
-				if Color then Label.TextColor3 = Color end
-			end
-			
-			function LabelObject:GetText()
-				return Label.Text
-			end
+
+			table.insert(Astral.UIObjects.Elements, LabelObject)
 
 			return LabelObject
 		end
 
 		return TabFunctions
 	end
+
+	local WindowData = {
+		Window = {
+			MainFrame = MainFrame,
+			ScreenGui = ScreenGui,
+			Functions = WindowFunctions
+		},
+		Id = WindowId
+	}
+	table.insert(Astral.UIObjects.Windows, WindowData)
 
 	return WindowFunctions
 end
